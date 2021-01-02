@@ -111,7 +111,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -142,31 +142,31 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Startseite</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archiv</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>الأرشيفات</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Kategorien</a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>التصنيفات</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Schlagwörter</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>الوسوم</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>Über</a>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>معلومات</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>بحث
         </a>
       </li>
   </ul>
@@ -182,7 +182,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="Suche..." spellcheck="false"
+           placeholder="بحث..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -241,22 +241,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2019-01-21 11:14:14" itemprop="dateCreated datePublished" datetime="2019-01-21T11:14:14+08:00">2019-01-21</time>
+              <time title="أُنشأ: 2019-01-21 11:14:14" itemprop="dateCreated datePublished" datetime="2019-01-21T11:14:14+08:00">2019-01-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
                 </span>
@@ -280,20 +280,14 @@
 <h3 id="Xmx"><a href="#Xmx" class="headerlink" title="-Xmx"></a>-Xmx</h3><p>设置JVM 运行过程中分配的最大可用内存。</p>
 <h3 id="Xss"><a href="#Xss" class="headerlink" title="-Xss"></a>-Xss</h3><p>-Xss128k：设置每个线程的堆栈大小。</p>
 <h3 id="Xmn"><a href="#Xmn" class="headerlink" title="-Xmn"></a>-Xmn</h3><p>设置年轻代大小。</p>
-<h2 id="打印-GC"><a href="#打印-GC" class="headerlink" title="打印 GC"></a>打印 GC</h2><ul>
-<li>-XX:+PrintGC：打印 GC 信息</li>
-<li>-XX:+PrintGCDetails</li>
-<li>-XX:PrintHeapAtGC：打印GC前后的详细堆栈信息</li>
-</ul>
-<h2 id="XX-AlwaysPreTouch"><a href="#XX-AlwaysPreTouch" class="headerlink" title="-XX:+AlwaysPreTouch"></a>-XX:+AlwaysPreTouch</h2><p>JAVA进程启动的时候，虽然我们可以为JVM指定合适的内存大小，但是这些内存操作系统并没有真正的分配给JVM，而是等JVM访问这些内存的时候，才真正分配，这样会造成以下问题：</p>
-<ul>
-<li>第1次YGC之前Eden区分配对象的速度较慢;</li>
-<li>YGC的时候，Young区的对象要晋升到Old区的时候，这个时候需要操作系统真正分配内存，这样就会加大YGC的停顿时间;</li>
-</ul>
-<p><code>AlwaysPreTouch</code> 参数可以优化上面的问题，但是它的副作用会导致 JVM 进程启动时间变长。</p>
-<h2 id="启动时间变长原因"><a href="#启动时间变长原因" class="headerlink" title="启动时间变长原因"></a>启动时间变长原因</h2><p>在没有配置-XX:+AlwaysPreTouch参数即默认情况下，JVM参数-Xms申明的堆只是在虚拟内存中分配，而不是在物理内存中分配：它被以一种内部数据结构的形式记录，从而避免被其他进程使用这些内存。这些内存页直到被访问时，才会在物理内存中分配。当JVM需要内存的时候，操作系统将根据需要分配内存页。</p>
-<p>配置-XX:+AlwaysPreTouch参数后，JVM将-Xms指定的堆内存中每个字节都写入’0’，这样的话，除了在虚拟内存中以内部数据结构保留之外，还会在物理内存中分配。并且由于touch这个行为是单线程的，因此它将会让JVM进程启动变慢。所以，要么选择减少接下来对每个缓存页的第一次访问时间，要么选择减少JVM进程启动时间，这是一种trade-off。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/jvm-parameter-configuration/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -334,22 +328,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2019-01-10 17:04:37" itemprop="dateCreated datePublished" datetime="2019-01-10T17:04:37+08:00">2019-01-10</time>
+              <time title="أُنشأ: 2019-01-10 17:04:37" itemprop="dateCreated datePublished" datetime="2019-01-10T17:04:37+08:00">2019-01-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
                 </span>
@@ -376,29 +370,15 @@
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190113093511.png"></p>
 <h1 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h1><p>NIO 模型中，它把这么多 while 死循环变成一个死循环，这个死循环由一个线程控制，那么他又是如何做到一个线程，一个 while 死循环就能监测1w个连接是否有数据可读的。这就是 NIO 模型中 selector 的作用，一条连接来了之后，现在不创建一个 while 死循环去监听是否有数据可读了，而是直接把这条连接注册到 selector 上，然后，通过检查这个 selector，就可以批量监测出有数据可读的连接，进而读取数据。</p>
 <p>NIO 主要有三大核心部分：Channel(通道)、Buffer(缓冲区)、Selector。传统 IO 基于字节流和字符流进行操作，而 NIO 基于 Channel 和 Buffer 进行操作，数据总是从通道读取到缓冲区，或者从缓冲区写入到通道中。Selector 用于监听多个通道的时间。因此，单个线程可以监听多个数据通道。</p>
-<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><h2 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h2><p>Buffer，缓冲区，实际上是一个容器，是一个连续数组。Channel 提供从文件、网络读取数据的通道，但是读取或写入的数据必须经由 Buffer。</p>
-<h2 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h2><p>Selector 类是 NIO 的核心类，Selector 能够检测多个注册的通道上是否有事件发生，如果有事件发生，便获取事件然后针对每个事件进行相应的响应处理。</p>
-<h1 id="IO-和-NIO-的区别"><a href="#IO-和-NIO-的区别" class="headerlink" title="IO 和 NIO 的区别"></a>IO 和 NIO 的区别</h1><h2 id="读写方式"><a href="#读写方式" class="headerlink" title="读写方式"></a>读写方式</h2><p>IO 读写是面向<strong>流</strong>的，一次性只能从流中读取一个或者多个字节，并且读完之后流无法再读取，你需要自己缓存数据。</p>
-<p>Java NIO 的读写是面向 <strong>Buffer</strong> 的。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动。这就增加了处理过程中的灵活性。但是，还需要检查是否该缓冲区中包含所有您需要处理的数据。而且，需确保当更多的数据读入缓冲区时，不要覆盖缓冲区里尚未处理的数据。</p>
-<h2 id="阻塞与非阻塞IO"><a href="#阻塞与非阻塞IO" class="headerlink" title="阻塞与非阻塞IO"></a>阻塞与非阻塞IO</h2><p><strong>Java IO 的各种流是阻塞的</strong>。这意味着，当一个线程调用read() 或 write()时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再干任何事情了。</p>
-<p><strong>Java NIO 的非阻塞模式</strong>，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。 非阻塞写也是如此。一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。 线程通常将非阻塞IO的空闲时间用于在其它通道上执行IO操作，所以一个单独的线程现在可以管理多个输入和输出通道（channel）。</p>
-<h2 id="选择器（Selectors）"><a href="#选择器（Selectors）" class="headerlink" title="选择器（Selectors）"></a>选择器（Selectors）</h2><p>Java NIO的选择器允许一个单独的线程来监视多个输入通道，你可以注册多个通道使用一个选择器，然后使用一个单独的线程来“选择”通道：这些通道里已经有可以处理的输入，或者选择已准备写入的通道。这种选择机制，使得一个单独的线程很容易来管理多个通道。</p>
-<h1 id="网络-IO-模型"><a href="#网络-IO-模型" class="headerlink" title="网络 IO 模型"></a>网络 IO 模型</h1><ul>
-<li>同步</li>
-<li>异步</li>
-<li>阻塞式 IO</li>
-<li>非阻塞式 IO</li>
-</ul>
-<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p>同步和异步关注的是消息通信机制(谓同步,就是在发出一个<em>调用时,在没有得到结果之前,该</em>调用就不返回。但是一旦调用主动等待这个调用*的结果</p>
-<p>而异步则是相反,<em>调用在发出之后,这个调用就直接返回了,所以没有返回结果。换句话说,当<br>用者不会立刻得到结果。而是在</em>调用*发出后,<em>被调用者</em>通过状知来通知调用者,或通过回调函数处理这个调用</p>
-<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p>塞和非阻塞关注的是程序在等待调用结果(消息，返回值)时的状态。</p>
-<p>阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。</p>
-<p>非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
-<h1 id="Netty"><a href="#Netty" class="headerlink" title="Netty"></a>Netty</h1><p>Nety是一款高性能、异步事件驱动的 NIO 框架，基于 Java NIO 提供的 API 实现。它提供了对 TCP、UDP 和文件传输的支持，作为一个异步 NIO 框架，Netty 的所有IO操作都是异步非阻塞的。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1WRBQ8OjklntV14r0j02MsA">Netty实战</a></li>
-</ul>
-
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/net-io-nio-netty/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -439,22 +419,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-29 15:53:07" itemprop="dateCreated datePublished" datetime="2018-12-29T15:53:07+08:00">2018-12-29</time>
+              <time title="أُنشأ: 2018-12-29 15:53:07" itemprop="dateCreated datePublished" datetime="2018-12-29T15:53:07+08:00">2018-12-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
                 </span>
@@ -487,14 +467,14 @@
 <p>桥接网络适用于在同一个 Docker守护程序主机上运行的容器。对于在不同Docker守护程序主机上运行的容器之间的通信，您可以在操作系统级别管理路由，也可以使用覆盖网络。</p>
 <p>启动Docker时，会自动创建默认桥接网络（也称为bridge），并且除非另行指定，否则新启动的容器将连接到该网络。您还可以创建用户定义的自定义网桥。用户定义的网桥优于默认bridge 网络。</p>
 <p>在Docker进行启动时，会在主机上创建一个名为 docker0 的虚拟网桥，在主机上启动的 Docker 容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器通过交换机连载了一个二层网络中。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190104153031.png"></p>
-<h2 id="host"><a href="#host" class="headerlink" title="host"></a>host</h2><p>如果host对容器使用网络驱动程序，则该容器的网络堆栈不会与Docker主机隔离。例如，如果您运行绑定到端口80 host的容器并使用网络，则容器的应用程序将在主机IP地址的端口80上可用。</p>
-<p>主机网络驱动程序仅适用于Linux主机。</p>
-<h2 id="none"><a href="#none" class="headerlink" title="none"></a>none</h2><h2 id="overlay"><a href="#overlay" class="headerlink" title="overlay"></a>overlay</h2><p>该overlay网络驱动程序会创建多个码头工人守护主机之间的分布式网络。该网络位于（覆盖）特定于主机的网络之上，允许连接到它的容器（包括群集服务容器）安全地进行通信。Docker透明地处理每个数据包与正确的Docker守护程序主机和正确的目标容器的路由。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://docs.docker.com/network/">Docker NetWork 官网</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/docker-network/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -535,22 +515,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-27 14:44:19" itemprop="dateCreated datePublished" datetime="2018-12-27T14:44:19+08:00">2018-12-27</time>
+              <time title="أُنشأ: 2018-12-27 14:44:19" itemprop="dateCreated datePublished" datetime="2018-12-27T14:44:19+08:00">2018-12-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -577,22 +557,14 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="keyword">this</span>, valueOffset, expect, update);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如上面的源码，对于 CAS 操作，这里会出现3个值，expect、update、value。只有当expect和内存中的value相同时，才把value更新为update。</p>
 <h1 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h1><p>假设如下事件序列：</p>
-<blockquote>
-<p>线程 1 从内存位置V中取出A。<br>线程 2 从位置V中取出A。<br>线程 2 进行了一些操作，将B写入位置V。<br>线程 2 将A再次写入位置V。<br>线程 1 进行CAS操作，发现位置V中仍然是A，操作成功。</p>
-</blockquote>
-<p>尽管上面的CAS操作成功了，数据也没有问题，但是程序失去了对数据变换的敏感性，不知道数据的变换。</p>
-<blockquote>
-<p>比如发生扣款/收款行为时，应当收到短信通知这个场景，<br>1、时刻1 : 500元<br>2、时刻2：转给了 A 10 元 490 元<br>3、时刻3：B 转入 10 元 500 元<br>应当收到两条短信，而不是最后我的账户余额没有变化，就一条短信都收不到</p>
-</blockquote>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181227152525.png"></p>
-<p>上面的图片来源不知道是谁的，只是在一个技术群里和别人聊CAS时别人发的。</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="AtomicStampedReference"><a href="#AtomicStampedReference" class="headerlink" title="AtomicStampedReference"></a>AtomicStampedReference</h3><p>JDK 为了解决 ABA 问题，提供了一些方法，如 <code>AtomicStampedReference</code>，在版本的更新过程中，添加了一个 <code>stamp</code> 邮戳来标记数据的版本。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//比较设置 参数依次为：期望值 写入新值 期望时间戳 新时间戳</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(V expectedReference, V newReference, </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> expectedStamp, <span class="keyword">int</span> newStamp)</span></span></span><br><span class="line"><span class="function"><span class="comment">//获得当前对象引用</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">getReference</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="comment">//获得当前时间戳</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getStamp</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="comment">//设置当前对象引用和时间戳</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(V newReference, <span class="keyword">int</span> newStamp)</span></span></span><br></pre></td></tr></table></figure>
-<p>具体关于 CAS 操作源码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Pair</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> T reference;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> stamp;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Pair</span><span class="params">(T reference, <span class="keyword">int</span> stamp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.reference = reference;</span><br><span class="line">        <span class="keyword">this</span>.stamp = stamp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> &lt;T&gt; <span class="function">Pair&lt;T&gt; <span class="title">of</span><span class="params">(T reference, <span class="keyword">int</span> stamp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Pair&lt;T&gt;(reference, stamp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(V   expectedReference,</span></span></span><br><span class="line"><span class="function"><span class="params">                             V   newReference,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">int</span> expectedStamp,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">int</span> newStamp)</span> </span>&#123;</span><br><span class="line">    Pair&lt;V&gt; current = pair;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">        expectedReference == current.reference &amp;&amp;</span><br><span class="line">        expectedStamp == current.stamp &amp;&amp;</span><br><span class="line">        ((newReference == current.reference &amp;&amp;</span><br><span class="line">          newStamp == current.stamp) ||</span><br><span class="line">         casPair(current, Pair.of(newReference, newStamp)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上面所示，在更新的过程中，除了比较内存中value的预期值，还比较了 stamp 的预期值，只有两者都相同的时候，才会把内存中的值更新掉。</p>
-<h3 id="AtomicMarkableReference"><a href="#AtomicMarkableReference" class="headerlink" title="AtomicMarkableReference"></a>AtomicMarkableReference</h3><p><code>AtomicMarkableReference</code> 和 <code>AtomicStampedReference</code> 功能相似，但<code>AtomicMarkableReference</code> 描述更加简单的是与否的关系。它的定义就是将状态戳简化为true|false。如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(V       expectedReference,</span></span></span><br><span class="line"><span class="function"><span class="params">                             V       newReference,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">boolean</span> expectedMark,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">boolean</span> newMark)</span> </span>&#123;</span><br><span class="line">    Pair&lt;V&gt; current = pair;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">        expectedReference == current.reference &amp;&amp;</span><br><span class="line">        expectedMark == current.mark &amp;&amp;</span><br><span class="line">        ((newReference == current.reference &amp;&amp;</span><br><span class="line">          newMark == current.mark) ||</span><br><span class="line">         casPair(current, Pair.of(newReference, newMark)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-cas/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -633,22 +605,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-19 09:45:35" itemprop="dateCreated datePublished" datetime="2018-12-19T09:45:35+08:00">2018-12-19</time>
+              <time title="أُنشأ: 2018-12-19 09:45:35" itemprop="dateCreated datePublished" datetime="2018-12-19T09:45:35+08:00">2018-12-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E9%98%9F%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">队列</span></a>
                 </span>
@@ -671,6 +643,14 @@
 <li><a target="_blank" rel="noopener" href="https://github.com/LMAX-Exchange/disruptor">GitHub地址</a></li>
 </ul>
 
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/disruptor/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -711,22 +691,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-17 13:53:35" itemprop="dateCreated datePublished" datetime="2018-12-17T13:53:35+08:00">2018-12-17</time>
+              <time title="أُنشأ: 2018-12-17 13:53:35" itemprop="dateCreated datePublished" datetime="2018-12-17T13:53:35+08:00">2018-12-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -757,16 +737,14 @@
 <p>如下所示，定义一个10位的数组：<br>[0,0,0,0,0,0,0,0,0,0]</p>
 <p>在添加元素，先对添加的元素使用 k 个hash函数，来计算出 k 个在数组中的位置，然后，将这些位置的 bit 置为 1。</p>
 <p>例如，把输入的x经过两次hash，给出的位置分别是0和4，将这两个位置bit置为1。</p>
-<p>[1, 0, 0, 0, 1, 0, 0, 0, 0, 0]</p>
-<h2 id="为什么会出现可能出错"><a href="#为什么会出现可能出错" class="headerlink" title="为什么会出现可能出错"></a>为什么会出现可能出错</h2><p>如下图所示，现在输入 x 和 y 两个数，分别把相应的位置置为1，当我们输入下一个元素 a 是，经过 hash 函数，得出的位置 3 和 13（下标从0开始），在数组中，其实不存在 a，但是这两个位置分别是 x和y的某个hash位置，所以就会出现开始所说的，某个元素可能存在集合中。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181218151909.png"></p>
-<h2 id="删除不可取"><a href="#删除不可取" class="headerlink" title="删除不可取"></a>删除不可取</h2><p>在 Bloomfilter 中不可删除元素，如果删除元素，会导致其他的一些元素不能被找到，当这些元素的某些下标和被删元素相同。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5842e0b361ff4b006c2b3c9b">BloomFilter 原理，实现及优化</a></li>
-<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5bfc90be5188254e2a04374b">如何判断一个元素在亿级数据中是否存在？</a></li>
-<li><a target="_blank" rel="noopener" href="https://sc5.io/posts/what-are-bloom-filters-and-why-are-they-useful/">What are Bloom filters, and why are they useful?</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-BloomFilter/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -807,22 +785,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-16 15:13:08" itemprop="dateCreated datePublished" datetime="2018-12-16T15:13:08+08:00">2018-12-16</time>
+              <time title="أُنشأ: 2018-12-16 15:13:08" itemprop="dateCreated datePublished" datetime="2018-12-16T15:13:08+08:00">2018-12-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
                 </span>
@@ -843,29 +821,21 @@
 <p>如果本文有错，希望在下面的留言区指正。</p>
 </blockquote>
 <p>TCP/IP 五层模型如图所示：</p>
-<img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181216154911.png" width = "200" height = "200" div align=center />
+<img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181216154911.png" width="200" height="200" div align="center">
 
 <h1 id="面向连接的-TCP"><a href="#面向连接的-TCP" class="headerlink" title="面向连接的 TCP"></a>面向连接的 TCP</h1><p>TCP（Transmission Control Protocol，传输控制协议）是基于连接的协议，也就是说，在正式收发数据前，必须和对方建立可靠的连接。一个 TCP 连接必须要经过三次”对话”才能建立起来，其中的过程非常复杂，我们这里只做简单、形象的介绍，你只要做到能够理解这个过程即可。</p>
 <h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181216155235.png"></p>
 <p>TCP 建立连接如下图所示：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181216155425.png"></p>
-<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181216160124.png"></p>
-<p>先由客户端向服务器端发送一个FIN，请求关闭数据传输。</p>
-<p>当服务器接收到客户端的FIN时，向客户端发送一个ACK，其中ack的值等于FIN+SEQ</p>
-<p>然后服务器向客户端发送一个FIN，告诉客户端应用程序关闭。</p>
-<p>当客户端收到服务器端的FIN是，回复一个ACK给服务器端。其中ack的值等于FIN+SEQ</p>
-<h1 id="面向非连接-UDP"><a href="#面向非连接-UDP" class="headerlink" title="面向非连接 UDP"></a>面向非连接 UDP</h1><p>UDP（User Data Protocol，用户数据报协议）是与TCP相对应的协议。它是面向非连接的协议，它不与对方建立连接，而是直接就把数据包发送过去。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>TCP 面向连接；UDP 是无连接，即发送数据前不需要建立连接</li>
-<li>TCP 提供可靠的服务，即通过 TCP 连接传送的数据，无差错，不丢失，不重复，且有序到达；UDP 尽最大努力交付，但不保证可靠交付。</li>
-<li>UDP 具有较好的实时性，工作效率比 TCP 高，适用于高速传输和实时性较高的通信或者广播通信。</li>
-<li>每一条 TCP 连接只能点到点的；UDP 支持一对一、一对多、多对一和多对多通信。</li>
-<li>TCO 对系统资源需求比较多；UDP 对系统资源需求比较少。</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/lms0755/p/9053119.html">图片来源</a></li>
-</ul>
-
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/net-tcp-udp/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -906,22 +876,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-14 11:14:25" itemprop="dateCreated datePublished" datetime="2018-12-14T11:14:25+08:00">2018-12-14</time>
+              <time title="أُنشأ: 2018-12-14 11:14:25" itemprop="dateCreated datePublished" datetime="2018-12-14T11:14:25+08:00">2018-12-14</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -947,30 +917,15 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PolymorphicCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        show(<span class="keyword">new</span> Cat());</span><br><span class="line">        show(<span class="keyword">new</span> Dog());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//向上转型</span></span><br><span class="line">        Animal animal = <span class="keyword">new</span> Cat();</span><br><span class="line">        animal.eat();<span class="comment">//调用的是Cat的 eat</span></span><br><span class="line">        <span class="comment">//当使用多态方式调用方法时，首先检查父类中是否有该方法，</span></span><br><span class="line">        <span class="comment">// 如果没有，则编译错误；如果有，再去调用子类的同名方法</span></span><br><span class="line">        animal.work();<span class="comment">//编译报错</span></span><br><span class="line">        <span class="comment">//向下转型</span></span><br><span class="line">        Cat cat = (Cat) animal;</span><br><span class="line">        cat.work();<span class="comment">//调用的是Cat的work</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">(Animal animal)</span> </span>&#123;</span><br><span class="line">        animal.eat();</span><br><span class="line">        <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Cat) &#123;</span><br><span class="line">            Cat cat = (Cat) animal;</span><br><span class="line">            cat.work();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Dog) &#123;</span><br><span class="line">            Dog dog = (Dog) animal;</span><br><span class="line">            dog.work();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫吃鱼....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫抓老鼠....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;狗吃骨头....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;look door....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="向上转型"><a href="#向上转型" class="headerlink" title="向上转型"></a>向上转型</h2><p><code>Animal animal = new Cat();</code> 对于这个对象的创建，就是体现了向上转型。</p>
 <p>子类引用的对象转换为父类类型成为向上转型。通俗的说就是将子类对象转化为父类对象，此处对象可以是接口。</p>
-<h2 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h2><p><code>Cat cat = (Cat) animal;</code> 这里就是向下转型。与向上转型相对应的就是向下转型了。向下转型是把父类对象转为子类对象。</p>
-<h2 id="多态的实现"><a href="#多态的实现" class="headerlink" title="多态的实现"></a>多态的实现</h2><ul>
-<li>重写</li>
-<li>接口</li>
-<li>抽象类和抽象方法</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="多态的优点"><a href="#多态的优点" class="headerlink" title="多态的优点"></a>多态的优点</h3><ul>
-<li>消除类型的耦合关系</li>
-<li>可替换性</li>
-<li>可扩充性</li>
-<li>接口性</li>
-<li>灵活性</li>
-<li>简化性</li>
-</ul>
-<h3 id="多态存在的三个必要条件"><a href="#多态存在的三个必要条件" class="headerlink" title="多态存在的三个必要条件"></a>多态存在的三个必要条件</h3><ul>
-<li>继承</li>
-<li>重写</li>
-<li>父类引用子类对象</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="http://www.runoob.com/java/java-polymorphism.html">Java 多态 | 菜鸟教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_31655965/article/details/54746235">重新认识java（五） —- 面向对象之多态（向上转型与向下转型）</a></li>
-</ul>
-
+<h2 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-polymorphic/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1011,22 +966,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-12-11 10:19:19" itemprop="dateCreated datePublished" datetime="2018-12-11T10:19:19+08:00">2018-12-11</time>
+              <time title="أُنشأ: 2018-12-11 10:19:19" itemprop="dateCreated datePublished" datetime="2018-12-11T10:19:19+08:00">2018-12-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -1064,7 +1019,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第一阶段：泛型出现之前的集合定义方式</span></span><br><span class="line">        List a1 = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        a1.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a1.add(<span class="keyword">new</span> Integer(<span class="number">111</span>));</span><br><span class="line">        a1.add(<span class="keyword">new</span> String(<span class="string">&quot;Hello World&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object o : a1)&#123;</span><br><span class="line">            System.out.println(o);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第二段：把a1 引用赋值给a2，注意a2与a1的区别是增加了泛型限制&lt;Object&gt;</span></span><br><span class="line">        List&lt;Object&gt; a2 = a1;</span><br><span class="line">        a2.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a2.add(<span class="keyword">new</span> Integer(<span class="number">222</span>));</span><br><span class="line">        a2.add(<span class="keyword">new</span> String(<span class="string">&quot;hello a2a2&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第三段:把a1引用赋值给a3,注意a3与a1的区别是增加了泛型&lt;Integer&gt;</span></span><br><span class="line">        List&lt;Integer&gt; a3 = a1;</span><br><span class="line">        a3.add(<span class="keyword">new</span> Integer(<span class="number">333</span>));</span><br><span class="line">        <span class="comment">//下方两行编译出错,不允许增加非 Integer类型进入集合</span></span><br><span class="line">        a3.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a3.add(<span class="keyword">new</span> String(<span class="string">&quot;hello a3a3&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第四段:把a1引用赋值给a4,a1与a4的区别是增加了通配符</span></span><br><span class="line">        List&lt;?&gt; a4 = a1;</span><br><span class="line">        a1.remove(<span class="number">0</span>);</span><br><span class="line">        a4.clear();</span><br><span class="line">        <span class="comment">//编译出错。不允许增加任何元素</span></span><br><span class="line">        a4.add(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 第一段说明：在定义List之后,毫不犹豫地往集合里装入三种不同的对象：Object、 Integer 和 String，遍历没有问题，但是贸然以为里边的元素都是 Integer，使用强制转化，则抛出 ClassCastException异常。
 
-第二段说明：把a赋值给a2，a2是 List<Object>类型的，也可以再往里装入三种不同的对象。很多程序员认为List和List<Object>是完全相同的，至少从目前这两段来看是这样的。
+第二段说明：把a赋值给a2，a2是 List<object>类型的，也可以再往里装入三种不同的对象。很多程序员认为List和List<object>是完全相同的，至少从目前这两段来看是这样的。
 
 第三段说明：由于泛型在JDK5之后才出现，考虑到向前兼容，因此历史代码有时需要赋值给新泛型代码，从编译器角度是允许的。这种代码似乎有点反人类，在实际故障案例中经常出现。
 
@@ -1072,7 +1027,15 @@
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li>《码出高效：Java开发手册》</li>
 </ul>
-
+</object></object>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-genericity-super-extends/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1113,22 +1076,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-11-28 16:15:41" itemprop="dateCreated datePublished" datetime="2018-11-28T16:15:41+08:00">2018-11-28</time>
+              <time title="أُنشأ: 2018-11-28 16:15:41" itemprop="dateCreated datePublished" datetime="2018-11-28T16:15:41+08:00">2018-11-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -1166,14 +1129,14 @@
 <li>setState(in newSate)：设置当前同步状态</li>
 <li>ompareAndSetState(int expect, int update)：使用 CAS 设置当前状态，该方法能够保证状态设置的原子性。</li>
 </ul>
-<h2 id="CLH-同步队列"><a href="#CLH-同步队列" class="headerlink" title="CLH 同步队列"></a>CLH 同步队列</h2><p>CLH 同步队列（Craig、Landin、Hagersten）是一个<strong>FIFO双向对象</strong>，AQS 依赖它来完成同步状态的管理，当线程如果获取同步状态失败时，AQS 则会将当前线程等待状态等信息构造成一个节点（Node）并将其加入到 CLH 同步队列，同时会阻塞当前线程，当同步状态释放时，会把首节点唤醒（公平锁），使其再次尝试同步状态。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** 共享*/</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">    <span class="comment">/** 独占*/</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">/**因为超时或者中断，节点会被设置为取消状态，被取消的节点时不会参与到竞争中的，他会一直保持取消状态不会转变为其他状态 */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">    <span class="comment">/**  后继节点的线程处于等待状态，而当前节点的线程如果释放了同步状态或者被取消，将会通知后继节点，使后继节点的线程得以运行 */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">    <span class="comment">/** 节点在等待队列中，节点线程等待在Condition上，当其他线程对Condition调用了signal()后，改节点将会从等待队列中转移到同步队列中，加入到同步状态的获取中*/</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * waitStatus value to indicate the next acquireShared should</span></span><br><span class="line"><span class="comment">     * unconditionally propagate</span></span><br><span class="line"><span class="comment">     * 表示下一次共享式同步状态获取将会无条件地传播下去</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line">    <span class="comment">/** 等待状态 */</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line">    <span class="comment">/** 前驱节点*/</span></span><br><span class="line">    <span class="keyword">volatile</span> Node prev;</span><br><span class="line">    <span class="comment">/**后续节点*/</span></span><br><span class="line">    <span class="keyword">volatile</span> Node next;</span><br><span class="line">    <span class="comment">/** 获取同步状态的线程*/</span></span><br><span class="line">    <span class="keyword">volatile</span> Thread thread;</span><br><span class="line"></span><br><span class="line">    Node nextWaiter;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**Returns true if node is waiting in shared mode.*/</span></span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">        Node p = prev;</span><br><span class="line">        <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">        <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">        <span class="keyword">this</span>.thread = thread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">        <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">        <span class="keyword">this</span>.thread = thread;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="AQS-实现细节"><a href="#AQS-实现细节" class="headerlink" title="AQS 实现细节"></a>AQS 实现细节</h1><p>线程首先尝试获取锁，如果失败就将当前线程及等待状态等信息包装成一个node节点加入到FIFO队列中。 接着会不断的循环尝试获取锁，条件是当前节点为head的直接后继才会尝试。如果失败就会阻塞自己直到自己被唤醒。而当持有锁的线程释放锁的时候，会唤醒队列中的后继线程。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/-swOI_4_cxP5BBSD9wd0lA">【死磕Java并发】—–J.U.C之AQS（一篇就够了）</a></li>
-<li>《Java并发编程艺术》</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-aqs/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1191,7 +1154,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="الصفحة السابقة"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="الصفحة التالية"></i></a>
   </nav>
 
 
@@ -1235,10 +1198,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Inhaltsverzeichnis
+          المحتويات
         </li>
         <li class="sidebar-nav-overview">
-          Übersicht
+          عام
         </li>
       </ul>
 
@@ -1260,20 +1223,20 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">90</span>
-          <span class="site-state-item-name">Artikel</span>
+          <span class="site-state-item-name">المقالات</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
         <span class="site-state-item-count">23</span>
-        <span class="site-state-item-name">Kategorien</span></a>
+        <span class="site-state-item-name">التصنيفات</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">110</span>
-        <span class="site-state-item-name">schlagwörter</span></a>
+        <span class="site-state-item-name">الوسوم</span></a>
       </div>
   </nav>
 </div>
@@ -1318,7 +1281,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Alle Besucher">
+      <span class="site-uv" title="إجمالي الزوار">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -1327,7 +1290,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Alle Aufrufe">
+      <span class="site-pv" title="إجمالي المشاهدات">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
@@ -1412,5 +1375,5 @@
   
 
 
-</body>
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
 </html>

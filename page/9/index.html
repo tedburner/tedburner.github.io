@@ -111,7 +111,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -142,31 +142,31 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Startseite</a>
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archiv</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>الأرشيفات</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Kategorien</a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>التصنيفات</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Schlagwörter</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>الوسوم</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>Über</a>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>معلومات</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>بحث
         </a>
       </li>
   </ul>
@@ -182,7 +182,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="Suche..." spellcheck="false"
+           placeholder="بحث..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -241,22 +241,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-18 19:36:34" itemprop="dateCreated datePublished" datetime="2018-04-18T19:36:34+08:00">2018-04-18</time>
+              <time title="أُنشأ: 2018-04-18 19:36:34" itemprop="dateCreated datePublished" datetime="2018-04-18T19:36:34+08:00">2018-04-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -283,22 +283,14 @@
 <h2 id="LinkedList源码分析"><a href="#LinkedList源码分析" class="headerlink" title="LinkedList源码分析"></a>LinkedList源码分析</h2><p>来看下LinkedList的部分源码，底层是基于双向链表的数据结构。<br>定义：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> java.util;<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class"> <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">transient</span> <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">transient</span> Node&lt;E&gt; first;</span><br><span class="line">    <span class="keyword">transient</span> Node&lt;E&gt; last;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// assert isElementIndex(index);</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;<span class="comment">//如果index&lt;(size/2),则从前找</span></span><br><span class="line">        Node&lt;E&gt; x = first;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</span><br><span class="line">            x = x.next;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;<span class="comment">//否则从末尾往前找</span></span><br><span class="line">        Node&lt;E&gt; x = last;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</span><br><span class="line">            x = x.prev;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//直接删除某个元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="keyword">null</span>; x = x.next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (x.item == <span class="keyword">null</span>) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; x = first; x != <span class="keyword">null</span>; x = x.next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (o.equals(x.item)) &#123;</span><br><span class="line">                unlink(x);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//根据下标查询某个元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    checkElementIndex(index);<span class="comment">//检查下标是否越界</span></span><br><span class="line">    <span class="keyword">return</span> node(index).item;<span class="comment">//可以看第一个node的方法，其中有查询</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//设置index位置处的值为element</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">    checkElementIndex(index);</span><br><span class="line">    Node&lt;E&gt; x = node(index);</span><br><span class="line">    E oldVal = x.item;</span><br><span class="line">    x.item = element;</span><br><span class="line">    <span class="keyword">return</span> oldVal;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//在下标index位置处新增element</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">    checkPositionIndex(index);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (index == size)<span class="comment">//index是末尾，则在末尾新增一个</span></span><br><span class="line">        linkLast(element);</span><br><span class="line">    <span class="keyword">else</span> <span class="comment">//这里的插入需要先去查询相应的位置，这会导致性能降低</span></span><br><span class="line">        linkBefore(element, node(index));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ArrayList和LinkedList区别"><a href="#ArrayList和LinkedList区别" class="headerlink" title="ArrayList和LinkedList区别"></a>ArrayList和LinkedList区别</h2><p>平时在看博客的时候，网上很多博客都说，ArrayList基于数组的数据机构，LinkedList是基于链表的数据结构，所以有以下几种特性：<br>1、对于随机查询，ArrayList比LinkedList快<br>2、对于插入或者删除，LinkedList由于是链表，所以是比ArrayList性能更好。<br>通过两者的源码比较，我们发现对于随机查找，ArrayList直接根据下标index查询相对于的值，而LinkedList虽然源码对其做了部分优化，index小于（size/2）,从前往后找，否则从后往前找，即使这样，还是ArrayList比LinkedList快。<br>下面通过实际代码来看下插入的性能比较。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; array = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    LinkedList&lt;Integer&gt; linked = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">//首先分别给两者插入10000条数据</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">        array.add(i);</span><br><span class="line">        linked.add(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获得两者随机访问的时间</span></span><br><span class="line">    System.out.println(<span class="string">&quot;array get cost time:&quot;</span> + getTime(array));</span><br><span class="line">    System.out.println(<span class="string">&quot;linked get cost time:&quot;</span> + getTime(linked));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获得在中间插入数据的时间</span></span><br><span class="line">    System.out.println(<span class="string">&quot;array insert in first cost time:&quot;</span> + insertArrayListAtFirstTime(array));</span><br><span class="line">    System.out.println(<span class="string">&quot;linked insert cost in first time:&quot;</span> + insertLinkedListAtFirstTime(linked));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获得在中间插入数据的时间</span></span><br><span class="line">    System.out.println(<span class="string">&quot;array insert in middle cost time:&quot;</span> + insertInMiddleTime(array));</span><br><span class="line">    System.out.println(<span class="string">&quot;linked insert cost in middle time:&quot;</span> + insertInMiddleTime(linked));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获得尾部插入数据的时间</span></span><br><span class="line">    System.out.println(<span class="string">&quot;array insert at last cost time:&quot;</span> + insertAtLastTime(array));</span><br><span class="line">    System.out.println(<span class="string">&quot;linked insert cost at last time:&quot;</span> + insertAtLastTime(linked));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//头插</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">insertArrayListAtFirstTime</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">100000</span>;</span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        list.add(<span class="number">0</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> System.currentTimeMillis() - time;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//头插</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">insertLinkedListAtFirstTime</span><span class="params">(LinkedList&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">100000</span>;</span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        list.addFirst(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> System.currentTimeMillis() - time;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//中间插入数据</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">insertInMiddleTime</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">10000000</span>; <span class="comment">//表示要插入的数据量</span></span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        list.add(list.size() &gt;&gt; <span class="number">1</span>, i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> System.currentTimeMillis() - time;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尾插</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">insertAtLastTime</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">1000000</span>; <span class="comment">//表示要插入的数据量</span></span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        list.add(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> System.currentTimeMillis() - time;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getTime</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> index = Collections.binarySearch(list, list.get(i));</span><br><span class="line">        <span class="keyword">if</span> (index != i) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;ERROR!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> System.currentTimeMillis() - time;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个是运行时间:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">array get cost time:6</span><br><span class="line">linked get cost time:4170</span><br><span class="line"></span><br><span class="line">array insert <span class="keyword">in</span> first cost time:2927</span><br><span class="line">linked insert cost <span class="keyword">in</span> first time:4</span><br><span class="line"></span><br><span class="line">array insert <span class="keyword">in</span> middle cost time:1887</span><br><span class="line">linked insert cost <span class="keyword">in</span> middle time:124</span><br><span class="line"></span><br><span class="line">array insert at last cost time:23</span><br><span class="line">linked insert cost at last time:92</span><br></pre></td></tr></table></figure>
-<p>这里我们可以看出，对于大数据的随机查询，ArrayList比较快。对于插入，需要区分头插、中间插入和尾插的区别：</p>
-<ul>
-<li>头插：ArrayList 需要做大量的位移和复制操作，而LinkedList的优势就体现出来了，耗时只是实例化一个对象，相对来说，LinkedList 在大量插入的情况下，相对较快。</li>
-<li>中间插入：ArrayList 中间插入，首先我们知道他的定位时间复杂度是O(1)，比较耗时的点在于数据迁移和容量不足的时候扩容。LinkedList 中间插入，链表的数据实际插入时候并不会怎么耗时，但是它定位的元素的时间复杂度是O(n)，所以这部分以及元素的实例化比较耗时。</li>
-<li>尾插：ArrayList 不需要做位移拷贝也就不那么耗时了，而 LinkedList 则需要创建大量的对象。所以这里ArrayList尾插的效果更好一些。</li>
-</ul>
-<p>不过我们从源码比较知道LinkedList性能比较差的原因是因为在中间插入的时候，性能耗在了查询相应的位置上面了，如果只是直接在首插入的话，性能还是ArrayList快。</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000023826724">面经手册 · 第8篇《LinkedList插入速度比ArrayList快？你确定吗？》</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-ArrayList-LinkedList/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -339,22 +331,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-16 17:32:09" itemprop="dateCreated datePublished" datetime="2018-04-16T17:32:09+08:00">2018-04-16</time>
+              <time title="أُنشأ: 2018-04-16 17:32:09" itemprop="dateCreated datePublished" datetime="2018-04-16T17:32:09+08:00">2018-04-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
                 </span>
@@ -378,22 +370,15 @@
 <h1 id="HTTP方法"><a href="#HTTP方法" class="headerlink" title="HTTP方法"></a>HTTP方法</h1><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>获取信息。GET请求必须是安全且幂等的，这意味着无论使用相同参数重复多少次，结果都是一样的。对于网上说的，GET请求有长度限制，其实，URL不存在参数上限的问题，HTTP协议规范没有对URL长度进行限制。对GET的URL长度限制的是浏览器，这里的限制是URL，而不是参数的限制。</p>
 <h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><p>请求URL中的资源对提供的实体执行某些操作。POST通常用于创建或者更新实体。POST把提交的数据则放置在是HTTP包的包体中。</p>
 <h2 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h2><p>将实体存储在URL中。PUT更新现有的实体，或者新增指定的资源(如果id不存在，新增一个含id资源)。PUT请求是幂等的。幂等性是PUT期望与POST请求之间的主要区别。</p>
-<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><p>请求移除资源; 但是，资源不必立即删除。它可能是一个异步或长时间运行的请求。</p>
-<h2 id="GET和POST"><a href="#GET和POST" class="headerlink" title="GET和POST"></a>GET和POST</h2><p>post和get的安全性在传输的层面上区别不大，但是采用url提交数据的get方式容易被人肉眼看到，或者出现在历史纪录里，还是可能被肉眼看到，都是一些本地的问题。</p>
-<h1 id="HTTP-status-codes"><a href="#HTTP-status-codes" class="headerlink" title="HTTP status codes"></a>HTTP status codes</h1><p>查看<a target="_blank" rel="noopener" href="https://spring.io/understanding/REST#http-status-codes">spring官网</a>，可以看到这些状态码。</p>
-<ul>
-<li>1XX：informational</li>
-<li>2XX：success：成功信息</li>
-<li>3XX：redirection：重定向问题</li>
-<li>4XX：client error：客户端问题</li>
-<li>5XX：server error：服务端问题</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25028045">听说『99% 的人都理解错了 HTTP 中 GET 与 POST 的区别』？？
-</a></li>
-<li><a target="_blank" rel="noopener" href="https://sunshinevvv.coding.me/blog/2017/02/09/HttpGETv.s.POST/">HTTP协议中GET和POST方法的区别</a></li>
-</ul>
-
+<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/net-get-post-put-delete/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -434,22 +419,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-11 11:53:40" itemprop="dateCreated datePublished" datetime="2018-04-11T11:53:40+08:00">2018-04-11</time>
+              <time title="أُنشأ: 2018-04-11 11:53:40" itemprop="dateCreated datePublished" datetime="2018-04-11T11:53:40+08:00">2018-04-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -477,24 +462,14 @@
 <p>如上面的代码，首先创建一个 <code>String</code> 对象 <code>a</code>，再把“abc”赋值给它，后面Java虚拟机又创建了一个 <code>String</code> 对象 <code>a</code>，然后再把原来的 <code>a</code> 的值和 “d” 加起来再赋值给新的 <code>a</code>，而原来的<code>a</code> 就会被Java虚拟机的垃圾回收机制（GC）给回收掉了，所以，<code>a</code> 实际上并没有被更改，也就是前面说的 <code>String</code> 对象一旦创建之后就不可更改了。从这里可以看出，对于频繁操作的字符串，不建议使用 <code>String</code> 类型，这将会是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
 <p>对于 <code>String</code> 类型对象的“+”操作，通过在 <code>StringBuilder</code> 的 append 方法上面打断点，可以发现对于String的操作，其实是使用了 <code>StringBuilder</code> 的 <code>append</code> 操作，这个不是线程安全。详细可以看下面关于  <code>StringBuilder</code> 的源码。</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181120163329.png"></p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181120163349.png"></p>
-<p><code>String</code> 的性能差，主要是对于频繁操作的字符串，不断的创建和销毁对象，对于程序性能有很大的影响。</p>
-<h2 id="StringBuffer"><a href="#StringBuffer" class="headerlink" title="StringBuffer"></a>StringBuffer</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/bd4156463bd0d33006577d37befd352a.jpg"></p>
-<p>从源码中我们可以看出，对 <code>StringBuffer</code> 来说，底层也是 char 数组。<code>StringBuffer</code> 默认初始空间是16。对于 <code>StringBuffer</code> 的扩容，从下面的这张图上面可以看出，是在旧的数组的2倍上面，再加2进行扩容。  </p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/39b7b480af3f3862dfc203102c793a12.jpg">  </p>
-<p>下面我们在来看下 <code>StringBuffer</code> 的操作函数<code>append</code>，<code>append</code> 方法是由 <code>synchronized</code> 修饰的，是线程安全的。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/732cb5d485beefc6ad6c36353d78e73d.jpg"></p>
-<h2 id="StringBuilder"><a href="#StringBuilder" class="headerlink" title="StringBuilder"></a>StringBuilder</h2><p>通过和 <code>StringBuffer</code> 的源码比较，我们发现，底层也是char数组，初始空间也是16。<code>StringBuilder</code> 和 <code>StringBuffer</code> 都是从 <code>AbstractStringBuilder</code> 继承来的，所以对于其初始空间和扩容都是相同的。  </p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/0e0a1b93bbc2f10b050b5406afb21e09.jpg"></p>
-<p>对于 <code>StringBuilder</code> 和 <code>StringBuffer</code> 的区别可以从下面的这张图片上看出，对于append()方法，缺少了<code>synchronized</code> 修饰，这使得 <code>StringBuilder</code> 不是一个线程安全。  </p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/84a05816bf159e873f00720901b33ea6.jpg"></p>
-<h2 id="三者性能比较"><a href="#三者性能比较" class="headerlink" title="三者性能比较"></a>三者性能比较</h2><p>我做了个测试，代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">10000</span>;</span><br><span class="line">    String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        a = a + i;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(System.currentTimeMillis() - time);</span><br><span class="line">    <span class="keyword">long</span> time1 = System.currentTimeMillis();</span><br><span class="line">    StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        buffer.append(i);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(System.currentTimeMillis() - time1);</span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">long</span> time2 = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; num; i++) &#123;</span><br><span class="line">        builder.append(i);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(System.currentTimeMillis() - time2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>再来看下运行的结果：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">405</span><br><span class="line">1</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-<p>从运行结果，我们可以非常明显的看出这三者的性能比较。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>String 长度大小不可变<br>StringBuffer 和 StringBuilder 长度可变<br>StringBuffer 线程安全 StringBuilder 线程不安全<br>因此：<br>String：适用于少量的字符串操作的情况<br>StringBuilder：适用于单线程下在字符缓冲区进行大量操作的情况<br>StringBuffer：适用多线程下在字符缓冲区进行大量操作的情况</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-string-source/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -535,22 +510,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-10 10:10:13" itemprop="dateCreated datePublished" datetime="2018-04-10T10:10:13+08:00">2018-04-10</time>
+              <time title="أُنشأ: 2018-04-10 10:10:13" itemprop="dateCreated datePublished" datetime="2018-04-10T10:10:13+08:00">2018-04-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
                 </span>
@@ -571,40 +546,14 @@
 <h2 id="必要时进行保护性拷贝"><a href="#必要时进行保护性拷贝" class="headerlink" title="必要时进行保护性拷贝"></a>必要时进行保护性拷贝</h2><h2 id="谨慎设计方法签名"><a href="#谨慎设计方法签名" class="headerlink" title="谨慎设计方法签名"></a>谨慎设计方法签名</h2><h2 id="慎用重载"><a href="#慎用重载" class="headerlink" title="慎用重载"></a>慎用重载</h2><p>在Java中，参数类型或者个数不一样，对返回参数没有要求，叫做重载。</p>
 <h2 id="慎用可变参数"><a href="#慎用可变参数" class="headerlink" title="慎用可变参数"></a>慎用可变参数</h2><p>可变参数如下代码所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">static int sum(int... args) &#123;</span><br><span class="line">   int sum = 0;</span><br><span class="line">   <span class="keyword">for</span> (int arg : args) &#123;</span><br><span class="line">       sum += arg;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在定义参数数目不定的方法时，可变参数方法是一种很方便的方式，但是它们不应该被过度滥用。如果使用不当，会产生混乱的结果。</p>
-<h2 id="返回零长度的数组或者集合，而不是null"><a href="#返回零长度的数组或者集合，而不是null" class="headerlink" title="返回零长度的数组或者集合，而不是null"></a>返回零长度的数组或者集合，而不是null</h2><p>返回类型为数组或集合的方法没理由返回null，而不是返回一个零长度的数组或者集合。</p>
-<h2 id="为所有导出的API元素编写文档注释"><a href="#为所有导出的API元素编写文档注释" class="headerlink" title="为所有导出的API元素编写文档注释"></a>为所有导出的API元素编写文档注释</h2><p>方便后来者阅读以及使用 API 的用户使用。</p>
-<h1 id="通用程序设计"><a href="#通用程序设计" class="headerlink" title="通用程序设计"></a>通用程序设计</h1><h2 id="将局部变量的作用域最小化"><a href="#将局部变量的作用域最小化" class="headerlink" title="将局部变量的作用域最小化"></a>将局部变量的作用域最小化</h2><p>要使局部变量的作用域最小化，最有利的方法就是在第一次使用它的地方声明。如果变量在使用之前声明，这只会造成混乱——对于试图理解程序功能的读者来说，多了一种分散注意力的因素。等到用到该变量的时候，读者可能已经记不起该变量的类型或者初始值了。</p>
-<h2 id="for-each循环优先于传统的for循环"><a href="#for-each循环优先于传统的for循环" class="headerlink" title="for-each循环优先于传统的for循环"></a>for-each循环优先于传统的for循环</h2><p>这个就是推荐使用下面这种循环：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Element e: elements)&#123;</span><br><span class="line">	doSomething (e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于这种循环，它的性能比传统的循环，性能更好。for-each循环在简洁性和预防Bug方面有着传统的for循环无法比拟的优势，并且没有性能损失。应该尽可能地使用for-each循环。不过在Java8中，stream 有一种foreach功能，可以试试使用。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">list.forEach(input-&gt;&#123;</span><br><span class="line">    //对数组的操作</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="了解和使用类库"><a href="#了解和使用类库" class="headerlink" title="了解和使用类库"></a>了解和使用类库</h2><p>Java提供了很多的标准库，我们在平时使用的时候，不需要再去造轮子了，可以直接使用，但是在使用的时候，需要注意这些类库的一些使用情况。 </p>
-<h2 id="如果需要精确的答案，请避免使用-float和-double"><a href="#如果需要精确的答案，请避免使用-float和-double" class="headerlink" title="如果需要精确的答案，请避免使用 float和 double"></a>如果需要精确的答案，请避免使用 float和 double</h2><p>如果性能非常关键，并且你又不介意自己记录十进制小数点，而且所涉及的数值又不太大，就可以使用int或者long。如果数值范围没有超过9位十进制数字，就可以使用int;如果不超过18位数字，就可以使用long。如果数值可能超过18位数字，就必须使用 BigDecimal。</p>
-<p>进行货币计算，正确的办法是使用 BigDecimal、int 或者 long。</p>
-<h2 id="基本类型优先于装箱基本类型"><a href="#基本类型优先于装箱基本类型" class="headerlink" title="基本类型优先于装箱基本类型"></a>基本类型优先于装箱基本类型</h2><p>基本类型简单，在运行的时候，速度更加快。装箱基本类型在创建的时候，初始是null。</p>
-<h2 id="如果其他类型更适合，则尽量避免使用字符串"><a href="#如果其他类型更适合，则尽量避免使用字符串" class="headerlink" title="如果其他类型更适合，则尽量避免使用字符串"></a>如果其他类型更适合，则尽量避免使用字符串</h2><ul>
-<li>字符串不适合替代其他的值类型</li>
-<li>字符串不适合替代枚举类型</li>
-<li>字符串不适合替代聚合类型</li>
-<li>字符串不适合替代能力表</li>
-</ul>
-<h2 id="当心字符串连接的性能"><a href="#当心字符串连接的性能" class="headerlink" title="当心字符串连接的性能"></a>当心字符串连接的性能</h2><p>可以查看<a href="https://jlj98.top/java-String-source/">String，StringBuilder，StringBuffer源码分析</a>。</p>
-<h2 id="通过接口引用对象"><a href="#通过接口引用对象" class="headerlink" title="通过接口引用对象"></a>通过接口引用对象</h2><h2 id="接口优先于反射机制"><a href="#接口优先于反射机制" class="headerlink" title="接口优先于反射机制"></a>接口优先于反射机制</h2><h2 id="谨慎地使用本地方法"><a href="#谨慎地使用本地方法" class="headerlink" title="谨慎地使用本地方法"></a>谨慎地使用本地方法</h2><p>本地方法（native method），指的是用本地程序设计语言（比如 C 或者 C++）来编写的特殊方法，有 native 修饰的。</p>
-<h2 id="谨慎地进行优化"><a href="#谨慎地进行优化" class="headerlink" title="谨慎地进行优化"></a>谨慎地进行优化</h2><h2 id="遵守普遍接受的命名惯例"><a href="#遵守普遍接受的命名惯例" class="headerlink" title="遵守普遍接受的命名惯例"></a>遵守普遍接受的命名惯例</h2><p><a target="_blank" rel="noopener" href="http://techforum-img.cn-hangzhou.oss-pub.aliyun-inc.com/Java_1512024443940.pdf">可以参考阿里巴巴的Java手册</a>。</p>
-<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><h2 id="只针对异常的情况才使用异常"><a href="#只针对异常的情况才使用异常" class="headerlink" title="只针对异常的情况才使用异常"></a>只针对异常的情况才使用异常</h2><p>对于程序，能够通过代码解决的问题，不要丢给异常来处理。</p>
-<h2 id="对可恢复的情况使用受检异常，对编程错误使用运行时异常"><a href="#对可恢复的情况使用受检异常，对编程错误使用运行时异常" class="headerlink" title="对可恢复的情况使用受检异常，对编程错误使用运行时异常"></a>对可恢复的情况使用受检异常，对编程错误使用运行时异常</h2><h2 id="避免不必要地使用受检的异常"><a href="#避免不必要地使用受检的异常" class="headerlink" title="避免不必要地使用受检的异常"></a>避免不必要地使用受检的异常</h2><h2 id="优先使用标准的异常"><a href="#优先使用标准的异常" class="headerlink" title="优先使用标准的异常"></a>优先使用标准的异常</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/60b96ac2d795023302ab8e8ecf56c543.jpg"></p>
-<h2 id="抛出与抽象相对应的异常"><a href="#抛出与抽象相对应的异常" class="headerlink" title="抛出与抽象相对应的异常"></a>抛出与抽象相对应的异常</h2><h2 id="每个方法抛出的异常都要有文档"><a href="#每个方法抛出的异常都要有文档" class="headerlink" title="每个方法抛出的异常都要有文档"></a>每个方法抛出的异常都要有文档</h2><p>使用 Javadoc 的 @throws 标签记录下一个方法可能拋出的每个未受检异常，但是不要使用 throws 关键字将未受检的异常包含在方法的声明中。</p>
-<h2 id="在细节消息中包含能捕获失败的信息"><a href="#在细节消息中包含能捕获失败的信息" class="headerlink" title="在细节消息中包含能捕获失败的信息"></a>在细节消息中包含能捕获失败的信息</h2><h2 id="努力使失败保持原子性"><a href="#努力使失败保持原子性" class="headerlink" title="努力使失败保持原子性"></a>努力使失败保持原子性</h2><h2 id="不要忽略异常"><a href="#不要忽略异常" class="headerlink" title="不要忽略异常"></a>不要忽略异常</h2><p>对于异常，需要解决。</p>
-<h1 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h1><h2 id="同步访问共享的可变数据"><a href="#同步访问共享的可变数据" class="headerlink" title="同步访问共享的可变数据"></a>同步访问共享的可变数据</h2><p>当多个线程共享可变数据的时候，每个读或者写数据的线程都必须执行同步。</p>
-<h2 id="避免过度同步"><a href="#避免过度同步" class="headerlink" title="避免过度同步"></a>避免过度同步</h2><p>这会导致程序整体性能下降。为了避免死锁和数据破坏，千万不要从同步区域内部调用外来方法。更为一般地讲，要尽量限制同步区域内部的工作量。当你在设计一个可变类的时候，要考虑一下它们是否应该自己完成同步操作。在现在现在多核的时代，这比永远不要过度同步来得更重要。</p>
-<h2 id="executor和task优先于线程"><a href="#executor和task优先于线程" class="headerlink" title="executor和task优先于线程"></a>executor和task优先于线程</h2><p>使用线程池。<a href="https://jlj98.top/java-thread-pool/">多线程编程 —— 线程池</a></p>
-<h2 id="并发工具优先于-wait-和-notify"><a href="#并发工具优先于-wait-和-notify" class="headerlink" title="并发工具优先于 wait 和 notify"></a>并发工具优先于 wait 和 notify</h2><p>在 <code>java.util.concurrent</code> 工具包下，提供了一些并发工具类，比如 CountDownLatch 和 Semaphore。可以参考<a href="https://jlj98.top/java-CyclicBarrier-CountDownLatch/">CyclicBarrier、CountDownLatch 和 Semaphore 的比较</a></p>
-<h2 id="线程安全性的文档化"><a href="#线程安全性的文档化" class="headerlink" title="线程安全性的文档化"></a>线程安全性的文档化</h2><h2 id="慎用延迟初始化"><a href="#慎用延迟初始化" class="headerlink" title="慎用延迟初始化"></a>慎用延迟初始化</h2><h2 id="不要依赖于线程调度器"><a href="#不要依赖于线程调度器" class="headerlink" title="不要依赖于线程调度器"></a>不要依赖于线程调度器</h2><h2 id="避免使用线程组"><a href="#避免使用线程组" class="headerlink" title="避免使用线程组"></a>避免使用线程组</h2><h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><h2 id="谨慎地实现-Serializable-接口"><a href="#谨慎地实现-Serializable-接口" class="headerlink" title="谨慎地实现 Serializable 接口"></a>谨慎地实现 Serializable 接口</h2><p>实现 Serializable 接口而付出的最大代价是，一旦一个类被发布，就大大降低了“改变这个类的实现”的灵活性。如果一个类实现 Serializable 接口，它的字节流编码就变成了它的导出 API 的一部分。如果使用这个类，就必须支持这种序列化。</p>
-<p>第二个代价是增加了出现 Bug 和安全漏洞的可能性。</p>
-<p>第三个代价是随着类的发行新的版本，相关的测试负担也增加了。</p>
-<p>PS：对于这一点，不是很明白。</p>
-<h2 id="考虑使用自定义的序列化形式"><a href="#考虑使用自定义的序列化形式" class="headerlink" title="考虑使用自定义的序列化形式"></a>考虑使用自定义的序列化形式</h2><h2 id="保护性地编写-readobject-方法"><a href="#保护性地编写-readobject-方法" class="headerlink" title="保护性地编写 readobject 方法"></a>保护性地编写 readobject 方法</h2><h2 id="对于实例控制，枚举类型优先于-readResolve"><a href="#对于实例控制，枚举类型优先于-readResolve" class="headerlink" title="对于实例控制，枚举类型优先于 readResolve"></a>对于实例控制，枚举类型优先于 readResolve</h2><h2 id="考虑用序列化代理代替序列化实例"><a href="#考虑用序列化代理代替序列化实例" class="headerlink" title="考虑用序列化代理代替序列化实例"></a>考虑用序列化代理代替序列化实例</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-3/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -645,22 +594,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-09 15:26:30" itemprop="dateCreated datePublished" datetime="2018-04-09T15:26:30+08:00">2018-04-09</time>
+              <time title="أُنشأ: 2018-04-09 15:26:30" itemprop="dateCreated datePublished" datetime="2018-04-09T15:26:30+08:00">2018-04-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
                 </span>
@@ -680,17 +629,14 @@
           <h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><h2 id="使类和成员的可访问性最小化"><a href="#使类和成员的可访问性最小化" class="headerlink" title="使类和成员的可访问性最小化"></a>使类和成员的可访问性最小化</h2><p>1、尽可能地使每个类或者成员不被外界访问。换句话说，应该使用与你正在编写的软件的对应功能相一致的、尽可能最小的访问级别。例如，想在实体类的中，使用private定义属性值。</p>
 <h2 id="在公有类中使用访问方法而非公有域"><a href="#在公有类中使用访问方法而非公有域" class="headerlink" title="在公有类中使用访问方法而非公有域"></a>在公有类中使用访问方法而非公有域</h2><h2 id="使可变性最小化"><a href="#使可变性最小化" class="headerlink" title="使可变性最小化"></a>使可变性最小化</h2><h3 id="不要提供任何会修改对象状态的方法-也称为-mutator"><a href="#不要提供任何会修改对象状态的方法-也称为-mutator" class="headerlink" title="不要提供任何会修改对象状态的方法(也称为 mutator)"></a>不要提供任何会修改对象状态的方法(也称为 mutator)</h3><h3 id="保证类不会被扩展。"><a href="#保证类不会被扩展。" class="headerlink" title="保证类不会被扩展。"></a>保证类不会被扩展。</h3><p>这样可以防止粗心或者恶意的子类假装对象的状态已经改变，从而破坏该类的不可变行为。为了防止子类化，一般做法是使这个类成为 final的，但是后面我们还会讨论到其他的做法。</p>
 <h3 id="使所有的域都是final的。"><a href="#使所有的域都是final的。" class="headerlink" title="使所有的域都是final的。"></a>使所有的域都是final的。</h3><p>通过系统的强制方式，这可以清楚地表明你的意图。而且，如果一个指向新创建实例的引用在缺乏同步机制的情况下，从一个线程被传递到另一个线程，就必需确保正确的行为，正如内存模型( memory model)中所述。</p>
-<h3 id="使所有的域都成为私有的。"><a href="#使所有的域都成为私有的。" class="headerlink" title="使所有的域都成为私有的。"></a>使所有的域都成为私有的。</h3><p>这样可以防止客户端获得访问被域引用的可变对象的权限，并防止客户端直接修改这些对象。虽然从技术上讲，允许不可变的类具有公有的 final域，只要这些域包含基本类型的值或者指向不可变对象的引1用，但是不建议这样做，因为这样会使得在以后的版本中无法再改变内部的表示法(见第13条)。</p>
-<h3 id="确保对于任何可变组件的互斥访问。"><a href="#确保对于任何可变组件的互斥访问。" class="headerlink" title="确保对于任何可变组件的互斥访问。"></a>确保对于任何可变组件的互斥访问。</h3><p>如果类具有指向可变对象的域，则必须确保该类的客户端无法获得指向这些对象的引用。并且，永远不要用客户端提供的对象引用来初始化这样的域，也不要从任何访问方法( accessor)中返回该对象引用。在构造器、访问方法和readobject方法(见第76条)中请使用保护性拷贝( defensive copy)技术(见第39条)。</p>
-<h2 id="复合优先于继承"><a href="#复合优先于继承" class="headerlink" title="复合优先于继承"></a>复合优先于继承</h2><p>不要出现跨包继承。</p>
-<h2 id="要么为继承而设计，并提供文档说明，要么就禁止继承"><a href="#要么为继承而设计，并提供文档说明，要么就禁止继承" class="headerlink" title="要么为继承而设计，并提供文档说明，要么就禁止继承"></a>要么为继承而设计，并提供文档说明，要么就禁止继承</h2><h2 id="接口优于抽象类"><a href="#接口优于抽象类" class="headerlink" title="接口优于抽象类"></a>接口优于抽象类</h2><p>通过 implements 来实现接口，可以多实现。</p>
-<h2 id="接口只用于定义类型"><a href="#接口只用于定义类型" class="headerlink" title="接口只用于定义类型"></a>接口只用于定义类型</h2><h2 id="类层次优于标签类"><a href="#类层次优于标签类" class="headerlink" title="类层次优于标签类"></a>类层次优于标签类</h2><h2 id="用函数对象表示策略"><a href="#用函数对象表示策略" class="headerlink" title="用函数对象表示策略"></a>用函数对象表示策略</h2><h2 id="优先考虑静态成员类"><a href="#优先考虑静态成员类" class="headerlink" title="优先考虑静态成员类"></a>优先考虑静态成员类</h2><h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h2 id="请不要在新代码中使用原生态类型"><a href="#请不要在新代码中使用原生态类型" class="headerlink" title="请不要在新代码中使用原生态类型"></a>请不要在新代码中使用原生态类型</h2><p>每个泛型都定义一个原生态类型(raw type)，即不带任何实际类型参数的泛型名称。例如，与List<E>相对应的原生态类型是List。原生态类型就像从类型声明中删除了所有泛型信息一样。实际上，原生态类型List与Java平台没有泛型之前的接口类型List完全一样。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">Object o = new Object();</span><br><span class="line">list.add(o);//这里会报错</span><br></pre></td></tr></table></figure>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/f417ecefc97980c424ab3458b0002df5.jpg"></p>
-<h2 id="消除非受检警告"><a href="#消除非受检警告" class="headerlink" title="消除非受检警告"></a>消除非受检警告</h2><p>尽可能的消除代码中的警告信息。如果无法消除警告，同时可以证明引起警告的代码是类型安全的，(只有在这种情况下才)可以用一个@ SuppressWarnings(“unchecked”)注解来禁止这条警告。</p>
-<h2 id="列表优先于数组"><a href="#列表优先于数组" class="headerlink" title="列表优先于数组"></a>列表优先于数组</h2><h2 id="优先考虑泛型"><a href="#优先考虑泛型" class="headerlink" title="优先考虑泛型"></a>优先考虑泛型</h2><h2 id="优先考虑泛型方法"><a href="#优先考虑泛型方法" class="headerlink" title="优先考虑泛型方法"></a>优先考虑泛型方法</h2><h2 id="利用有限制通配符来提升AP的灵活性"><a href="#利用有限制通配符来提升AP的灵活性" class="headerlink" title="利用有限制通配符来提升AP的灵活性"></a>利用有限制通配符来提升AP的灵活性</h2><h2 id="优先考虑类型安全的异构容器"><a href="#优先考虑类型安全的异构容器" class="headerlink" title="优先考虑类型安全的异构容器"></a>优先考虑类型安全的异构容器</h2><h1 id="枚举和注解"><a href="#枚举和注解" class="headerlink" title="枚举和注解"></a>枚举和注解</h1><h2 id="用enum代替int常量"><a href="#用enum代替int常量" class="headerlink" title="用enum代替int常量"></a>用enum代替int常量</h2><p>很多常亮不需要定义一大推，只需要使用枚举，定义一个就好了。</p>
-<h2 id="用-EnumSet代替位域"><a href="#用-EnumSet代替位域" class="headerlink" title="用 EnumSet代替位域"></a>用 EnumSet代替位域</h2><h2 id="用接口模拟可伸缩的枚举"><a href="#用接口模拟可伸缩的枚举" class="headerlink" title="用接口模拟可伸缩的枚举"></a>用接口模拟可伸缩的枚举</h2><h2 id="用标记接囗定义类型"><a href="#用标记接囗定义类型" class="headerlink" title="用标记接囗定义类型"></a>用标记接囗定义类型</h2><p>标记接口胜过标记注解的另一个优点是，它们可以被更加精确地进行锁定。如果注解类型利用@Target( ElementType.TYPE)声明，它就可以被应用到任何类或者接口。假设有一个标记只适用于特殊接口的实现。如果将它定义成一个标记接口，就可以用它将唯一的接口扩展成它适用的接口。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-2/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -731,22 +677,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2018-04-09 10:37:14" itemprop="dateCreated datePublished" datetime="2018-04-09T10:37:14+08:00">2018-04-09</time>
+              <time title="أُنشأ: 2018-04-09 10:37:14" itemprop="dateCreated datePublished" datetime="2018-04-09T10:37:14+08:00">2018-04-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
                 </span>
@@ -769,22 +715,15 @@
 <h2 id="遇到多个构造器参数时要考虑用构建器"><a href="#遇到多个构造器参数时要考虑用构建器" class="headerlink" title="遇到多个构造器参数时要考虑用构建器"></a>遇到多个构造器参数时要考虑用构建器</h2><h3 id="重叠构造器模式"><a href="#重叠构造器模式" class="headerlink" title="重叠构造器模式"></a>重叠构造器模式</h3><p>这种模式就是利用重载，不断调用构造函数，生成需要的bean：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span></span>&#123;</span><br><span class="line">    <span class="comment">//必要的参数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> one;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> two;</span><br><span class="line">    <span class="comment">//可选的参数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> three;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> four;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass1</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(one,two,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two,<span class="keyword">int</span> three)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(one,two,three,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two,<span class="keyword">int</span> three,<span class="keyword">int</span> four)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.one=one;</span><br><span class="line">        <span class="keyword">this</span>.two=two;</span><br><span class="line">        <span class="keyword">this</span>.three=three;</span><br><span class="line">        <span class="keyword">this</span>.four=four;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot; one=&quot;</span>+<span class="keyword">this</span>.one+<span class="string">&quot; two=&quot;</span>+<span class="keyword">this</span>.two+<span class="string">&quot; three=&quot;</span>+<span class="keyword">this</span>.three+<span class="string">&quot; four=&quot;</span>+<span class="keyword">this</span>.four;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从这代代码可以看出，这种写法有点复杂，个人觉得实际开发中，不会去使用</p>
-<h3 id="JavaB-ean"><a href="#JavaB-ean" class="headerlink" title="JavaB ean"></a>JavaB ean</h3><p>使用创建对象，通过set来设置参数，这种也是在实际开发中，使用最多的。但是如果存在很多歌参数需要set，那就有点麻烦了，所以推荐builder模式。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user.setNation(<span class="string">&quot;China&quot;</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="使用builder模式"><a href="#使用builder模式" class="headerlink" title="使用builder模式"></a>使用builder模式</h3><p>在编辑器idea中，提供了丰富的插件，其中有一款Builder Generator的插件，提供了builder模式。这种生成的对象，可以选择参数。如果类的构造器或者静态工厂中具有多个参数，设计这种类时， Builder模式就是种不错的选择，特别是当大多数参数都是可选的时候。这种模式结合了重叠和JavaBeans的模式，在开发中可以使用。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/19d5913a6ce2ea1603ab8e3cedcc46f1.jpg"></p>
-<p>使用builder模式的时候，只要如下代码使用就可以：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SimpleDTO builder = SimpleDTO.SimpleDTOBuilder.aSimpleDTO()</span><br><span class="line">                .withId(<span class="number">1</span>)</span><br><span class="line">                .withName(<span class="string">&quot;金华市&quot;</span>)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure>
-<h2 id="用私有构造器或者枚举类型强化Singleton属性"><a href="#用私有构造器或者枚举类型强化Singleton属性" class="headerlink" title="用私有构造器或者枚举类型强化Singleton属性"></a>用私有构造器或者枚举类型强化Singleton属性</h2><p>Singleton在设计模式中，指的是单例模式。只需要初始化一次，之后就不需要再创建对象了。</p>
-<h2 id="通过私有构造器强化不可实例化的能力"><a href="#通过私有构造器强化不可实例化的能力" class="headerlink" title="通过私有构造器强化不可实例化的能力"></a>通过私有构造器强化不可实例化的能力</h2><h2 id="避免创建不必要的对象"><a href="#避免创建不必要的对象" class="headerlink" title="避免创建不必要的对象"></a>避免创建不必要的对象</h2><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>在项目中，对于String的属性，若改变量存在频繁的操作，就选择StringBuilder或者StringBuffer这两个。因为String定义的变量是不可变的，在执行+来修改变量的时候，String变量重新new一个String对象实例。<a href="https://jlj98.top/java-String-source/">详情</a>。</p>
-<h3 id="使用静态工厂方法"><a href="#使用静态工厂方法" class="headerlink" title="使用静态工厂方法"></a>使用静态工厂方法</h3><p>对于同时提供了静态工厂方法(见第1条)和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法 Boolean. valueof( String)几乎总是优先于构造器 Boolean( String)。构造器在每次被调用的时候都会创建一个新的对象，而静态工厂方法则从来不要求这样做，实际上也不会这样做。</p>
-<h3 id="自动装箱"><a href="#自动装箱" class="headerlink" title="自动装箱"></a>自动装箱</h3><p>要优先使用基本类型而不是装箱基本类型，要当心无意识的自动装箱。类型对象需要不断的创建。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/e14ba87db4b431332b52c0007f29059c.jpg"></p>
-<h2 id="消除过期的对象引用"><a href="#消除过期的对象引用" class="headerlink" title="消除过期的对象引用"></a>消除过期的对象引用</h2><h2 id="避免使用终结方法"><a href="#避免使用终结方法" class="headerlink" title="避免使用终结方法"></a>避免使用终结方法</h2><p>终结方法( finalizer)通常是不可预测的，也是很危险的，一般情况下是不必要的。使用终结方法会导致行为不稳定、降低性能，以及可移植性问题。当然，终结方法也有其可用之处，但是根据经验，应该避免使用终结方法。</p>
-<h2 id="覆盖-equals时请遵守通用约定"><a href="#覆盖-equals时请遵守通用约定" class="headerlink" title="覆盖 equals时请遵守通用约定"></a>覆盖 equals时请遵守通用约定</h2><h2 id="覆盖-equals时总要覆盖-hashCode"><a href="#覆盖-equals时总要覆盖-hashCode" class="headerlink" title="覆盖 equals时总要覆盖 hashCode"></a>覆盖 equals时总要覆盖 hashCode</h2><h2 id="始终要覆盖-toString"><a href="#始终要覆盖-toString" class="headerlink" title="始终要覆盖 toString"></a>始终要覆盖 toString</h2><p>在实体类的创建的时候，记得覆盖 toString，这样在打印日志什么的时候，就可以在日志中看到实体类中的具体数据了，而不是出现“实体类@163b91”这种日志了。</p>
-<h2 id="谨慎地覆盖clone"><a href="#谨慎地覆盖clone" class="headerlink" title="谨慎地覆盖clone"></a>谨慎地覆盖clone</h2><p>这个clone还没使用过，这几天详细的去看下。</p>
-<h2 id="考虑实现Comparable接口"><a href="#考虑实现Comparable接口" class="headerlink" title="考虑实现Comparable接口"></a>考虑实现Comparable接口</h2><p>在Java8中的Stream中，新增了一些排序的功能，<a href="http://jlj98.top/Java-Stream/">详情</a>。</p>
-
+<h3 id="JavaB-ean"><a href="#JavaB-ean" class="headerlink" title="JavaB ean"></a>JavaB ean</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-1/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -825,22 +764,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2017-12-20 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-20T10:37:14+08:00">2017-12-20</time>
+              <time title="أُنشأ: 2017-12-20 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-20T10:37:14+08:00">2017-12-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -862,46 +801,19 @@
 </blockquote>
 <p>Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。</p>
 <h2 id="生成一个List"><a href="#生成一个List" class="headerlink" title="生成一个List"></a>生成一个List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">&quot;1,2,3,4,10,11,9,66,222,12&quot;</span>;</span><br><span class="line">List&lt;Integer&gt; list = Stream.of(str.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line">                .map(Integer::valueOf)</span><br><span class="line">                .filter(x-&gt; !Objects.equals(x,<span class="number">3</span>))</span><br><span class="line">                .sorted(Comparator.reverseOrder())</span><br><span class="line">                .limit(<span class="number">4</span>)</span><br><span class="line">                .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
-<p>上面的代码Stream.of 为我们生成了一个List<String>，但是我们需要的Integer，所以我们还需要使用<strong>map</strong>来转换类型。然后对于生成的列表，我们不想要其中的3，于是我们使用<strong>filter</strong>来过滤掉列表中的3。对于现在列表我们又想是倒序后的列表的前四条数据，于是我们在使用<strong>sorted</strong>来对列表来进行倒序后，再使用<strong>limit</strong>取前四条。顺便说一句，对于比较，推荐使用Objects.equals(a,b).<br>下面来简单的介绍下stream。</p>
+<p>上面的代码Stream.of 为我们生成了一个List<string>，但是我们需要的Integer，所以我们还需要使用<strong>map</strong>来转换类型。然后对于生成的列表，我们不想要其中的3，于是我们使用<strong>filter</strong>来过滤掉列表中的3。对于现在列表我们又想是倒序后的列表的前四条数据，于是我们在使用<strong>sorted</strong>来对列表来进行倒序后，再使用<strong>limit</strong>取前四条。顺便说一句，对于比较，推荐使用Objects.equals(a,b).<br>下面来简单的介绍下stream。</string></p>
 <h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map：对于Stream中包含的元素使用给定的转换函数进行转换操作，新生成的Stream只包含转换生成的元素<br>map方法是对列表里面的对象的转换，比如上面的map的功能是吧String转换成Integer。除了这样的转换，你也可以对对象进行你需要的操作。比如现在有一个对象ListDTO:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDTO</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">(Integer id, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>现在这么一个List<ListDTO>，你现在只想得到这个列表中ListDTO对象里面的id，现在你就可以这样操作：</p>
+<p>现在这么一个List<listdto>，你现在只想得到这个列表中ListDTO对象里面的id，现在你就可以这样操作：</listdto></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; idList = beans.stream().map(ListDTO::getId).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
-<p>如果你想要得到name的列表，也可以进行上面类似的操作。下面对List列表的元素先转换成大写，在用逗号把元素拼接起来。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将字符串换成大写并用逗号拼接起来</span></span><br><span class="line">List&lt;String&gt; G7 = Arrays.asList(<span class="string">&quot;USA&quot;</span>, <span class="string">&quot;Japan&quot;</span>, <span class="string">&quot;France&quot;</span>, <span class="string">&quot;Germany&quot;</span>, <span class="string">&quot;Italy&quot;</span>, <span class="string">&quot;U.K.&quot;</span>,<span class="string">&quot;Canada&quot;</span>);</span><br><span class="line">String G7Countries = G7.stream().map(x -&gt; x.toUpperCase()).collect(Collectors.joining(<span class="string">&quot;, &quot;</span>));</span><br><span class="line">System.out.println(G7Countries);</span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">USA, JAPAN, FRANCE, GERMANY, ITALY, U.K., CANADA</span><br></pre></td></tr></table></figure>
-<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p>类似于map，但是flatMap是对Stream之间的转换。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String[][] data = <span class="keyword">new</span> String[][]&#123;&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>&#125;, &#123;<span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>&#125;, &#123;<span class="string">&quot;e&quot;</span>, <span class="string">&quot;f&quot;</span>&#125;&#125;;</span><br><span class="line">Stream&lt;String[]&gt; temp = Arrays.stream(data);</span><br><span class="line">Stream&lt;String[]&gt; stream = temp.filter(x -&gt; <span class="string">&quot;a&quot;</span>.equals(x.toString()));</span><br></pre></td></tr></table></figure>
-<h3 id="count"><a href="#count" class="headerlink" title="count"></a>count</h3><p>count()是对列表的聚合，统计列表的数量。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Long count = list.stream().count();</span><br></pre></td></tr></table></figure>
-<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>对于Stream中包含的元素使用给定的过滤函数进行过滤操作，新生成的Stream只包含符合条件的元素</p>
-<h3 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h3><p>distinct是对stream里面的元素进行去重，有点类似于SQL里面的distinct去重</p>
-<h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><p>对一个Stream进行截断操作，获取其前N个元素，如果原Stream中包含的元素个数小于N，那就获取其所有的元素</p>
-<h2 id="stream-生成-map"><a href="#stream-生成-map" class="headerlink" title="stream 生成 map"></a>stream 生成 map</h2><p>上面我们介绍了stream里面的toList()，下面我们来介绍下如何使用stream直接生成map，而不是像以前一样，需要循环后再一个一个的put进map。虽然我们也可以第三方的jar生成Map，比如Google的某些jar，使用里面的Maps.uniqueIndex()也可以直接把List转换成Map。</p>
-<h3 id="toMap"><a href="#toMap" class="headerlink" title="toMap"></a>toMap</h3><p>利用Collectors里面的toMap对List列表转换Map。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这种toMap，当出现Key相同时，会出现 Duplicate key 问题</span></span><br><span class="line">Map&lt;Integer,String&gt; beanMap = beans.stream()</span><br><span class="line">                .collect(Collectors.toMap(x-&gt;x.getId(), m-&gt;m.getName()));</span><br><span class="line"></span><br><span class="line"><span class="comment">//解决key冲突问题，使用新的value替换原来的value</span></span><br><span class="line">Map&lt;Integer, String&gt; map = beans.stream()</span><br><span class="line">    .collect(Collectors.toMap(SimpleDTO::getId, SimpleDTO::getName, (v1, v2) -&gt; v2));</span><br></pre></td></tr></table></figure>
-<p>前者的toMap使用的是 throwingMerger，在出现key相同时，抛出异常；后者的toMap使用的是mergeFunction，如示例中，如果出现key相同的元素，新的key能覆盖旧的。</p>
-<h3 id="groupingBy"><a href="#groupingBy" class="headerlink" title="groupingBy"></a>groupingBy</h3><p>利用Collectors里面的groupingBy，可以对列表进行分组，总和和排序。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; items = Arrays.asList(<span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;papaya&quot;</span>);</span><br><span class="line"></span><br><span class="line">    Map&lt;String, Long&gt; result = items</span><br><span class="line">            .stream()</span><br><span class="line">            .collect(Collectors</span><br><span class="line">                    .groupingBy(Function.identity(), Collectors.counting()));</span><br><span class="line">    System.out.println(result);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序</span></span><br><span class="line">    Map&lt;String, Long&gt; finalMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//sort a map and add to finalMap</span></span><br><span class="line">    result.entrySet().stream()</span><br><span class="line">            .sorted(Map.Entry.&lt;String, Long&gt;comparingByValue()</span><br><span class="line">                    .reversed()).forEachOrdered(e -&gt; finalMap.put(e.getKey(), e.getValue()));</span><br><span class="line"></span><br><span class="line">    System.out.println(finalMap);</span><br><span class="line">    <span class="comment">//数据统计</span></span><br><span class="line">    List&lt;SimpleDTO&gt; beans = BeanData.getBeanDataList();</span><br><span class="line">    Map&lt;Integer, Long&gt; countMap = beans</span><br><span class="line">            .stream().collect(</span><br><span class="line">                    Collectors.groupingBy(SimpleDTO::getId, Collectors.counting()));</span><br><span class="line">    System.out.println(countMap);</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, List&lt;SimpleDTO&gt;&gt; listMap = beans.stream().collect(</span><br><span class="line">            Collectors.groupingBy(SimpleDTO::getId));</span><br><span class="line">    System.out.println(JSON.toJSON(listMap));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Map 的value值自行聚合</span></span><br><span class="line">    Map&lt;Integer, Set&lt;String&gt;&gt; setMap = beans.stream().collect(</span><br><span class="line">            Collectors.groupingBy(SimpleDTO::getId, Collectors.mapping(SimpleDTO::getName, Collectors.toSet()))</span><br><span class="line">    );</span><br><span class="line">    System.out.println(JSON.toJSON(setMap));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Map的value重新聚合一个新的对象</span></span><br><span class="line">    Map&lt;Integer, List&lt;UserDTO&gt;&gt; collectMap = beans.stream()</span><br><span class="line">            .collect(Collectors.groupingBy(SimpleDTO::getId,</span><br><span class="line">                    Collectors.collectingAndThen(Collectors.toList(), input -&gt; input.stream()</span><br><span class="line">                            .map(m -&gt; &#123;</span><br><span class="line">                                UserDTO user = <span class="keyword">new</span> UserDTO();</span><br><span class="line">                                user.setId(m.getId());</span><br><span class="line">                                user.setUsername(m.getName());</span><br><span class="line">                                <span class="keyword">return</span> user;</span><br><span class="line">                            &#125;).collect(Collectors.toList())</span><br><span class="line">                    )));</span><br><span class="line">    System.out.println(JSON.toJSON(collectMap));</span><br><span class="line"></span><br><span class="line">    SimpleDTO dto1 = <span class="keyword">new</span> SimpleDTO(<span class="number">1</span>, <span class="string">&quot;Jack&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">    SimpleDTO dto2 = <span class="keyword">new</span> SimpleDTO(<span class="number">2</span>, <span class="string">&quot;James&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">    SimpleDTO dto3 = <span class="keyword">new</span> SimpleDTO(<span class="number">3</span>, <span class="string">&quot;Hangzhou&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">    SimpleDTO dto4 = <span class="keyword">new</span> SimpleDTO(<span class="number">3</span>, <span class="string">&quot;Hangzhou&quot;</span>, <span class="string">&quot;4&quot;</span>);</span><br><span class="line">    List&lt;SimpleDTO&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(dto1);</span><br><span class="line">    list.add(dto2);</span><br><span class="line">    list.add(dto3);</span><br><span class="line">    list.add(dto4);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//自行拼接KEY</span></span><br><span class="line">    Map&lt;String, List&lt;SimpleDTO&gt;&gt; mapKey = list.stream()</span><br><span class="line">            .collect(Collectors.groupingBy(e -&gt; fetchGroupKey(e)));</span><br><span class="line">    System.out.println(mapKey);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">fetchGroupKey</span><span class="params">(SimpleDTO dto)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> dto.getId() + <span class="string">&quot;_&quot;</span> + dto.getName();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="总和"><a href="#总和" class="headerlink" title="总和"></a>总和</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; items = Arrays.asList(<span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;papaya&quot;</span>);</span><br><span class="line">Map&lt;String,Long&gt; result = items.stream()</span><br><span class="line">                                .collect(Collectors</span><br><span class="line">                                .groupingBy(Function.identity(),Collectors.counting()));</span><br></pre></td></tr></table></figure>
-<p>输出结果:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;papaya=1, banana=1, orange=2, Apple=3&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Long&gt; finalMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">        <span class="comment">//Sort a map and add to finalMap</span></span><br><span class="line">        result.entrySet().stream()</span><br><span class="line">                .sorted(Map.Entry.&lt;String, Long&gt;comparingByValue()</span><br><span class="line">                        .reversed()).forEachOrdered(e -&gt; finalMap.put(e.getKey(), e.getValue()));</span><br><span class="line">System.out.println(finalMap);</span><br></pre></td></tr></table></figure>
-<h4 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h4><p>现在有数据</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;ListDTO&gt; <span class="title">getBeanDataList</span><span class="params">()</span></span>&#123;</span><br><span class="line">      List&lt;ListDTO&gt; listDTOS = Arrays.asList(</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;孙博&quot;</span>), <span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;孙博&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;戴硕&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;戴硕&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;赛克&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;路痴&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;路痴&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;赛克&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;路痴&quot;</span>)</span><br><span class="line">   );</span><br></pre></td></tr></table></figure>
-<p>下面更加其中的ID作为Map的key，对上面的List进行Map.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,List&lt;ListDTO&gt;&gt; listMap = beans.stream().collect(</span><br><span class="line">                Collectors.groupingBy(ListDTO::getId));</span><br></pre></td></tr></table></figure>
-<p>把对象中的name取出并塞到一个Set中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Set&lt;String&gt;&gt; setMap = beans.stream().collect(</span><br><span class="line">Collectors.groupingBy(ListDTO::getId,Collectors.mapping(ListDTO::getName,Collectors.toSet()))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>现在需要对上面的集合，根据ID，对数据进行统计。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Long&gt; countMap = beans</span><br><span class="line">                .stream().collect(</span><br><span class="line">          Collectors.groupingBy(ListDTO::getId,Collectors.counting())</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h2 id="Stream-和-parallelStream"><a href="#Stream-和-parallelStream" class="headerlink" title="Stream 和 parallelStream"></a>Stream 和 parallelStream</h2><p><code>Stream</code> 是普通的对流操作，而 <code>parallelStream</code> 是对集合进行并发操作，看下面的对两者的简单比较：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;SimpleDTO&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">        SimpleDTO dto = <span class="keyword">new</span> SimpleDTO();</span><br><span class="line">        dto.setId(i);</span><br><span class="line">        dto.setName(<span class="string">&quot;测试员&quot;</span> + i + <span class="string">&quot;号&quot;</span>);</span><br><span class="line">        dto.setContent(<span class="string">&quot;Stream 测试普通和并行的效率&quot;</span>);</span><br><span class="line">        list.add(dto);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    List&lt;SimpleDTO&gt; testList = list;</span><br><span class="line"></span><br><span class="line">    Long stattTime = System.currentTimeMillis();</span><br><span class="line">    List&lt;String&gt; list1 = list.stream()</span><br><span class="line">            .filter(x -&gt; x.getId() &gt; <span class="number">1000</span>)</span><br><span class="line">            .map(SimpleDTO::getName)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    Long endTime = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;stream 耗时：&quot;</span> + (endTime - stattTime) + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; list2 = testList.parallelStream()</span><br><span class="line">            .filter(x -&gt; x.getId() &gt; <span class="number">1000</span>)</span><br><span class="line">            .map(SimpleDTO::getName)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    Long endTime1 = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;parallelStream 耗时：&quot;</span> + (endTime1 - endTime) + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stream 耗时：77ms</span><br><span class="line">parallelStream 耗时：19ms</span><br></pre></td></tr></table></figure>
-<p>从最终的耗时可以看出，对于 <code>parallelStream</code> 处理大量数据的时候，效率还是有很大的提升的。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-stream/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -942,22 +854,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2017-12-09 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-09T10:37:14+08:00">2017-12-09</time>
+              <time title="أُنشأ: 2017-12-09 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-09T10:37:14+08:00">2017-12-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Mac/" itemprop="url" rel="index"><span itemprop="name">Mac</span></a>
                 </span>
@@ -980,16 +892,14 @@
 <h3 id="安装Homebrew"><a href="#安装Homebrew" class="headerlink" title="安装Homebrew"></a>安装Homebrew</h3><p>1.到<a target="_blank" rel="noopener" href="https://brew.sh/index_zh-tw.html">Homebrew</a>官网去下载<br>2.在命令终端里面下载</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ruby -e <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>&quot;</span></span><br></pre></td></tr></table></figure>
 <h2 id="安装Python3"><a href="#安装Python3" class="headerlink" title="安装Python3"></a>安装Python3</h2><p>homebrew的一些基本命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ brew search &lt;pkg_name&gt; <span class="comment">#查找软件包</span></span><br><span class="line">$ brew install &lt;pkg_name&gt; <span class="comment">#安装软件包</span></span><br><span class="line">$ brew list <span class="comment">#列出软件包</span></span><br><span class="line">$ brew uninstall &lt;pkg_name&gt; <span class="comment">#卸载软件包</span></span><br><span class="line">$ brew info &lt;pkg_name&gt; <span class="comment">#查看软件包的基本资料</span></span><br><span class="line">$ brew update <span class="comment"># 更新 Homebrew 的信息</span></span><br><span class="line">$ brew outdated <span class="comment"># 看一下哪些软件可以升级</span></span><br><span class="line">$ brew upgrade &lt;xxx&gt; <span class="comment"># 如果不是所有的都要升级，那就这样升级指定的</span></span><br><span class="line">$ brew upgrade; brew cleanup <span class="comment"># 如果都要升级，直接升级完然后清理干净</span></span><br></pre></td></tr></table></figure>
-<p>查询homebrew下的Python</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew search Python</span><br></pre></td></tr></table></figure>
-<p>安装Python</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install Python3</span><br></pre></td></tr></table></figure>
-<p>安装后的Python3在/usr/local/Cellar/python3/3.6.3</p>
-<h2 id="安装Python3时碰到的问题"><a href="#安装Python3时碰到的问题" class="headerlink" title="安装Python3时碰到的问题"></a>安装Python3时碰到的问题</h2><p>我在安装的时候碰到了 <code>Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks</code> 的问题。看着好像是在安装Python3的时候，因为权限问题，不能创建Frameworks文件夹。于是我去GitHub上面的HomeBrew上面去找问题。<a target="_blank" rel="noopener" href="https://github.com/Homebrew/homebrew-core/issues/20985">网址</a>上面有类似的答案。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /usr/<span class="built_in">local</span>/Frameworks</span><br><span class="line">sudo chown -R $(whoami) /usr/<span class="built_in">local</span>/*</span><br></pre></td></tr></table></figure>
-<p>然后在使用 <code>brew install python3</code> 安装。然后使用which python3 查看是否安装。<br>如果使用PyCharm的话，需要自己去找你安装Python3目录下的python3文件。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mac-homebrew-python/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1030,22 +940,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2017-12-05 11:53:40" itemprop="dateCreated datePublished" datetime="2017-12-05T11:53:40+08:00">2017-12-05</time>
+              <time title="أُنشأ: 2017-12-05 11:53:40" itemprop="dateCreated datePublished" datetime="2017-12-05T11:53:40+08:00">2017-12-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
                 </span>
@@ -1070,22 +980,14 @@
 <p>Java8对这几个时间提供了丰富的时间计算接口。<br>关于Date和String之间的转化，我这里就不多说了</p>
 <h3 id="String-–-gt-LocalDate-LocalTime-LocalDateTime"><a href="#String-–-gt-LocalDate-LocalTime-LocalDateTime" class="headerlink" title="String –&gt; LocalDate/LocalTime/LocalDateTime"></a>String –&gt; LocalDate/LocalTime/LocalDateTime</h3><p>String类型转化新特性时间可以使用 DateTimeFormatter 功能。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd&quot;</span>);</span><br><span class="line">LocalDate ld = LocalDate.parse(<span class="string">&quot;2017-08-01&quot;</span>, dateformatter);</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DateTimeFormatter df = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);</span><br><span class="line">LocalDateTime ldt = LocalDateTime.parse(<span class="string">&quot;2017-09-22 11:30:10&quot;</span>, df);</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String time = <span class="string">&quot;11:30:10&quot;</span>;</span><br><span class="line">DateTimeFormatter df = DateTimeFormatter.ofPattern(<span class="string">&quot;HH:mm:ss&quot;</span>);</span><br><span class="line">LocalTime lt = LocalTime.parse(time,df);</span><br></pre></td></tr></table></figure>
-<p>但是在转化的时候要注意了，你不能把“2017-08-01”的String转化成LocalDateTime/LocalTime，不然会报错，需要他们代表时间的范围。</p>
-<h3 id="Date-–-gt-LocalDate-LocalTime-LocalDateTime"><a href="#Date-–-gt-LocalDate-LocalTime-LocalDateTime" class="headerlink" title="Date –&gt;  LocalDate/LocalTime/LocalDateTime"></a>Date –&gt;  LocalDate/LocalTime/LocalDateTime</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Date date = <span class="keyword">new</span> Date();</span><br><span class="line">Instant instant = date.toInstant();</span><br><span class="line">ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);<span class="comment">//转化成LocalDateTime</span></span><br><span class="line">LocalDate localDate = localDateTime.toLocalDate();<span class="comment">//转化成LocalDate</span></span><br><span class="line">LocalTime localTime = localDateTime.toLocalTime();<span class="comment">//转化成LocalTime</span></span><br></pre></td></tr></table></figure>
-<h3 id="LocalDate-LocalTime-LocalDateTime-–-gt-Date"><a href="#LocalDate-LocalTime-LocalDateTime-–-gt-Date" class="headerlink" title="LocalDate/LocalTime/LocalDateTime –&gt; Date"></a>LocalDate/LocalTime/LocalDateTime –&gt; Date</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocalDateTime localDateTime = LocalDateTime.now();</span><br><span class="line">ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">Instant instant = localDateTime.atZone(zone).toInstant();</span><br><span class="line">Date date = Date.from(instant);</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();</span><br><span class="line">Date date = Date.from(instant);</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LocalTime localTime = LocalTime.now();</span><br><span class="line">LocalDate localDate = LocalDate.now();</span><br><span class="line">LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);</span><br><span class="line">LocalDateTime localDateTime1 = LocalDateTime.now();</span><br><span class="line">ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">Instant instant = localDateTime.atZone(zone).toInstant();</span><br><span class="line">Date date = Date.from(instant);</span><br></pre></td></tr></table></figure>
-<h2 id="计算两个时间差"><a href="#计算两个时间差" class="headerlink" title="计算两个时间差"></a>计算两个时间差</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LocalDateTime now = LocalDateTime.now();</span><br><span class="line">LocalDateTime start = now.minusDays(<span class="number">5</span>);</span><br><span class="line">Duration duration = Duration.between(start,now);</span><br><span class="line">System.out.println(duration.toDays());</span><br></pre></td></tr></table></figure>
-<h2 id="Instant"><a href="#Instant" class="headerlink" title="Instant"></a>Instant</h2><p>Instant代表某个时间，类似于<code>java.util.Date</code>，它是精确到纳秒的（而不是象旧版本的Date精确到毫秒）。如果使用Long去表示，其中的存储空间是不够的，不能像data那样直接使用一个long类型表示时间戳。其实在Instant中，它的源码就是分成两部分组成的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Instant</span><span class="params">(<span class="keyword">long</span> epochSecond, <span class="keyword">int</span> nanos)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    <span class="keyword">this</span>.seconds = epochSecond;</span><br><span class="line">    <span class="keyword">this</span>.nanos = nanos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Instant和上面介绍的时间类一样，提供了很多的方法。简单的介绍点。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Instant instant = Instant.now();</span><br><span class="line">    System.out.println(instant);</span><br><span class="line">    <span class="comment">//将java.util.Date转换为Instant</span></span><br><span class="line">    Instant time = Instant.ofEpochMilli(<span class="keyword">new</span> Date().getTime());</span><br><span class="line">    <span class="comment">//从字符串类型中创建Instant类型的时间</span></span><br><span class="line">    instant = Instant.parse(<span class="string">&quot;1995-10-23T10:12:35Z&quot;</span>);</span><br><span class="line">    <span class="comment">//将现在的时间加上5个小时4分钟</span></span><br><span class="line">    instant.plus(Duration.ofHours(<span class="number">5</span>).plusMinutes(<span class="number">4</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html">java8 doc DateTimeFormatter</a></li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-time/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1126,22 +1028,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2017-10-09 10:37:14" itemprop="dateCreated datePublished" datetime="2017-10-09T10:37:14+08:00">2017-10-09</time>
+              <time title="أُنشأ: 2017-10-09 10:37:14" itemprop="dateCreated datePublished" datetime="2017-10-09T10:37:14+08:00">2017-10-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">in</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
                 </span>
@@ -1164,47 +1066,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 <h2 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h2><p>安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>参考官网<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/deployment">Hexo</a>的技术文档。服务器可以选择 coding 和 GitHub Page，他们都有免费的静态博客服务器提供，基本上满足了自己的需求。</p>
-<h2 id="域名的绑定"><a href="#域名的绑定" class="headerlink" title="域名的绑定"></a>域名的绑定</h2><p>本人实在阿里云上面买的域名。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> <span class="built_in">source</span></span><br><span class="line">touch CNAME</span><br></pre></td></tr></table></figure>
-<ul>
-<li>并在文件中写上你的域名，比如：example.com。如果想在国内走coding，国外走GitHub，那些在阿里云上面设置域名解析。<br><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/90ec15fefdc96bb3317f73d06a6fc446.jpg"></li>
-</ul>
-<p>并在coding page上，进行域名绑定，可以开启HTTPS。GitHub上面现在不支持自定义域名绑定的HTTPS。   </p>
-<ul>
-<li>不过GitHub page已经支持HTTPS认证了，直接在域名解析中，如下图使用就OK了，顺便再GitHub上面勾选<code>Enforce Https</code>:</li>
-</ul>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/259dab614632a55721d27042f795454a.jpg"></p>
-<h2 id="部署服务器"><a href="#部署服务器" class="headerlink" title="部署服务器"></a>部署服务器</h2><p>Hexo提供了很多种部署，可以如前面一样选择部署到coding page或者GitHub page上面，也可以部署到服务器上面，<a href="#%E9%83%A8%E7%BD%B2">部署详情</a>。</p>
-<p>本人选择的喜欢捣鼓，就想把hexo部署到阿里云服务器上面，<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000009723457">参考资料1</a>，<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000005723321">参考资料2</a><br>部署完成，发现Nginx访问403，看了下日志，好像是文件权限问题，于是就使用ll命令查看了下文件，发现hexo文件是git用户的，Nginx是root用户在访问这个文件夹，使用chown -R root:root &lt;文件夹名&gt;，把hexo文件夹权限改为root的，再次访问就可以了。</p>
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><p>启动本地服务</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-<p>部署到GitHub</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure>
-<h2 id="主题的选择"><a href="#主题的选择" class="headerlink" title="主题的选择"></a>主题的选择</h2><p>一开始使用的主题是indigo，但是在使用的过程中，虽然自己是一只程序猿，但是对前端的内容只能看个基本的，所以对于自己的一些前端修改，很怕。最近，在逛hexo主题的时候，发现了一款非常不错的主题<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next/">next</a>。反正我在使用之后，发现是个不错的主题，它对很多第三方插件，有了很好的集成，你是要改下配置，基本上就满足你的需求。详情可以查看它的<a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/">next主题官网</a>，上面有很多的介绍，可以自己进行定制，而且页面也比较简洁。</p>
-<h2 id="开启版权声明"><a href="#开启版权声明" class="headerlink" title="开启版权声明"></a>开启版权声明</h2><p>把其中的enable设置为true：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Declare license on posts</span></span><br><span class="line">post_copyright:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  license: CC BY-NC-SA 3.0</span><br><span class="line">  license_url: https://creativecommons.org/licenses/by-nc-sa/3.0/</span><br></pre></td></tr></table></figure>
-<h2 id="修改文章底部的那个带-号的标签"><a href="#修改文章底部的那个带-号的标签" class="headerlink" title="修改文章底部的那个带#号的标签"></a>修改文章底部的那个带#号的标签</h2><p>打开 themes/next/layout/_macro/post.swig 文件，搜索 rel=”tag”&gt;# ，将 # 换成 <i class="fa fa-tag"></i></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">&quot;post-tags&quot;</span>&gt;</span><br><span class="line">    &#123;% <span class="keyword">for</span> tag <span class="keyword">in</span> post.tags %&#125;</span><br><span class="line">       &lt;a href=<span class="string">&quot;&#123;&#123; url_for(tag.path) &#125;&#125;&quot;</span> rel=<span class="string">&quot;tag&quot;</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;fa fa-tag&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span> &#123;&#123; tag.name &#125;&#125;&lt;/a&gt;</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="撰写博客"><a href="#撰写博客" class="headerlink" title="撰写博客"></a>撰写博客</h2><p>先使用下面命令生成博客模板</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new post &lt;title&gt;</span><br></pre></td></tr></table></figure>
-<p>之后就可以使用编译器进行编写了。Hexo博客的编写是使用Markdown的。查看<a target="_blank" rel="noopener" href="https://www.zybuluo.com/mdeditor#%E6%AC%A2%E8%BF%8E%E4%BD%BF%E7%94%A8-cmd-markdown-%E7%BC%96%E8%BE%91%E9%98%85%E8%AF%BB%E5%99%A8">Markdown</a>的详细语言。</p>
-<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><p>可以现在本地看下自己的编写情况：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-<p>可以边修改便查看。好了之后就可以发布到自己的Coding page和GitHub page上面了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
-<h1 id="图床"><a href="#图床" class="headerlink" title="图床"></a>图床</h1><p>在编写博客的时候，我们难免会使用到图片，那是把图片放在hexo本地呢？还是放在服务器上呢？为什么删除七牛云，因为七牛云因为有人使用它的域名，进行非法事件，域名被查封了，于是出现了测试域名回收事件，域名只有30天有效时间，除非你自己绑定域名，而且需要备案过的。对于自己简单的博客，不想搞了，于是去找别家的对象存储，发现腾讯云和网易云的对象存储有免费的，对于一个网站图床来说感觉够用了。本人最后选择的是腾讯云，因为我之前在活动期间买了服务器，不想东一家西一家了。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181123160641.png"></p>
-<p><del>这个时候我就推荐七牛云了，这个在我之前的工作中也在使用，发现还挺方便的。免费用户有每月10GB流量+总空间10GB+PUT/DELETE 10万次请求+GET 100万次请求，这个对于个人来说已经够用了，如果你想使用七牛云，可以走这个<a target="_blank" rel="noopener" href="https://portal.qiniu.com/signup?code=3lpwng1uo5jki">通道</a>，这样，我就可以每个月多得5G的下载流量了。</del></p>
-<h2 id="七牛云-Alfred-插件组合"><a href="#七牛云-Alfred-插件组合" class="headerlink" title="七牛云+Alfred+插件组合"></a>七牛云+Alfred+插件组合</h2><p><del>本人图床使用的是七牛云+Alfred+插件组合使用的，使用快捷键，就可以直接上传到七牛云，返回一个MarkDown的图片路径，<a target="_blank" rel="noopener" href="https://github.com/jiwenxing/qiniu-image-tool">插件源码</a>，上面有比较详细的安装过程，声明一点Alfed这款软件只在Mac有。</del>  </p>
-<h2 id="PicGo"><a href="#PicGo" class="headerlink" title="PicGo"></a>PicGo</h2><p>上面只能再Mac上使用，发现了另外一款图床软件<a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/picgo/releases">PicGo</a>，支持Mac和Windows，在他的介绍上，除了七牛云、GitHub图床、腾讯云等。</p>
-<h2 id="live2"><a href="#live2" class="headerlink" title="live2"></a>live2</h2><p>今天看到别人关于介绍给博客添加个萌娘，给自己的博客增彩。效果如下：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191011154725.gif"></p>
-<p>live2 完美兼容 Hexo，对Hexo 的支持非常友好。</p>
-<h3 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h3><p>使用 npm 在 hexo 下安装 hexo-helper-live2d，它将 live2d-widget.js 与 hexo 进行了整合，使得我们只需要通过简单的配置，即可生效：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 live2 插件</span></span><br><span class="line">npm install --save hexo-helper-live2d</span><br><span class="line"><span class="comment"># 安装人物模型 https://github.com/xiazeyu/live2d-widget-models</span></span><br><span class="line">npm install live2d-widget-model-z16</span><br></pre></td></tr></table></figure>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在Hexo 的 _config.yml 文件中添加配置，同时在根目录下添加 1live2dw` 文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">live2d:</span><br><span class="line">  <span class="built_in">enable</span>: <span class="literal">true</span></span><br><span class="line">  scriptFrom: <span class="built_in">local</span> <span class="comment"># 默认 </span></span><br><span class="line">  pluginRootPath: live2dw/  <span class="comment"># 插件在站点上的根目录(相对路径)</span></span><br><span class="line">  pluginJsPath: lib/    <span class="comment"># 脚本文件相对与插件根目录路径</span></span><br><span class="line">  pluginModelPath: assets/    <span class="comment"># 模型文件相对与插件根目录路径</span></span><br><span class="line">  tagMode: <span class="literal">false</span>     <span class="comment"># 标签模式, 是否仅替换 live2d tag标签而非插入到所有页面中</span></span><br><span class="line">  debug: <span class="literal">false</span>       <span class="comment"># 调试, 是否在控制台输出日志</span></span><br><span class="line">  model:</span><br><span class="line">    use: live2d-widget-model-wanko   <span class="comment"># npm-module package name</span></span><br><span class="line">  display:</span><br><span class="line">    position: right</span><br><span class="line">    width: 150</span><br><span class="line">    height: 300</span><br><span class="line">  mobile:</span><br><span class="line">    show: <span class="literal">true</span></span><br><span class="line">  react:</span><br><span class="line">    opacity: 0.7</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/hexo-instructions/#more" rel="contents">
+                تابع القراءة &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1222,7 +1091,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Vorherige Seite"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="الصفحة السابقة"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
   </nav>
 
 
@@ -1266,10 +1135,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Inhaltsverzeichnis
+          المحتويات
         </li>
         <li class="sidebar-nav-overview">
-          Übersicht
+          عام
         </li>
       </ul>
 
@@ -1291,20 +1160,20 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">90</span>
-          <span class="site-state-item-name">Artikel</span>
+          <span class="site-state-item-name">المقالات</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
         <span class="site-state-item-count">23</span>
-        <span class="site-state-item-name">Kategorien</span></a>
+        <span class="site-state-item-name">التصنيفات</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">110</span>
-        <span class="site-state-item-name">schlagwörter</span></a>
+        <span class="site-state-item-name">الوسوم</span></a>
       </div>
   </nav>
 </div>
@@ -1349,7 +1218,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Alle Besucher">
+      <span class="site-uv" title="إجمالي الزوار">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -1358,7 +1227,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Alle Aufrufe">
+      <span class="site-pv" title="إجمالي المشاهدات">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
@@ -1443,5 +1312,5 @@
   
 
 
-</body>
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
 </html>
