@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -29,7 +29,7 @@
 <meta property="og:url" content="https://jlj98.top/problem-pagehelper-limit/index.html">
 <meta property="og:site_name" content="蒋先森のBlog">
 <meta property="og:description" content="最近在测试环境登录的时候，突然出现了下面的异常。  本来这条SQL只查询一条数据的，但是在错误日志中，发现后面莫名其妙的多了一个LIMIT。第一个反应是不是这个查询的前面用错了PageHelper的分页功能，但是查看了项目中的这处查询，发现LIMIT只是在SQL里面写死了LIMIT 1。我就懵逼了，问了下同事，同事说以前项目也出现过这种抽风的现象，然后我一脸黑人问号。 最近几天大致的看了下Page">
-<meta property="og:locale">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191204094316.png">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191204204237.png">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191204204255.png">
@@ -53,7 +53,7 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'zh-Hans'
+    lang   : 'en'
   };
 </script>
 
@@ -122,7 +122,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    <div class="toggle" aria-label="Toggle navigation bar">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -158,26 +158,26 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>الأرشيفات</a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>التصنيفات</a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>الوسوم</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>معلومات</a>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>بحث
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
       </li>
   </ul>
@@ -193,7 +193,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="بحث..." spellcheck="false"
+           placeholder="Searching..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -230,7 +230,7 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/problem-pagehelper-limit/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -252,33 +252,33 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">نُشر في</span>
+              <span class="post-meta-item-text">Posted on</span>
 
-              <time title="أُنشأ: 2019-12-03 21:23:44" itemprop="dateCreated datePublished" datetime="2019-12-03T21:23:44+08:00">2019-12-03</time>
+              <time title="Created: 2019-12-03 21:23:44" itemprop="dateCreated datePublished" datetime="2019-12-03T21:23:44+08:00">2019-12-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">عُدل في</span>
-                <time title="عُدل: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-02 17:34:15" itemprop="dateModified" datetime="2021-01-02T17:34:15+08:00">2021-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">في</span>
+              <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">问题</span></a>
                 </span>
             </span>
 
           
-            <span class="post-meta-item" title="مشاهدات" id="busuanzi_container_page_pv" style="display: none;">
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">مشاهدات: </span>
+              <span class="post-meta-item-text">Views: </span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
 
@@ -323,7 +323,7 @@
         <div class="reward-container">
   <div>客官，赏一杯coffee嘛~~~~</div>
   <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    تبرّع
+    Donate
   </button>
   <div id="qr" style="display: none;">
       
@@ -409,10 +409,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          المحتويات
+          Table of Contents
         </li>
         <li class="sidebar-nav-overview">
-          عام
+          Overview
         </li>
       </ul>
 
@@ -434,20 +434,20 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">90</span>
-          <span class="site-state-item-name">المقالات</span>
+          <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
         <span class="site-state-item-count">23</span>
-        <span class="site-state-item-name">التصنيفات</span></a>
+        <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">110</span>
-        <span class="site-state-item-name">الوسوم</span></a>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
@@ -492,7 +492,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="إجمالي الزوار">
+      <span class="site-uv" title="Total Visitors">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -501,7 +501,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="إجمالي المشاهدات">
+      <span class="site-pv" title="Total Views">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
@@ -597,7 +597,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       owner       : 'tedburner',
       admin       : ['tedburner'],
       id          : '38dc9dab3dfa1eda39d23288f4ae08dd',
-        language: 'zh-CN',
+        language: 'en',
       distractionFreeMode: true
     });
     gitalk.render('gitalk-container');
