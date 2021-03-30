@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="wxb76UTRY67kFy4NOVbPPg0wdApCY2m8Q893NDo9gZo">
+  <meta name="msvalidate.01" content="D7721C3AA61282179CF4844D5A4954F6">
+  <meta name="baidu-site-verification" content="iQ13LTtqEB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Redis系列：  Redis——初识Redis Redis——底层结构 Redis——数据库实现 Redis 服务集群  Redis是一款NoSQL数据库，在大多数项目中作为缓存使用，也可以作为数据库，存储数据。  Redis源码  数据库Redis服务器将所有数据库都保存在服务器状态 redis.h&#x2F;redisServer 结构的 db 数组中，db 数组的每个项都是一个 redis.h&#x2F;re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis —— 数据库实现">
+<meta property="og:url" content="https://jlj98.top/redis-database/index.html">
+<meta property="og:site_name" content="蒋先森のBlog">
+<meta property="og:description" content="Redis系列：  Redis——初识Redis Redis——底层结构 Redis——数据库实现 Redis 服务集群  Redis是一款NoSQL数据库，在大多数项目中作为缓存使用，也可以作为数据库，存储数据。  Redis源码  数据库Redis服务器将所有数据库都保存在服务器状态 redis.h&#x2F;redisServer 结构的 db 数组中，db 数组的每个项都是一个 redis.h&#x2F;re">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/fb1f4dd82647357663581535d5ebe744.jpg">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/b336872f74a6e24214f7769bfb6e8ae1.jpg">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/d82b58f9af0b26a6b461b7aad20f7025.jpg">
+<meta property="article:published_time" content="2018-08-01T06:05:25.000Z">
+<meta property="article:modified_time" content="2021-03-30T12:08:37.306Z">
+<meta property="article:author" content="蒋先森">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/fb1f4dd82647357663581535d5ebe744.jpg">
+
+<link rel="canonical" href="https://jlj98.top/redis-database/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Redis —— 数据库实现 | 蒋先森のBlog</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-117488457-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9277f2eb3b52fade687b154751182245";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">蒋先森のBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个刚起航的后端菜鸟</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redis —— 数据库实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-01 14:05:25" itemprop="dateCreated datePublished" datetime="2018-08-01T14:05:25+08:00">2018-08-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Redis系列：</p>
+<ul>
+<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
+<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
+<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
+<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
+</ul>
+<p>Redis是一款NoSQL数据库，在大多数项目中作为缓存使用，也可以作为数据库，存储数据。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/antirez/redis">Redis源码</a></li>
+</ul>
+<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><p>Redis服务器将所有数据库都保存在服务器状态 <code>redis.h/redisServer</code> 结构的 <code>db</code> 数组中，<code>db</code> 数组的每个项都是一个 <code>redis.h/redisDb</code>结构，每个 <code>redis</code> 结构代表个数据库:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    redisDb *db;<span class="comment">//数组，保存服务器中的所有数据库</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">int</span> dbnum; <span class="comment">//服务器数据库数量，默认16个</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//数据库键空间</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">    dict *dict;                 <span class="comment">/* 数据库键空间，保存着数据库中所有键值对 */</span></span><br><span class="line">    dict *expires;              <span class="comment">/* 过期字典，保存所有过期时间*/</span></span><br><span class="line">    dict *blocking_keys;        <span class="comment">/* Keys with clients waiting for data (BLPOP)*/</span></span><br><span class="line">    dict *ready_keys;           <span class="comment">/* Blocked keys that received a PUSH */</span></span><br><span class="line">    dict *watched_keys;         <span class="comment">/* WATCHED keys for MULTI/EXEC CAS */</span></span><br><span class="line">    <span class="keyword">int</span> id;                     <span class="comment">/* Database ID */</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> avg_ttl;          <span class="comment">/* Average TTL, just for stats */</span></span><br><span class="line">    <span class="built_in">list</span> *defrag_later;         <span class="comment">/* List of key names to attempt to defrag one by one, gradually. */</span></span><br><span class="line">&#125; redisDb;</span><br></pre></td></tr></table></figure>
+<p>键空间和用户所见的数据库是直接对应的：</p>
+<ul>
+<li>键空间的键也就是数据库的键，每个键都是一个字符串对象。</li>
+<li>键空间的值也就是数据库的值，每个值可以是字符串对象、列表对象、哈希表对象、集合对象和有序集合对象中的任意一种 Redis 对象。</li>
+</ul>
+<h2 id="过期键删除策略"><a href="#过期键删除策略" class="headerlink" title="过期键删除策略"></a>过期键删除策略</h2><ul>
+<li><p>定时删除：在设置键的过期时间的同时，创建一个定时器( timer)，让定时器在键的过期时间来临时，立即执行对键的删除操作。这种策略对内存友好，但是对CPU时间是最不友好的：在过期间比较多的情况下，删除过期键这一行为可能会占用箱单大一部分CPU时间，影响服务器的响应时间和吞吐量。</p>
+</li>
+<li><p>惰性删除：放任键过期不管，但是每次从键空间中获取键时，都检查取得的键是否过期，如果过期的话，就删除该键；如果没有过期，就返回该键。这种策略是对内存很不友好，如果一些过期键，一直没被查找，就会一直占用内存，可能会出现内存泄露的危险。</p>
+</li>
+<li><p>定期删除：每隔一段时间，程序就对数据库进行一次检査，删除里面的过期键。至于要删除多少过期键，以及要检查多少个数据库，则由算法决定</p>
+</li>
+</ul>
+<p>在这三种策略中，第一种和第三种为主动删除策略，而第二种则为被动删除策略。 </p>
+<p>Redis 服务器实际使用的是惰性删除和定期删除两种策略：通过配合使用这两种删除策略，服务器可以很好地在合理使用CPU时间和避免浪费内存空间之间取得平衡。</p>
+<h2 id="Redis-内存淘汰机制"><a href="#Redis-内存淘汰机制" class="headerlink" title="Redis 内存淘汰机制"></a>Redis 内存淘汰机制</h2><p>Redis 提供了6种数据淘汰策略：</p>
+<ul>
+<li>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</li>
+<li>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</li>
+<li>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</li>
+<li>allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的key（这个是最常用的）</li>
+<li>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</li>
+<li>no-eviction：禁止驱逐数据，也就是说当内存不足以容纳新写入数据时，新写入操作会报错。这个应该没人使用吧！</li>
+</ul>
+<p>4.0 版本后增加了以下两种：</p>
+<ul>
+<li>volatile-lfu：从已设置过期时间的数据集(server.db[i].expires)中挑选最不经常使用的数据淘汰</li>
+<li>allkeys-lfu：当内存不足以容纳新写入数据时，在键空间中，移除最不经常使用的key</li>
+</ul>
+<h1 id="Redis-持久化"><a href="#Redis-持久化" class="headerlink" title="Redis 持久化"></a>Redis 持久化</h1><h2 id="RDB-Redis-DataBase-持久化"><a href="#RDB-Redis-DataBase-持久化" class="headerlink" title="RDB (Redis DataBase) 持久化"></a>RDB (Redis DataBase) 持久化</h2><p>因为 Redis 是内存数据库，它将自己的数据库状态储存在内存里面，所以如果不想办法将储存在内存中的数据库状态保存到磁盘里面，那么一且服务器进程退出，服务器中的数据库状态也会消失不见。为了解决这个问题，Redis 提供了 RDB 持久化功能，可以将 Redis 在内存中的数据库状态保存到磁盘中，避免数据丢失。RDB是一个经过压缩的二进制文件。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/fb1f4dd82647357663581535d5ebe744.jpg"></p>
+<p>Redis 有两个命令用来自生成 RDB 文件：<code>SAVE</code> 和 <code>BGSAVE</code>。</p>
+<ul>
+<li>SAVE：当 save 执行是，Redis服务器会被阻塞，客户端发送的所有命令请求都会被拒绝。</li>
+<li>BGSAVE：Redis 进程执行 fork 操作创建子进程，所以 Redis 服务器可以继续执行客户端的命令。</li>
+</ul>
+<p>在 Redis 涉及 RDB 的操作都采用 <code>BGSAVE</code> 的方式，而 <code>SAVE</code> 命令已经废弃。</p>
+<h3 id="RDB文件结构"><a href="#RDB文件结构" class="headerlink" title="RDB文件结构"></a>RDB文件结构</h3><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/b336872f74a6e24214f7769bfb6e8ae1.jpg"></p>
+<p>RDB文件的最开头是 REDIS 部分，这个部分的长度为5字节，保存着 <code>REDIS</code> 五个字符。通过这五个字符，程序可以在载入文件时，快速检查所载人的文件是否RDB文件。</p>
+<p>db version 长度为 <code>4字节</code>，它的值是一个字符串表示的整数，这个整数记录了RDB文件的版本号，比如”0006就代表RDB文件的版本为第六版。本章只介绍第六版 RDB 文件的结构。</p>
+<p>databases 部分包含着零个或任意多个数据库，以及各个数据库中的键值对数据:</p>
+<ul>
+<li>如果服务器的数据库状态为空(所有数据库都是空的)，那么这个部分也为空，长度为0字节。</li>
+<li>如果服务器的数据库状态为非空(有至少一个数据库非空)，那么这个部分也为非空，根据数据库所保存键值对的数量、类型和内容不同，这个部分的长度也会有所不同。</li>
+</ul>
+<p>EOF常量的长度为1字节，这个常量标志着RDB文件正文内容的结束，当读入程序遇<br>这个值的时候，它知道所有数据库的所有键值对都已经载入完毕了。  </p>
+<p>check sum 是一个8字节长的无符号整数，保存着一个校验和，这个校验和是程序通过对 REDIS、 db version、 databases、EoF四个部分的内容进行计算得出的。服务器在载入RDB文件时，会将载入数据所计算出的校验和与 check sum所记录的校验和进行对比，以此来检查RDB文件是否有出错或者损坏的情况出现。</p>
+<p>RDB 快照的过程如下：</p>
+<ul>
+<li>Redis使用fork函数复制一份当前进程（父进程）的副本（子进程）；</li>
+<li>父进程继续接收并处理客户端发来的命令，而子进程开始将内存中的数据写入硬盘中的临时文件；</li>
+<li>当子进程写入完所有数据后会用该临时文件替换旧的 RDB 文件，至此一次快照操作完成。</li>
+</ul>
+<h3 id="Copy-On-Write-机制"><a href="#Copy-On-Write-机制" class="headerlink" title="Copy-On-Write 机制"></a>Copy-On-Write 机制</h3><p>核心思路：fork 一个子进程，只在父进程发生写操作修改内存数据时，才会真正去分配内存空间，并复制内存数据，而且也<strong>只是复制被修改的内存页中的数据，并不是全部内存数据</strong>，所以新的RDB文件存储的是执行fork一刻的内存数据。。</p>
+<ul>
+<li>Redis中执行BGSAVE命令生成RDB文件时，本质就是调用Linux中的fork()命令，Linux下的fork()系统调用实现了<code>Copy-On-Write</code>写时复制；</li>
+<li>fork()是类Unix操作系统上创建线程的主要方法，fork用于创建子进程（等同于当前进程的副本）；</li>
+<li>传统的普通进程复制，会直接将父进程的数据拷贝到子进程中，拷贝完成后，父进程和子进程之间的数据段和堆栈是相互独立的；</li>
+<li><code>Copy-On-Write</code>技术，在fork出子进程后，与父进程共享内存空间，两者只是虚拟空间不同，但是其对应的物理空间是同一个。</li>
+</ul>
+<h2 id="AOF-持久化"><a href="#AOF-持久化" class="headerlink" title="AOF 持久化"></a>AOF 持久化</h2><p>AOF 持久化是通过保存 Redis 服务器所执行的<strong>写命令</strong>来记录数据库状态的，查询操作不会记录，AOF 命令写入的内容直接是文本协议格式，在重启时在执行 AOF 文件中的命令达到恢复数据的目的。</p>
+<p>AOF 的主要作用是解决数据持久化的实时性，目前已经是 Redis 持久化的主流方式。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/d82b58f9af0b26a6b461b7aad20f7025.jpg"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; SET msg <span class="string">&quot;hello&quot;</span></span><br><span class="line">OK</span><br><span class="line">redis&gt; PUSH number 1 2 3</span><br><span class="line">(<span class="built_in">integer</span>)3</span><br></pre></td></tr></table></figure>
+<p>对于RDB持久化存储的是SET、PUSH这两个键值对；AOF持久化存储的是SET、PUSH这两个命令。</p>
+<h2 id="RDB-和-AOF-比较"><a href="#RDB-和-AOF-比较" class="headerlink" title="RDB 和 AOF 比较"></a>RDB 和 AOF 比较</h2><h3 id="RDB-持久化优缺点"><a href="#RDB-持久化优缺点" class="headerlink" title="RDB 持久化优缺点"></a>RDB 持久化优缺点</h3><p>RDB 持久化优点：</p>
+<ul>
+<li>使用 RDB 持久化，整个 Redis 数据库将只包含一个文件，这对于文件备份而言非常完美</li>
+<li>对于灾难恢复而言，RDB 是非常不错的选择。因为我们可以非常轻松的将一个单独的文件压缩后再转移到其它存储介质上。</li>
+<li>性能最大化。对于Redis的服务进程而言，在开始持久化时，它唯一需要做的只是fork出子进程，之后再由子进程完成这些持久化的工作，这样就可以极大的避免服务进程执行IO操作了。</li>
+<li>相比于 AOF 机制，如果数据集很大，RDB的启动效率会更高</li>
+</ul>
+<p>RDB 持久化缺点：</p>
+<ul>
+<li>如果想保证 Redis 数据的高可用性，即最大限度的避免数据丢失，RDB 不是一个好的选择。在 Redis 定时持久化之前出现宕机现象，就不能保证数据及时写入磁盘中。</li>
+<li>由于 RDB 是通过 fork 子进程来协助完成数据持久化工作，当数据集比较大的时候，可能导致整个服务器停止服务操作。</li>
+</ul>
+<h3 id="AOF-持久化优缺点"><a href="#AOF-持久化优缺点" class="headerlink" title="AOF 持久化优缺点"></a>AOF 持久化优缺点</h3><p>AOF 持久化优点：</p>
+<ul>
+<li>该方法保证了数据的安全性。Redis 中提供了3种同步策略，即每秒同步、每修过同步和不同步。每秒同步是异步完成的，其效率是非常高的，其缺点是出现宕机时，这一秒内修改的数据会丢失；每修改同步，可以看做为同步持久化，即每次数据发生变化时，就记入到磁盘中，这种同步方法性能相对比较低；不同步就是字面的意思。</li>
+<li>该机制对日志文件的写入操作采用的是 append 模式，因此即使在写入过程中出现宕机现象，也不会破坏之前的日志文件内容。如果本次操作只是写入了一半数据就出现了系统崩溃问题，不需要担心数据丢失，在Redis下一次启动之前，我们可以通过redis-check-aof 工具来帮助我们解决数据一致性的问题。</li>
+<li>如果日志过大，Redis 可以自动启用 rewrite 机制。即 Redis 以 append 模式不断的将修改数据写入到老的磁盘文件中，同时 Redis 还会创建一个新的文件用于记录此期间有哪些修改命令被执行。因此在进行 rewrite 切换时可以更好的保证数据安全性。</li>
+<li>AOF包含一个格式清晰、易于理解的日志文件用于记录所有的修改操作。事实上，我们也可以通过该文件完成数据的重建。</li>
+</ul>
+<p>AOF 持久化缺点：</p>
+<ul>
+<li>对于相同数量的数据集而言，AOF 文件通常要大于 RDB 文件。RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</li>
+<li>根据同步策略的不同，AOF 在运行效率上往往会慢于 RDB。总之，每秒同步策略的效率是比较高的，同步禁用策略的效率和 RDB 一样高效。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于持久化的选择，主要看系统是愿意牺牲一些性能，换取更高的缓存一致性（AOF），还是愿意写操作频繁的时候，不启动被封换取高性能，手动运行备份（RDB）。</p>
+<p>Redis 4.0 开始支持 RDB 和 AOF 的混合持久化（默认关闭，可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）。</p>
+<p>如果把混合持久化打开，AOF 重写的时候就直接把 RDB 的内容写到 AOF 文件开头。这样做的好处是可以结合 RDB 和 AOF 的优点, 快速加载同时避免丢失过多的数据。当然缺点也是有的， AOF 里面的 RDB 部分是压缩格式不再是 AOF 格式，可读性较差。</p>
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><p>Redis 服务器是一个事件驱动程序，服务器需要处理以下两类事件:</p>
+<ul>
+<li>文件事件(file event): Redis服务器通过套接字与客户端(或者其他 Redis服务器)进行连接，而文件事件就是服务器对套接字操作的抽象。服务器与客户端(或者其他服务器)的通信会产生相应的文件事件，而服务器则通过监听并处理这些事件来完成一系列网络通信操作。</li>
+<li>时间事件(time event): Redis服务器中的一些操作(比如 servercron函数)需要在给定的时间点执行，而时间事件就是服务器对这类定时操作的抽象。</li>
+</ul>
+<h2 id="文件事件"><a href="#文件事件" class="headerlink" title="文件事件"></a>文件事件</h2><p>Redis 基于Reactor模式开发了自己的网络事件处理器即文件事件处理器。<br>文件事件处理器使用I/O多路复用程序来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同的事务处理器。</p>
+<h2 id="时间事件"><a href="#时间事件" class="headerlink" title="时间事件"></a>时间事件</h2><p>Redis的时间事件分为以下两类:</p>
+<ul>
+<li>定时事件:让一段程序在指定的时间之后执行一次。比如说，让程序X在当前时间的30毫秒之后执行一次。</li>
+<li>周期性事件:让一段程序每隔指定时间就执行一次。比如说，让程序Y每隔30毫秒就执行一次。</li>
+</ul>
+<p>一个时间事件的三个属性：</p>
+<ul>
+<li>ID：服务器为时间事件创建的全局唯一ID。</li>
+<li>when：毫秒精度的UNX时间戳，记录了时间事件的到达( arrive )时间。</li>
+<li>timeproc：时间事件处理器，一个函数。当时间事件到达时，服务器就会调用相应的处理器来处理事件。</li>
+</ul>
+<p>服务器把所有时间事件都放在一个无序链表中，每当时间事件执行，遍历整个链表，查找所有已达的时间事件，并调用相应的事件处理器。</p>
+<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><p>命令请求过程：</p>
+<ul>
+<li>客户端向服务器发送请求命令：Redis服务器的命令请求来自Reds客户端，当用户在客户端中键入一个命令请求时，客户端会将这个命令请求转换成协议格式，然后通过连接到服务器的套接字，将协议格式的命令请求发送给服务器。</li>
+<li>服务器接收并处理客户端发来的命令请求，在数据库中进行设置操作，并尝试命令回复OK<ul>
+<li>读取套接字中协议格式的命令请求，并将其保存到客户端状态的输入缓冲区里面。</li>
+<li>对输入缓冲区中的命令请求进行分析，提取出命令请求中包含的命令参数，以及命令参数的个数，然后分别将参数和参数个数保存到客户端状态的 argv 属性和 argc 属性里面</li>
+<li>调用命令执行器，执行客户端指定的命令</li>
+</ul>
+</li>
+<li>服务器将命令回复OK发送给客户端</li>
+<li>客户端接收到服务器的返回的命令OK，并打印显示在客户端</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-redis-bgsave-fork/">为什么 Redis 快照使用子进程</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>客官，赏一杯coffee嘛~~~~</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/wechatpay.jpeg" alt="蒋先森 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/alipay.jpeg" alt="蒋先森 Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/redis-under-structure/" rel="prev" title="Redis —— 底层结构">
+      <i class="fa fa-chevron-left"></i> Redis —— 底层结构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/mysql-innodb-myisam/" rel="next" title="MySQL的存储引擎 —— InnoDB和MyIsAM">
+      MySQL的存储引擎 —— InnoDB和MyIsAM <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E6%9C%9F%E9%94%AE%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="nav-number">1.1.</span> <span class="nav-text">过期键删除策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">Redis 内存淘汰机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">Redis 持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB-Redis-DataBase-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">RDB (Redis DataBase) 持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.1.</span> <span class="nav-text">RDB文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy-On-Write-%E6%9C%BA%E5%88%B6"><span class="nav-number">2.1.2.</span> <span class="nav-text">Copy-On-Write 机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">AOF 持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB-%E5%92%8C-AOF-%E6%AF%94%E8%BE%83"><span class="nav-number">2.3.</span> <span class="nav-text">RDB 和 AOF 比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB-%E6%8C%81%E4%B9%85%E5%8C%96%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.3.1.</span> <span class="nav-text">RDB 持久化优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF-%E6%8C%81%E4%B9%85%E5%8C%96%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.3.2.</span> <span class="nav-text">AOF 持久化优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.3.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">文件事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">时间事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蒋先森"
+      src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+  <p class="site-author-name" itemprop="name">蒋先森</p>
+  <div class="site-description" itemprop="description">当你的才华还撑不起你的野心时，那你就应该静下心来学习</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tedburner" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tedburner" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋先森</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '596496ecd42725079d5e',
+      clientSecret: 'ee930af15d654db4e6c9cbdf99369075abb55c4c',
+      repo        : 'blog-comments',
+      owner       : 'tedburner',
+      admin       : ['tedburner'],
+      id          : '068d14846caf777f060e05fcc2087bf5',
+        language: 'en',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

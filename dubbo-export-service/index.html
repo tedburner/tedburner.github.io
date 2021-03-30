@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="wxb76UTRY67kFy4NOVbPPg0wdApCY2m8Q893NDo9gZo">
+  <meta name="msvalidate.01" content="D7721C3AA61282179CF4844D5A4954F6">
+  <meta name="baidu-site-verification" content="iQ13LTtqEB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="源码版本是 2.7.8  Dubbo 服务导出过程始于 Spring 容器发布刷新事件，Dubbo 在接收到事件后，会立即执行服务导出逻辑。整个逻辑大致可分为三个部分，第一部分是前置工作，主要用于检查参数，组装 URL。第二部分是导出服务，包含导出服务到本地 (JVM)，和导出服务到远程两个过程。第三部分是向注册中心注册服务，用于服务发现。本篇文章将会对这三个部分代码进行详细的分析。 在 2.7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo源码分析之服务导出">
+<meta property="og:url" content="https://jlj98.top/dubbo-export-service/index.html">
+<meta property="og:site_name" content="蒋先森のBlog">
+<meta property="og:description" content="源码版本是 2.7.8  Dubbo 服务导出过程始于 Spring 容器发布刷新事件，Dubbo 在接收到事件后，会立即执行服务导出逻辑。整个逻辑大致可分为三个部分，第一部分是前置工作，主要用于检查参数，组装 URL。第二部分是导出服务，包含导出服务到本地 (JVM)，和导出服务到远程两个过程。第三部分是向注册中心注册服务，用于服务发现。本篇文章将会对这三个部分代码进行详细的分析。 在 2.7">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201122133305.png">
+<meta property="article:published_time" content="2020-11-21T05:39:55.000Z">
+<meta property="article:modified_time" content="2021-03-30T12:08:37.277Z">
+<meta property="article:author" content="蒋先森">
+<meta property="article:tag" content="dubbo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201122133305.png">
+
+<link rel="canonical" href="https://jlj98.top/dubbo-export-service/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Dubbo源码分析之服务导出 | 蒋先森のBlog</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-117488457-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9277f2eb3b52fade687b154751182245";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">蒋先森のBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个刚起航的后端菜鸟</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-export-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dubbo源码分析之服务导出
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-21 13:39:55" itemprop="dateCreated datePublished" datetime="2020-11-21T13:39:55+08:00">2020-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index"><span itemprop="name">dubbo</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>源码版本是 2.7.8</p>
+</blockquote>
+<p>Dubbo 服务导出过程始于 Spring 容器发布刷新事件，Dubbo 在接收到事件后，会立即执行服务导出逻辑。整个逻辑大致可分为三个部分，第一部分是前置工作，主要用于检查参数，组装 URL。第二部分是导出服务，包含导出服务到本地 (JVM)，和导出服务到远程两个过程。第三部分是向注册中心注册服务，用于服务发现。本篇文章将会对这三个部分代码进行详细的分析。</p>
+<p>在 2.7.8 版本中，服务导出的入口已经在 <code>DubboBootstrapApplicationListener</code> <code>onApplicationContextEvent</code>方法是在 <code>onApplicationEvent</code>中引用的，onApplicationEvent 是一个事件响应方法，该方法会在收到 Spring 上下文刷事件后执行服务导出操作。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201122133305.png"></p>
+<p>在DubboBootstrap.start调用中，会调用一个exportServices方法，这个方法中，会调用 export 方法，这是就开始服务导出流程了。</p>
+<h2 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h2><h3 id="export"><a href="#export" class="headerlink" title="export"></a>export</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">export</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (bootstrap == <span class="keyword">null</span>) &#123;</span><br><span class="line">        bootstrap = DubboBootstrap.getInstance();</span><br><span class="line">        bootstrap.initialize();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    checkAndUpdateSubConfigs();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//init serviceMetadata 初始化服务元数据</span></span><br><span class="line">    serviceMetadata.setVersion(getVersion());</span><br><span class="line">    serviceMetadata.setGroup(getGroup());</span><br><span class="line">    serviceMetadata.setDefaultGroup(getGroup());</span><br><span class="line">    serviceMetadata.setServiceType(getInterfaceClass());</span><br><span class="line">    serviceMetadata.setServiceInterfaceName(getInterface());</span><br><span class="line">    serviceMetadata.setTarget(getRef());</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果不允许暴露，直接放过 &lt;dubbo:provider export=&quot;false&quot; /&gt;</span></span><br><span class="line">    <span class="keyword">if</span> (!shouldExport()) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果需要延迟，则延迟暴露</span></span><br><span class="line">    <span class="keyword">if</span> (shouldDelay()) &#123;</span><br><span class="line">        DELAY_EXPORT_EXECUTOR.schedule(<span class="keyword">this</span>::doExport, getDelay(), TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 直接暴露</span></span><br><span class="line">        doExport();</span><br><span class="line">    &#125;</span><br><span class="line">    exported();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ServiceConfig.export是继承重写了父类ServiceConfigBase.export方法。在export方法中，主要是以下逻辑：</p>
+<ul>
+<li>检测 <a href="dubbo:service">dubbo:service</a> 标签的 interface 属性合法性，不合法则抛出异常</li>
+<li>检测 ProviderConfig、ApplicationConfig 等核心配置类对象是否为空，若为空，则尝试从其他配置类对象中获取相应的实例。</li>
+<li>检测并处理泛化服务和普通服务类</li>
+<li>检测本地存根配置，并进行相应的处理</li>
+<li>对 ApplicationConfig、RegistryConfig 等配置类进行检测，为空则尝试创建，若无法创建则抛出异常</li>
+<li>主要是初始化服务元数据</li>
+<li>对export配置项进行检查，判断是否需要导出服务</li>
+<li>如果需要延迟，则延迟导出，否则直接导出服务</li>
+</ul>
+<h3 id="doExport"><a href="#doExport" class="headerlink" title="doExport"></a>doExport</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doExport</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (unexported) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;The service &quot;</span> + interfaceClass.getName() + <span class="string">&quot; has already unexported!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (exported) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    exported = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isEmpty(path)) &#123;</span><br><span class="line">        path = interfaceName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 重点关注</span></span><br><span class="line">    doExportUrls();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法没啥逻辑，前面是一些校验，重点关注doExportUrls方法。</p>
+<h3 id="doExportUrls"><a href="#doExportUrls" class="headerlink" title="doExportUrls"></a>doExportUrls</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doExportUrls</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ServiceRepository repository = ApplicationModel.getServiceRepository();</span><br><span class="line">    ServiceDescriptor serviceDescriptor = repository.registerService(getInterfaceClass());</span><br><span class="line">    repository.registerProvider(</span><br><span class="line">            getUniqueServiceName(),</span><br><span class="line">            ref,</span><br><span class="line">            serviceDescriptor,</span><br><span class="line">            <span class="keyword">this</span>,</span><br><span class="line">            serviceMetadata</span><br><span class="line">    );</span><br><span class="line">    <span class="comment">// 获取当前服务的注册中心，可以有多个服务中心</span></span><br><span class="line">    List&lt;URL&gt; registryURLs = ConfigValidationUtils.loadRegistries(<span class="keyword">this</span>, <span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">// // 遍历 protocols，并在每个协议下导出服务</span></span><br><span class="line">    <span class="keyword">for</span> (ProtocolConfig protocolConfig : protocols) &#123;</span><br><span class="line">        <span class="comment">// 凭借key，全限定名+group+version。类似 com.dubbo.api.service.AsyncService:1.0.0</span></span><br><span class="line">        String pathKey = URL.buildKey(getContextPath(protocolConfig)</span><br><span class="line">                .map(p -&gt; p + <span class="string">&quot;/&quot;</span> + path)</span><br><span class="line">                .orElse(path), group, version);</span><br><span class="line">        <span class="comment">// In case user specified path, register service one more time to map it to path.</span></span><br><span class="line">        repository.registerService(pathKey, interfaceClass);</span><br><span class="line">        <span class="comment">// TODO, uncomment this line once service key is unified</span></span><br><span class="line">        serviceMetadata.setServiceKey(pathKey);</span><br><span class="line">        doExportUrlsFor1Protocol(protocolConfig, registryURLs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Dubbo 允许我们使用不同的协议导出服务，也允许我们向多个注册中心注册服务。Dubbo 在 doExportUrls 方法中对多协议，多注册中心进行了支持。从上面的代码中，可以知道，通过 loadRegistries 加载注册中心链接，然后再遍历 ProtocolConfig 集合导出每个服务。并在导出服务的过程中，将服务注册到注册中心。</p>
+<p><code>ConfigValidationUtils.loadRegistries</code> 方法主要功能：</p>
+<ul>
+<li>检测是否存在注册中心配置类，不存在则抛出异常</li>
+<li>构建参数映射集合，也就是 map</li>
+<li>构建注册中心链接列表</li>
+<li>遍历链接列表，并根据条件决定是否将其添加到 registryList 中</li>
+</ul>
+<h3 id="组装URL"><a href="#组装URL" class="headerlink" title="组装URL"></a>组装URL</h3><p>这个方法主要的功能是组装 URL。URL 是 Dubbo 配置的载体，通过 URL 可让 Dubbo 的各种配置在各个模块之间传递。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doExportUrlsFor1Protocol</span><span class="params">(ProtocolConfig protocolConfig, List&lt;URL&gt; registryURLs)</span> </span>&#123;</span><br><span class="line">    String name = protocolConfig.getName();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isEmpty(name)) &#123;</span><br><span class="line">        name = DUBBO;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 根据配置往map中塞值，构建URL</span></span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(SIDE_KEY, PROVIDER_SIDE);</span><br><span class="line"></span><br><span class="line">    ServiceConfig.appendRuntimeParameters(map);</span><br><span class="line">    AbstractConfig.appendParameters(map, getMetrics());</span><br><span class="line">    AbstractConfig.appendParameters(map, getApplication());</span><br><span class="line">    AbstractConfig.appendParameters(map, getModule());</span><br><span class="line">    <span class="comment">// remove &#x27;default.&#x27; prefix for configs from ProviderConfig</span></span><br><span class="line">    <span class="comment">// appendParameters(map, provider, Constants.DEFAULT_KEY);</span></span><br><span class="line">    AbstractConfig.appendParameters(map, provider);</span><br><span class="line">    AbstractConfig.appendParameters(map, protocolConfig);</span><br><span class="line">    AbstractConfig.appendParameters(map, <span class="keyword">this</span>);</span><br><span class="line">    MetadataReportConfig metadataReportConfig = getMetadataReportConfig();</span><br><span class="line">    <span class="keyword">if</span> (metadataReportConfig != <span class="keyword">null</span> &amp;&amp; metadataReportConfig.isValid()) &#123;</span><br><span class="line">        map.putIfAbsent(METADATA_KEY, REMOTE_METADATA_STORAGE_TYPE);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// methods 为 MethodConfig 集合，MethodConfig 中存储了 &lt;dubbo:method&gt; 标签的配置信息</span></span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isNotEmpty(getMethods())) &#123;</span><br><span class="line">        <span class="comment">// 省略代码</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ProtocolUtils.isGeneric(generic)) &#123;</span><br><span class="line">        map.put(GENERIC_KEY, generic);</span><br><span class="line">        map.put(METHODS_KEY, ANY_VALUE);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        String revision = Version.getVersion(interfaceClass, version);</span><br><span class="line">        <span class="keyword">if</span> (revision != <span class="keyword">null</span> &amp;&amp; revision.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(REVISION_KEY, revision);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();</span><br><span class="line">        <span class="keyword">if</span> (methods.length == <span class="number">0</span>) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;No method found in service interface &quot;</span> + interfaceClass.getName());</span><br><span class="line">            map.put(METHODS_KEY, ANY_VALUE);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(METHODS_KEY, StringUtils.join(<span class="keyword">new</span> HashSet&lt;String&gt;(Arrays.asList(methods)), <span class="string">&quot;,&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Here the token value configured by the provider is used to assign the value to ServiceConfig#token</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (ConfigUtils.isEmpty(token) &amp;&amp; provider != <span class="keyword">null</span>) &#123;</span><br><span class="line">        token = provider.getToken();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!ConfigUtils.isEmpty(token)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (ConfigUtils.isDefault(token)) &#123;</span><br><span class="line">            map.put(TOKEN_KEY, UUID.randomUUID().toString());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(TOKEN_KEY, token);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//init serviceMetadata attachments</span></span><br><span class="line">    serviceMetadata.getAttachments().putAll(map);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// export service</span></span><br><span class="line">    String host = findConfigedHosts(protocolConfig, registryURLs, map);</span><br><span class="line">    Integer port = findConfigedPorts(protocolConfig, name, map);</span><br><span class="line">    <span class="comment">// 构建URL</span></span><br><span class="line">    URL url = <span class="keyword">new</span> URL(name, host, port, getContextPath(protocolConfig).map(p -&gt; p + <span class="string">&quot;/&quot;</span> + path).orElse(path), map);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 省略代码 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码首先是将一些信息，比如版本、时间戳、方法名以及各种配置对象的字段信息放入到 map 中，map 中的内容将作为 URL 的查询字符串。构建好 map 后，紧接着是获取上下文路径、主机名以及端口号等信息。最后将 map 和主机名等数据传给 URL 构造方法创建 URL 对象。需要注意的是，这里出现的 URL 并非 java.net.URL，而是 com.alibaba.dubbo.common.URL。</p>
+<p>上面在if判断中省略了一段代码。这段代码用于检测 <a href="dubbo:method">dubbo:method</a> 标签中的配置信息，并将相关配置添加到 map 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (MethodConfig method : getMethods()) &#123;</span><br><span class="line">    AbstractConfig.appendParameters(map, method, method.getName());</span><br><span class="line">    String retryKey = method.getName() + <span class="string">&quot;.retry&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (map.containsKey(retryKey)) &#123;</span><br><span class="line">        String retryValue = map.remove(retryKey);</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;false&quot;</span>.equals(retryValue)) &#123;</span><br><span class="line">            map.put(method.getName() + <span class="string">&quot;.retries&quot;</span>, <span class="string">&quot;0&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;ArgumentConfig&gt; arguments = method.getArguments();</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isNotEmpty(arguments)) &#123;</span><br><span class="line">        <span class="keyword">for</span> (ArgumentConfig argument : arguments) &#123;</span><br><span class="line">            <span class="comment">// convert argument type</span></span><br><span class="line">            <span class="keyword">if</span> (argument.getType() != <span class="keyword">null</span> &amp;&amp; argument.getType().length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                Method[] methods = interfaceClass.getMethods();</span><br><span class="line">                <span class="comment">// visit all methods</span></span><br><span class="line">                <span class="keyword">if</span> (methods.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; methods.length; i++) &#123;</span><br><span class="line">                        String methodName = methods[i].getName();</span><br><span class="line">                        <span class="comment">// target the method, and get its signature</span></span><br><span class="line">                        <span class="keyword">if</span> (methodName.equals(method.getName())) &#123;</span><br><span class="line">                            Class&lt;?&gt;[] argtypes = methods[i].getParameterTypes();</span><br><span class="line">                            <span class="comment">// one callback in the method</span></span><br><span class="line">                            <span class="keyword">if</span> (argument.getIndex() != -<span class="number">1</span>) &#123;</span><br><span class="line">                                <span class="keyword">if</span> (argtypes[argument.getIndex()].getName().equals(argument.getType())) &#123;</span><br><span class="line">                                    AbstractConfig.appendParameters(map, argument, method.getName() + <span class="string">&quot;.&quot;</span> + argument.getIndex());</span><br><span class="line">                                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Argument config error : the index attribute and type attribute not match :index :&quot;</span> + argument.getIndex() + <span class="string">&quot;, type:&quot;</span> + argument.getType());</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="comment">// multiple callbacks in the method</span></span><br><span class="line">                                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; argtypes.length; j++) &#123;</span><br><span class="line">                                    Class&lt;?&gt; argclazz = argtypes[j];</span><br><span class="line">                                    <span class="keyword">if</span> (argclazz.getName().equals(argument.getType())) &#123;</span><br><span class="line">                                        AbstractConfig.appendParameters(map, argument, method.getName() + <span class="string">&quot;.&quot;</span> + j);</span><br><span class="line">                                        <span class="keyword">if</span> (argument.getIndex() != -<span class="number">1</span> &amp;&amp; argument.getIndex() != j) &#123;</span><br><span class="line">                                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Argument config error : the index attribute and type attribute not match :index :&quot;</span> + argument.getIndex() + <span class="string">&quot;, type:&quot;</span> + argument.getType());</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argument.getIndex() != -<span class="number">1</span>) &#123;</span><br><span class="line">                AbstractConfig.appendParameters(map, argument, method.getName() + <span class="string">&quot;.&quot;</span> + argument.getIndex());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Argument config must set index or type attribute.eg: &lt;dubbo:argument index=&#x27;0&#x27; .../&gt; or &lt;dubbo:argument type=xxx .../&gt;&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="comment">// end of methods for</span></span><br></pre></td></tr></table></figure>
+<h2 id="导出服务"><a href="#导出服务" class="headerlink" title="导出服务"></a>导出服务</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doExportUrlsFor1Protocol</span><span class="params">(ProtocolConfig protocolConfig, List&lt;URL&gt; registryURLs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 省略无关代码 ...</span></span><br><span class="line">    <span class="comment">// You can customize Configurator to append extra parameters</span></span><br><span class="line">    <span class="keyword">if</span> (ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)</span><br><span class="line">            .hasExtension(url.getProtocol())) &#123;</span><br><span class="line">        url = ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)</span><br><span class="line">                .getExtension(url.getProtocol()).getConfigurator(url).configure(url);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String scope = url.getParameter(SCOPE_KEY);</span><br><span class="line">    <span class="comment">// don&#x27;t export when none is configured 当scope=none时，不进行服务暴露</span></span><br><span class="line">    <span class="keyword">if</span> (!SCOPE_NONE.equalsIgnoreCase(scope)) &#123;</span><br><span class="line">        <span class="comment">// 如果不是远程暴露，进行本地暴露。如果scope是null，则会进入分支，进行本地暴露</span></span><br><span class="line">        <span class="keyword">if</span> (!SCOPE_REMOTE.equalsIgnoreCase(scope)) &#123;</span><br><span class="line">            exportLocal(url);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果不是本地暴露，进行远程暴露</span></span><br><span class="line">        <span class="keyword">if</span> (!SCOPE_LOCAL.equalsIgnoreCase(scope)) &#123;</span><br><span class="line">            <span class="comment">// 如果有注册中心，进行远程暴露</span></span><br><span class="line">            <span class="keyword">if</span> (CollectionUtils.isNotEmpty(registryURLs)) &#123;</span><br><span class="line">                <span class="keyword">for</span> (URL registryURL : registryURLs) &#123;</span><br><span class="line">                    <span class="comment">// 判断协议是否是 injvm，是的话，不进行注册了</span></span><br><span class="line">                    <span class="keyword">if</span> (LOCAL_PROTOCOL.equalsIgnoreCase(url.getProtocol())) &#123;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    url = url.addParameterIfAbsent(DYNAMIC_KEY, registryURL.getParameter(DYNAMIC_KEY));</span><br><span class="line">                    <span class="comment">// 如果有监控中心，则会添加之后向其汇报</span></span><br><span class="line">                    URL monitorUrl = ConfigValidationUtils.loadMonitor(<span class="keyword">this</span>, registryURL);</span><br><span class="line">                    <span class="keyword">if</span> (monitorUrl != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        url = url.addParameterAndEncoded(MONITOR_KEY, monitorUrl.toFullString());</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (url.getParameter(REGISTER_KEY, <span class="keyword">true</span>)) &#123;</span><br><span class="line">                            logger.info(<span class="string">&quot;Register dubbo service &quot;</span> + interfaceClass.getName() + <span class="string">&quot; url &quot;</span> + url + <span class="string">&quot; to registry &quot;</span> + registryURL);</span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            logger.info(<span class="string">&quot;Export dubbo service &quot;</span> + interfaceClass.getName() + <span class="string">&quot; to url &quot;</span> + url);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// For providers, this is used to enable custom proxy to generate invoker</span></span><br><span class="line">                    String proxy = url.getParameter(PROXY_KEY);</span><br><span class="line">                    <span class="keyword">if</span> (StringUtils.isNotEmpty(proxy)) &#123;</span><br><span class="line">                        registryURL = registryURL.addParameter(PROXY_KEY, proxy);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 将具体实现类封装成 invoker</span></span><br><span class="line">                    Invoker&lt;?&gt; invoker = PROXY_FACTORY.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(EXPORT_KEY, url.toFullString()));</span><br><span class="line">                    DelegateProviderMetaDataInvoker wrapperInvoker = <span class="keyword">new</span> DelegateProviderMetaDataInvoker(invoker, <span class="keyword">this</span>);</span><br><span class="line">                    <span class="comment">// 包装转换成 exporter</span></span><br><span class="line">                    Exporter&lt;?&gt; exporter = PROTOCOL.export(wrapperInvoker);</span><br><span class="line">                    exporters.add(exporter);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">                    logger.info(<span class="string">&quot;Export dubbo service &quot;</span> + interfaceClass.getName() + <span class="string">&quot; to url &quot;</span> + url);</span><br><span class="line">                &#125;</span><br><span class="line">                Invoker&lt;?&gt; invoker = PROXY_FACTORY.getInvoker(ref, (Class) interfaceClass, url);</span><br><span class="line">                DelegateProviderMetaDataInvoker wrapperInvoker = <span class="keyword">new</span> DelegateProviderMetaDataInvoker(invoker, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">                Exporter&lt;?&gt; exporter = PROTOCOL.export(wrapperInvoker);</span><br><span class="line">                exporters.add(exporter);</span><br><span class="line">            &#125;</span><br><span class="line">            MetadataUtils.publishServiceDefinition(url);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.urls.add(url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码根据 url 中的 scope 参数决定服务导出方式，分别如下：</p>
+<ul>
+<li>scope = none，不导出服务</li>
+<li>scope != remote，导出到本地</li>
+<li>scope != local，导出到远程</li>
+</ul>
+<h3 id="Invoker-创建过程"><a href="#Invoker-创建过程" class="headerlink" title="Invoker 创建过程"></a>Invoker 创建过程</h3><h3 id="导出服务到本地"><a href="#导出服务到本地" class="headerlink" title="导出服务到本地"></a>导出服务到本地</h3><h3 id="导出服务到远程"><a href="#导出服务到远程" class="headerlink" title="导出服务到远程"></a>导出服务到远程</h3><h2 id="注册服务"><a href="#注册服务" class="headerlink" title="注册服务"></a>注册服务</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://dubbo.apache.org/zh/docs/v2.7/dev/source/export-service/">Apache Dubbo 服务导出</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>客官，赏一杯coffee嘛~~~~</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/wechatpay.jpeg" alt="蒋先森 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/alipay.jpeg" alt="蒋先森 Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dubbo/" rel="tag"># dubbo</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/dubbo-spi/" rel="prev" title="Dubbo源码分析之 SPI 机制">
+      <i class="fa fa-chevron-left"></i> Dubbo源码分析之 SPI 机制
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">前置工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#export"><span class="nav-number">1.1.</span> <span class="nav-text">export</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doExport"><span class="nav-number">1.2.</span> <span class="nav-text">doExport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doExportUrls"><span class="nav-number">1.3.</span> <span class="nav-text">doExportUrls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E8%A3%85URL"><span class="nav-number">1.4.</span> <span class="nav-text">组装URL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">导出服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Invoker-%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">Invoker 创建过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E6%9C%8D%E5%8A%A1%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="nav-number">2.2.</span> <span class="nav-text">导出服务到本地</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E6%9C%8D%E5%8A%A1%E5%88%B0%E8%BF%9C%E7%A8%8B"><span class="nav-number">2.3.</span> <span class="nav-text">导出服务到远程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">注册服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蒋先森"
+      src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+  <p class="site-author-name" itemprop="name">蒋先森</p>
+  <div class="site-description" itemprop="description">当你的才华还撑不起你的野心时，那你就应该静下心来学习</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tedburner" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tedburner" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋先森</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '596496ecd42725079d5e',
+      clientSecret: 'ee930af15d654db4e6c9cbdf99369075abb55c4c',
+      repo        : 'blog-comments',
+      owner       : 'tedburner',
+      admin       : ['tedburner'],
+      id          : 'e93773947031ff8548212b980b745759',
+        language: 'en',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

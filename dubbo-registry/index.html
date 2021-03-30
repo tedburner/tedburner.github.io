@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="wxb76UTRY67kFy4NOVbPPg0wdApCY2m8Q893NDo9gZo">
+  <meta name="msvalidate.01" content="D7721C3AA61282179CF4844D5A4954F6">
+  <meta name="baidu-site-verification" content="iQ13LTtqEB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="源码版本是 2.7.8  什么是注册中心？服务治理框架中大致分为服务通信和服务管理两部分，服务管理可以分为服务注册、服务发现以及服务被热加工介入，服务提供者Provider会往注册中心注册服务，而消费者Consumer会从注册中心订阅相关服务，并不会订阅全部的服务。  dubbo-registry 模块在dubbo中，注册中心相关的代码在dubbo-registry模块下，子模块dubbo-re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo源码分析之Registry注册中心">
+<meta property="og:url" content="https://jlj98.top/dubbo-registry/index.html">
+<meta property="og:site_name" content="蒋先森のBlog">
+<meta property="og:description" content="源码版本是 2.7.8  什么是注册中心？服务治理框架中大致分为服务通信和服务管理两部分，服务管理可以分为服务注册、服务发现以及服务被热加工介入，服务提供者Provider会往注册中心注册服务，而消费者Consumer会从注册中心订阅相关服务，并不会订阅全部的服务。  dubbo-registry 模块在dubbo中，注册中心相关的代码在dubbo-registry模块下，子模块dubbo-re">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106135956.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106135758.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106140026.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106140115.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107151010.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107151739.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107152931.png">
+<meta property="article:published_time" content="2020-10-29T12:49:07.000Z">
+<meta property="article:modified_time" content="2021-03-30T12:08:37.278Z">
+<meta property="article:author" content="蒋先森">
+<meta property="article:tag" content="dubbo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106135956.png">
+
+<link rel="canonical" href="https://jlj98.top/dubbo-registry/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Dubbo源码分析之Registry注册中心 | 蒋先森のBlog</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-117488457-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9277f2eb3b52fade687b154751182245";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">蒋先森のBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个刚起航的后端菜鸟</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-registry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dubbo源码分析之Registry注册中心
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-29 20:49:07" itemprop="dateCreated datePublished" datetime="2020-10-29T20:49:07+08:00">2020-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index"><span itemprop="name">dubbo</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>源码版本是 2.7.8</p>
+</blockquote>
+<h2 id="什么是注册中心？"><a href="#什么是注册中心？" class="headerlink" title="什么是注册中心？"></a>什么是注册中心？</h2><p>服务治理框架中大致分为服务通信和服务管理两部分，服务管理可以分为服务注册、服务发现以及服务被热加工介入，服务提供者Provider会往注册中心注册服务，而消费者Consumer会从注册中心订阅相关服务，并不会订阅全部的服务。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106135956.png"></p>
+<h2 id="dubbo-registry-模块"><a href="#dubbo-registry-模块" class="headerlink" title="dubbo-registry 模块"></a>dubbo-registry 模块</h2><p>在dubbo中，注册中心相关的代码在<code>dubbo-registry</code>模块下，子模块<code>dubbo-registry-api</code>中定义了注册中心相关的基础代码，而在<code>dubbo-registry-xxx</code>模块中则定义了具体的注册中心类型实现代码，例如<code>dubbo-registry-zookeeper</code>模块则存放了zookeeper注册中心的实现代码。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106135758.png"></p>
+<p>类关系图：</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106140026.png"></p>
+<h3 id="dubbo-registry-api-相关实现"><a href="#dubbo-registry-api-相关实现" class="headerlink" title="dubbo-registry-api 相关实现"></a>dubbo-registry-api 相关实现</h3><p>通过Registry的实现管理，分析下面各个接口类：</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201106140115.png"></p>
+<h4 id="RegistryService"><a href="#RegistryService" class="headerlink" title="RegistryService"></a>RegistryService</h4><p>注册中心模块的服务接口，提供注册、取消注册、订阅、取消订阅、查询符合条件的已注册数据。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107151010.png"></p>
+<p>下面的注释，是官方的解释：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">RegistryService</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    *注册服务</span></span><br><span class="line"><span class="comment">    * 注册需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 当URL设置了check=false时，注册失败后不报错，在后台定时重试，否则抛出异常。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 当URL设置了dynamic=false参数，则需持久存储，否则，当注册者出现断电等情况异常退出时，需自动删除。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 3. 当URL设置了category=overrides时，表示分类存储，缺省类别为providers，可按分类部分通知数据。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 4. 当注册中心重启，网络抖动，不能丢失数据，包括断线自动删除数据。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 5. 允许URI相同但参数不同的URL并存，不能覆盖。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 注册信息，不允许为空，如：dubbo://10.20.153.10/com.alibaba.foo.BarService?version=1.0.0&amp;application=kylin    </span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">register</span><span class="params">(URL url)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 取消注册服务.</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 取消注册需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 如果是dynamic=false的持久存储数据，找不到注册数据，则抛IllegalStateException，否则忽略。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 按全URL匹配取消注册。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 注册信息，不允许为空，如：dubbo://10.20.153.10/com.alibaba.foo.BarService?version=1.0.0&amp;application=kylin</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unregister</span><span class="params">(URL url)</span></span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订阅服务.</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 订阅需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 当URL设置了check=false时，订阅失败后不报错，在后台定时重试。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 当URL设置了category=overrides，只通知指定分类的数据，多个分类用逗号分隔，并允许星号通配，表示订阅所有分类数据。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 3. 允许以interface,group,version,classifier作为条件查询，如：interface=com.alibaba.foo.BarService&amp;version=1.0.0&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 4. 并且查询条件允许星号通配，订阅所有接口的所有分组的所有版本，或：interface=*&amp;group=*&amp;version=*&amp;classifier=*&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 5. 当注册中心重启，网络抖动，需自动恢复订阅请求。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 6. 允许URI相同但参数不同的URL并存，不能覆盖。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 7. 必须阻塞订阅过程，等第一次通知完后再返回。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 订阅条件，不允许为空，如：consumer://10.20.153.10/com.alibaba.foo.BarService?version=1.0.0&amp;application=kylin</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> listener 变更事件监听器，不允许为空</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(URL url, NotifyListener listener)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 取消订阅服务.</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 取消订阅需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 如果没有订阅，直接忽略。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 按全URL匹配取消订阅。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 订阅条件，不允许为空，如：consumer://10.20.153.10/com.alibaba.foo.BarService?version=1.0.0&amp;application=kylin</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> listener 变更事件监听器，不允许为空</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unsubscribe</span><span class="params">(URL url, NotifyListener listener)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询注册列表，与订阅的推模式相对应，这里为拉模式，只返回一次结果。</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> org.apache.dubbo.registry.NotifyListener#notify(List)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 查询条件，不允许为空，如：consumer://10.20.153.10/com.alibaba.foo.BarService?version=1.0.0&amp;application=kylin</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 已注册信息列表，可能为空，含义同&#123;<span class="doctag">@link</span> org.apache.dubbo.registry.NotifyListener#notify(List&lt;URL&gt;)&#125;的参数。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;URL&gt; <span class="title">lookup</span><span class="params">(URL url)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h4><p>Node 接口不是registry中，而是在common模块中的一个接口。Node 接口中主要声明了一些节点的操作方法，获取节点Url、是否可用、销毁节点。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107151739.png"></p>
+<h4 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h4><p>Registry 接口主要是继承了 Node 接口和 RegistryService 接口，将这两个接口的内容都统一在一起。同时 Registry 接口也提供了两个方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Registry</span> <span class="keyword">extends</span> <span class="title">Node</span>, <span class="title">RegistryService</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**再次暴露注册*/</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">reExportRegister</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">        register(url);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**再次取消注册*/</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">reExportUnregister</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">        unregister(url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="AbstractRegistry"><a href="#AbstractRegistry" class="headerlink" title="AbstractRegistry"></a>AbstractRegistry</h4><p>AbstractRegistry 实现 Registry 接口，实现了接口中定义的注册、订阅等方法。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201107152931.png"></p>
+<h5 id="抽象类的属性"><a href="#抽象类的属性" class="headerlink" title="抽象类的属性"></a>抽象类的属性</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// URL 地址分隔符，用于文件缓存，服务提供成功url分隔</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">char</span> URL_SEPARATOR = <span class="string">&#x27; &#x27;</span>;</span><br><span class="line"><span class="comment">// URL 地址分隔的正则表达式，用于分析文件缓存中的服务提供程序URL列表</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String URL_SPLIT = <span class="string">&quot;\\s+&quot;</span>;</span><br><span class="line"><span class="comment">// Max times to retry to save properties to local cache file</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_RETRY_TIMES_SAVE_PROPERTIES = <span class="number">3</span>;</span><br><span class="line"><span class="comment">// Log output</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"><span class="comment">// 本地磁盘缓存，其中的特殊key为registies是记录注册表中心列表，其他是已通知服务提供商的列表</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line"><span class="comment">// 文件缓存写入执行器 提供一个线程的线程池</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ExecutorService registryCacheExecutor = Executors.newFixedThreadPool(<span class="number">1</span>, <span class="keyword">new</span> NamedThreadFactory(<span class="string">&quot;DubboSaveRegistryCache&quot;</span>, <span class="keyword">true</span>));</span><br><span class="line"><span class="comment">// 是否同步保存文件标识</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> syncSaveFile;</span><br><span class="line"><span class="comment">// 缓存的版本号</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicLong lastCacheChanged = <span class="keyword">new</span> AtomicLong();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger savePropertiesRetryTimes = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"><span class="comment">// 已经注册的URL集合，不仅仅服务提供者，也注册服务消费者</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Set&lt;URL&gt; registered = <span class="keyword">new</span> ConcurrentHashSet&lt;&gt;();</span><br><span class="line"><span class="comment">// 已订阅 URL，value是监听器集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;URL, Set&lt;NotifyListener&gt;&gt; subscribed = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"><span class="comment">// 消费者或者服务治理服务获取注册信息后的缓存对象。内存中服务器缓存的notified对象是ConcurrentHashMap里面嵌套了一个Map，</span></span><br><span class="line"><span class="comment">// 外层Map的Key是消费者的URL，内层的Map的key是分类，包括provider，consumer，routes，configurators四种，value则对应服务列表，没有服务提供者提供服务的URL，会以一个特别的empty://前缀开头</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;URL, Map&lt;String, List&lt;URL&gt;&gt;&gt; notified = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"><span class="comment">// 注册中心的URL</span></span><br><span class="line"><span class="keyword">private</span> URL registryUrl;</span><br><span class="line"><span class="comment">// 本地磁盘缓存文件保存的是注册中心的数据</span></span><br><span class="line"><span class="keyword">private</span> File file;</span><br></pre></td></tr></table></figure>
+<h5 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">AbstractRegistry</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 这只注册中心的地址URL</span></span><br><span class="line">    setUrl(url);</span><br><span class="line">    <span class="comment">// 当file.cache参数为true时，即开启本地文件缓存，加载本地文件中的参数</span></span><br><span class="line">    <span class="keyword">if</span> (url.getParameter(REGISTRY__LOCAL_FILE_CACHE_ENABLED, <span class="keyword">true</span>)) &#123;</span><br><span class="line">        syncSaveFile = url.getParameter(REGISTRY_FILESAVE_SYNC_KEY, <span class="keyword">false</span>);</span><br><span class="line">        String defaultFilename = System.getProperty(<span class="string">&quot;user.home&quot;</span>) + <span class="string">&quot;/.dubbo/dubbo-registry-&quot;</span> + url.getParameter(APPLICATION_KEY) + <span class="string">&quot;-&quot;</span> + url.getAddress().replaceAll(<span class="string">&quot;:&quot;</span>, <span class="string">&quot;-&quot;</span>) + <span class="string">&quot;.cache&quot;</span>;</span><br><span class="line">        String filename = url.getParameter(FILE_KEY, defaultFilename);</span><br><span class="line">        File file = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (ConfigUtils.isNotEmpty(filename)) &#123;</span><br><span class="line">            file = <span class="keyword">new</span> File(filename);</span><br><span class="line">            <span class="keyword">if</span> (!file.exists() &amp;&amp; file.getParentFile() != <span class="keyword">null</span> &amp;&amp; !file.getParentFile().exists()) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!file.getParentFile().mkdirs()) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Invalid registry cache file &quot;</span> + file + <span class="string">&quot;, cause: Failed to create directory &quot;</span> + file.getParentFile() + <span class="string">&quot;!&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.file = file;</span><br><span class="line">        <span class="comment">// 加载文件中的参数放到Properties，Properties继承HashTable。</span></span><br><span class="line">        loadProperties();</span><br><span class="line">        <span class="comment">// 通知监视器URL变化</span></span><br><span class="line">        notify(url.getBackupUrls());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loadProperties</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (file != <span class="keyword">null</span> &amp;&amp; file.exists()) &#123;</span><br><span class="line">        InputStream in = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            in = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">            properties.load(in);</span><br><span class="line">            <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">                logger.info(<span class="string">&quot;Load registry cache file &quot;</span> + file + <span class="string">&quot;, data: &quot;</span> + properties);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;Failed to load registry cache file &quot;</span> + file, e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (in != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    in.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    logger.warn(e.getMessage(), e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="lookup"><a href="#lookup" class="headerlink" title="lookup"></a>lookup</h5><p>获取消费者URL订阅的服务URL列表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;URL&gt; <span class="title">lookup</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    List&lt;URL&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">// 获取注册信息中分类服务列表信息</span></span><br><span class="line">    Map&lt;String, List&lt;URL&gt;&gt; notifiedUrls = getNotified().get(url);</span><br><span class="line">    <span class="comment">// 如果该服务订阅了服务</span></span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isNotEmptyMap(notifiedUrls)) &#123;</span><br><span class="line">        <span class="keyword">for</span> (List&lt;URL&gt; urls : notifiedUrls.values()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (URL u : urls) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!EMPTY_PROTOCOL.equals(u.getProtocol())) &#123;</span><br><span class="line">                    result.add(u);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果没有订阅服务，获取注册中心的最新的注册服务URL</span></span><br><span class="line">        <span class="keyword">final</span> AtomicReference&lt;List&lt;URL&gt;&gt; reference = <span class="keyword">new</span> AtomicReference&lt;&gt;();</span><br><span class="line">        <span class="comment">// 通知监听器，当收到服务变更时触发</span></span><br><span class="line">        NotifyListener listener = reference::set;</span><br><span class="line">        <span class="comment">// 添加服务的监听器</span></span><br><span class="line">        subscribe(url, listener);</span><br><span class="line">        List&lt;URL&gt; urls = reference.get();</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtils.isNotEmpty(urls)) &#123;</span><br><span class="line">            <span class="keyword">for</span> (URL u : urls) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!EMPTY_PROTOCOL.equals(u.getProtocol())) &#123;</span><br><span class="line">                    result.add(u);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="register-and-unregister"><a href="#register-and-unregister" class="headerlink" title="register and unregister"></a>register and unregister</h5><p>URL 注册和取消注册，代码的主要逻辑就是从registered的内存缓存中添加或者删除URL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;register url == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">        logger.info(<span class="string">&quot;Register: &quot;</span> + url);</span><br><span class="line">    &#125;</span><br><span class="line">    registered.add(url);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unregister</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;unregister url == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">        logger.info(<span class="string">&quot;Unregister: &quot;</span> + url);</span><br><span class="line">    &#125;</span><br><span class="line">    registered.remove(url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">(List&lt;URL&gt; urls)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isEmpty(urls)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 遍历已订阅URL匹配当前URL</span></span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;URL, Set&lt;NotifyListener&gt;&gt; entry : getSubscribed().entrySet()) &#123;</span><br><span class="line">        URL url = entry.getKey();</span><br><span class="line">        <span class="keyword">if</span> (!UrlUtils.isMatch(url, urls.get(<span class="number">0</span>))) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Set&lt;NotifyListener&gt; listeners = entry.getValue();</span><br><span class="line">        <span class="keyword">if</span> (listeners != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (NotifyListener listener : listeners) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    notify(url, listener, filterEmpty(url, urls));</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">                    logger.error(<span class="string">&quot;Failed to notify registry event, urls: &quot;</span> + urls + <span class="string">&quot;, cause: &quot;</span> + t.getMessage(), t);</span><br><span class="line">                &#125; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Notify changes from the Provider side.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> url      consumer side url</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> listener listener</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> urls     provider latest urls</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">(URL url, NotifyListener listener, List&lt;URL&gt; urls)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;notify url == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (listener == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;notify listener == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ((CollectionUtils.isEmpty(urls))</span><br><span class="line">            &amp;&amp; !ANY_VALUE.equals(url.getServiceInterface())) &#123;</span><br><span class="line">        logger.warn(<span class="string">&quot;Ignore empty notify urls for subscribe url &quot;</span> + url);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">        logger.info(<span class="string">&quot;Notify urls for subscribe url &quot;</span> + url + <span class="string">&quot;, urls: &quot;</span> + urls);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 对每个服务提供URL进行分类</span></span><br><span class="line">    Map&lt;String, List&lt;URL&gt;&gt; result = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (URL u : urls) &#123;</span><br><span class="line">        <span class="keyword">if</span> (UrlUtils.isMatch(url, u)) &#123;</span><br><span class="line">            String category = u.getParameter(CATEGORY_KEY, DEFAULT_CATEGORY);</span><br><span class="line">            List&lt;URL&gt; categoryList = result.computeIfAbsent(category, k -&gt; <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">            categoryList.add(u);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (result.size() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Map&lt;String, List&lt;URL&gt;&gt; categoryNotified = notified.computeIfAbsent(url, u -&gt; <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;());</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;String, List&lt;URL&gt;&gt; entry : result.entrySet()) &#123;</span><br><span class="line">        String category = entry.getKey();</span><br><span class="line">        List&lt;URL&gt; categoryList = entry.getValue();</span><br><span class="line">        categoryNotified.put(category, categoryList);</span><br><span class="line">        <span class="comment">// 通知监听器</span></span><br><span class="line">        listener.notify(categoryList);</span><br><span class="line">        <span class="comment">// 保存一份到文件缓存中</span></span><br><span class="line">        saveProperties(url);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="FailbackRegistry"><a href="#FailbackRegistry" class="headerlink" title="FailbackRegistry"></a>FailbackRegistry</h4><p>FailbackRegistry 是继承AbstractRegistry，增加了失败重试的机制作为抽象能力，后面不同的注册中心具体实现继承了这个类，就可以直接使用这个能力。</p>
+<h5 id="抽象类的属性-1"><a href="#抽象类的属性-1" class="headerlink" title="抽象类的属性"></a>抽象类的属性</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册失败集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;URL, FailedRegisteredTask&gt; failedRegistered = <span class="keyword">new</span> ConcurrentHashMap&lt;URL, FailedRegisteredTask&gt;();</span><br><span class="line"><span class="comment">// 取消注册失败集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;URL, FailedUnregisteredTask&gt; failedUnregistered = <span class="keyword">new</span> ConcurrentHashMap&lt;URL, FailedUnregisteredTask&gt;();</span><br><span class="line"><span class="comment">// 订阅失败集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;Holder, FailedSubscribedTask&gt; failedSubscribed = <span class="keyword">new</span> ConcurrentHashMap&lt;Holder, FailedSubscribedTask&gt;();</span><br><span class="line"><span class="comment">// 取消订阅集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;Holder, FailedUnsubscribedTask&gt; failedUnsubscribed = <span class="keyword">new</span> ConcurrentHashMap&lt;Holder, FailedUnsubscribedTask&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The time in milliseconds the retryExecutor will wait</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> retryPeriod;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Timer for failure retry, regular check if there is a request for failure, and if there is, an unlimited retry</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> HashedWheelTimer retryTimer;</span><br></pre></td></tr></table></figure>
+<h5 id="构造方法-1"><a href="#构造方法-1" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FailbackRegistry</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(url);</span><br><span class="line">    <span class="keyword">this</span>.retryPeriod = url.getParameter(REGISTRY_RETRY_PERIOD_KEY, DEFAULT_REGISTRY_RETRY_PERIOD);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// since the retry task will not be very much. 128 ticks is enough.</span></span><br><span class="line">    retryTimer = <span class="keyword">new</span> HashedWheelTimer(<span class="keyword">new</span> NamedThreadFactory(<span class="string">&quot;DubboRegistryRetryTimer&quot;</span>, <span class="keyword">true</span>), retryPeriod, TimeUnit.MILLISECONDS, <span class="number">128</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="register"><a href="#register" class="headerlink" title="register"></a>register</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!acceptable(url)) &#123;</span><br><span class="line">            logger.info(<span class="string">&quot;URL &quot;</span> + url + <span class="string">&quot; will not be registered to Registry. Registry &quot;</span> + url + <span class="string">&quot; does not accept service of this protocol type.&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">super</span>.register(url);</span><br><span class="line">        removeFailedRegistered(url);</span><br><span class="line">        removeFailedUnregistered(url);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 这里调用具体的注册中心，比如Zookeeper</span></span><br><span class="line">            doRegister(url);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            Throwable t = e;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If the startup detection is opened, the Exception is thrown directly.</span></span><br><span class="line">            <span class="keyword">boolean</span> check = getUrl().getParameter(Constants.CHECK_KEY, <span class="keyword">true</span>)</span><br><span class="line">                    &amp;&amp; url.getParameter(Constants.CHECK_KEY, <span class="keyword">true</span>)</span><br><span class="line">                    &amp;&amp; !CONSUMER_PROTOCOL.equals(url.getProtocol());</span><br><span class="line">            <span class="keyword">boolean</span> skipFailback = t <span class="keyword">instanceof</span> SkipFailbackWrapperException;</span><br><span class="line">            <span class="keyword">if</span> (check || skipFailback) &#123;</span><br><span class="line">                <span class="keyword">if</span> (skipFailback) &#123;</span><br><span class="line">                    t = t.getCause();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;Failed to register &quot;</span> + url + <span class="string">&quot; to registry &quot;</span> + getUrl().getAddress() + <span class="string">&quot;, cause: &quot;</span> + t.getMessage(), t);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                logger.error(<span class="string">&quot;Failed to register &quot;</span> + url + <span class="string">&quot;, waiting for retry, cause: &quot;</span> + t.getMessage(), t);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 保存注册失败的URL</span></span><br><span class="line">            addFailedRegistered(url);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>另外的几个方法，unregister、subscribe、unsubscribe都类似，里面会调用一个doxxx方法，底层就是不同的注册中心具体实现方法。</p>
+<h5 id="notify-1"><a href="#notify-1" class="headerlink" title="notify"></a>notify</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">(URL url, NotifyListener listener, List&lt;URL&gt; urls)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;notify url == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (listener == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;notify listener == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        doNotify(url, listener, urls);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception t) &#123;</span><br><span class="line">        <span class="comment">// Record a failed registration request to a failed list</span></span><br><span class="line">        logger.error(<span class="string">&quot;Failed to notify addresses for subscribe &quot;</span> + url + <span class="string">&quot;, cause: &quot;</span> + t.getMessage(), t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doNotify</span><span class="params">(URL url, NotifyListener listener, List&lt;URL&gt; urls)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 调用父类的notify方法</span></span><br><span class="line">    <span class="keyword">super</span>.notify(url, listener, urls);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="RegistryFactory"><a href="#RegistryFactory" class="headerlink" title="RegistryFactory"></a>RegistryFactory</h4><p>RegistryFactory 接口定义只有一个getRegistry方法。URL 为dubbo封装的统一资源定位符，其中定义了协议protocol、用户名username、密码password、host主机、path路径等等属性。</p>
+<p>RegistryFactory 是一个工厂方法，根据具体的注册协议，比如zookeeper，获取具体的注册中心实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SPI(&quot;dubbo&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">RegistryFactory</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 连接注册中心.</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 连接注册中心需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 当设置check=false时表示不检查连接，否则在连接不上时抛出异常。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 支持URL上的username:password权限认证。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 3. 支持backup=10.20.153.10备选注册中心集群地址。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 4. 支持file=registry.cache本地磁盘文件缓存。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 5. 支持timeout=1000请求超时设置。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 6. 支持session=60000会话超时或过期设置。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url 注册中心地址，不允许为空</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 注册中心引用，总不返回空</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Adaptive(&#123;&quot;protocol&quot;&#125;)</span></span><br><span class="line">    <span class="function">Registry <span class="title">getRegistry</span><span class="params">(URL url)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="NotifyListener"><a href="#NotifyListener" class="headerlink" title="NotifyListener"></a>NotifyListener</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NotifyListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当收到服务变更通知时触发。</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 通知需处理契约：&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 1. 总是以服务接口和数据类型为维度全量通知，即不会通知一个服务的同类型的部分数据，用户不需要对比上一次通知结果。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 2. 订阅时的第一次通知，必须是一个服务的所有类型数据的全量通知。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 3. 中途变更时，允许不同类型的数据分开通知，比如：providers, consumers, routes, overrides，允许只通知其中一种类型，但该类型的数据必须是全量的，不是增量的。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 4. 如果一种类型的数据为空，需通知一个empty协议并带category参数的标识性URL数据。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 5. 通知者(即注册中心实现)需保证通知的顺序，比如：单线程推送，队列串行化，带版本对比。&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> urls 已注册信息列表，总不为空，含义同&#123;<span class="doctag">@link</span> org.apache.dubbo.registry.RegistryService#lookup(URL)&#125;的返回值。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">notify</span><span class="params">(List&lt;URL&gt; urls)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">addServiceListener</span><span class="params">(ServiceInstancesChangedListener instanceListener)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dubbo-registry-zookeeper"><a href="#dubbo-registry-zookeeper" class="headerlink" title="dubbo-registry-zookeeper"></a>dubbo-registry-zookeeper</h3><p>对于dubbo的注册中心，这里只介绍下zookeeper，这个也是dubbo默认的注册中心。</p>
+<h4 id="ZookeeperRegistry"><a href="#ZookeeperRegistry" class="headerlink" title="ZookeeperRegistry"></a>ZookeeperRegistry</h4><h5 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dubbo 在zookeeper注册中默认的根节点</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String DEFAULT_ROOT = <span class="string">&quot;dubbo&quot;</span>;</span><br><span class="line"><span class="comment">// 组的名称 或者说是 根节点的值</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> String root;</span><br><span class="line"><span class="comment">// 服务集合</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Set&lt;String&gt; anyServices = <span class="keyword">new</span> ConcurrentHashSet&lt;&gt;();</span><br><span class="line"><span class="comment">// zk 的监听器，&lt;URL，Map&lt;监听器，&gt;&gt;</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ConcurrentMap&lt;URL, ConcurrentMap&lt;NotifyListener, ChildListener&gt;&gt; zkListeners = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"><span class="comment">// zk 客户端</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ZookeeperClient zkClient;</span><br></pre></td></tr></table></figure>
+<h5 id="构造方法-2"><a href="#构造方法-2" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ZookeeperRegistry</span><span class="params">(URL url, ZookeeperTransporter zookeeperTransporter)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 调用父类FailbackRegistry的构造函数</span></span><br><span class="line">    <span class="keyword">super</span>(url);</span><br><span class="line">    <span class="keyword">if</span> (url.isAnyHost()) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;registry address == null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取组名称并赋值给root</span></span><br><span class="line">    String group = url.getParameter(GROUP_KEY, DEFAULT_ROOT);</span><br><span class="line">    <span class="keyword">if</span> (!group.startsWith(PATH_SEPARATOR)) &#123;</span><br><span class="line">        group = PATH_SEPARATOR + group;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.root = group;</span><br><span class="line">    <span class="comment">// 连接 Zookeeper</span></span><br><span class="line">    zkClient = zookeeperTransporter.connect(url);</span><br><span class="line">    <span class="comment">//添加连接状态监听器</span></span><br><span class="line">    zkClient.addStateListener((state) -&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (state == StateListener.RECONNECTED) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;Trying to fetch the latest urls, in case there&#x27;re provider changes during connection loss.\n&quot;</span> +</span><br><span class="line">                    <span class="string">&quot; Since ephemeral ZNode will not get deleted for a connection lose, &quot;</span> +</span><br><span class="line">                    <span class="string">&quot;there&#x27;s no need to re-register url of this instance.&quot;</span>);</span><br><span class="line">            ZookeeperRegistry.<span class="keyword">this</span>.fetchLatestAddresses();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state == StateListener.NEW_SESSION_CREATED) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;Trying to re-register urls and re-subscribe listeners of this instance to registry...&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                ZookeeperRegistry.<span class="keyword">this</span>.recover();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                logger.error(e.getMessage(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state == StateListener.SESSION_LOST) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;Url of this instance will be deleted from registry soon. &quot;</span> +</span><br><span class="line">                    <span class="string">&quot;Dubbo client will try to re-register once a new session is created.&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state == StateListener.SUSPENDED) &#123;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (state == StateListener.CONNECTED) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="服务注册发布和下线取消注册"><a href="#服务注册发布和下线取消注册" class="headerlink" title="服务注册发布和下线取消注册"></a>服务注册发布和下线取消注册</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doRegister</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// zk生成一个节点</span></span><br><span class="line">        zkClient.create(toUrlPath(url), url.getParameter(DYNAMIC_KEY, <span class="keyword">true</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RpcException(<span class="string">&quot;Failed to register &quot;</span> + url + <span class="string">&quot; to zookeeper &quot;</span> + getUrl() + <span class="string">&quot;, cause: &quot;</span> + e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doUnregister</span><span class="params">(URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 删除zk节点</span></span><br><span class="line">        zkClient.delete(toUrlPath(url));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RpcException(<span class="string">&quot;Failed to unregister &quot;</span> + url + <span class="string">&quot; to zookeeper &quot;</span> + getUrl() + <span class="string">&quot;, cause: &quot;</span> + e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="http://dubbo.apache.org/zh-cn/docs/2.7/dev/impls/registry/">Apache Dubbo 注册中心扩展</a></li>
+<li>《深入理解Apace Dubbo 实战》</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>客官，赏一杯coffee嘛~~~~</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/wechatpay.jpeg" alt="蒋先森 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/alipay.jpeg" alt="蒋先森 Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dubbo/" rel="tag"># dubbo</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/dubbo-loadbalance/" rel="prev" title="Dubbo源码分析之负载均衡">
+      <i class="fa fa-chevron-left"></i> Dubbo源码分析之负载均衡
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/dubbo-spi/" rel="next" title="Dubbo源码分析之 SPI 机制">
+      Dubbo源码分析之 SPI 机制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是注册中心？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo-registry-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.</span> <span class="nav-text">dubbo-registry 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo-registry-api-%E7%9B%B8%E5%85%B3%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">dubbo-registry-api 相关实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RegistryService"><span class="nav-number">2.1.1.</span> <span class="nav-text">RegistryService</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Node"><span class="nav-number">2.1.2.</span> <span class="nav-text">Node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Registry"><span class="nav-number">2.1.3.</span> <span class="nav-text">Registry</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AbstractRegistry"><span class="nav-number">2.1.4.</span> <span class="nav-text">AbstractRegistry</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.4.1.</span> <span class="nav-text">抽象类的属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.4.2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#lookup"><span class="nav-number">2.1.4.3.</span> <span class="nav-text">lookup</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#register-and-unregister"><span class="nav-number">2.1.4.4.</span> <span class="nav-text">register and unregister</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#notify"><span class="nav-number">2.1.4.5.</span> <span class="nav-text">notify</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FailbackRegistry"><span class="nav-number">2.1.5.</span> <span class="nav-text">FailbackRegistry</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%B1%9E%E6%80%A7-1"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">抽象类的属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-1"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#register"><span class="nav-number">2.1.5.3.</span> <span class="nav-text">register</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#notify-1"><span class="nav-number">2.1.5.4.</span> <span class="nav-text">notify</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RegistryFactory"><span class="nav-number">2.1.6.</span> <span class="nav-text">RegistryFactory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NotifyListener"><span class="nav-number">2.1.7.</span> <span class="nav-text">NotifyListener</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo-registry-zookeeper"><span class="nav-number">2.2.</span> <span class="nav-text">dubbo-registry-zookeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ZookeeperRegistry"><span class="nav-number">2.2.1.</span> <span class="nav-text">ZookeeperRegistry</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-2"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%8F%91%E5%B8%83%E5%92%8C%E4%B8%8B%E7%BA%BF%E5%8F%96%E6%B6%88%E6%B3%A8%E5%86%8C"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">服务注册发布和下线取消注册</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蒋先森"
+      src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+  <p class="site-author-name" itemprop="name">蒋先森</p>
+  <div class="site-description" itemprop="description">当你的才华还撑不起你的野心时，那你就应该静下心来学习</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tedburner" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tedburner" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋先森</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '596496ecd42725079d5e',
+      clientSecret: 'ee930af15d654db4e6c9cbdf99369075abb55c4c',
+      repo        : 'blog-comments',
+      owner       : 'tedburner',
+      admin       : ['tedburner'],
+      id          : 'def38e758d2d41e10560cb53604e0706',
+        language: 'en',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

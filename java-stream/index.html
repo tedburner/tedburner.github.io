@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="wxb76UTRY67kFy4NOVbPPg0wdApCY2m8Q893NDo9gZo">
+  <meta name="msvalidate.01" content="D7721C3AA61282179CF4844D5A4954F6">
+  <meta name="baidu-site-verification" content="iQ13LTtqEB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="声明：本文使用JDK1.8  Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。 生成一个List1234567String str &#x3D; &quot;1,2,3,4,10,11,9,66,222,12&quot;;List&lt;Integer&gt; list &#x3D; Stream.of(str.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 Stream的介绍">
+<meta property="og:url" content="https://jlj98.top/java-stream/index.html">
+<meta property="og:site_name" content="蒋先森のBlog">
+<meta property="og:description" content="声明：本文使用JDK1.8  Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。 生成一个List1234567String str &#x3D; &quot;1,2,3,4,10,11,9,66,222,12&quot;;List&lt;Integer&gt; list &#x3D; Stream.of(str.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-12-20T02:37:14.000Z">
+<meta property="article:modified_time" content="2021-03-30T12:08:37.292Z">
+<meta property="article:author" content="蒋先森">
+<meta property="article:tag" content="Stream">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://jlj98.top/java-stream/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java8 Stream的介绍 | 蒋先森のBlog</title>
+  
+    <script>
+      function sendPageView() {
+        if (CONFIG.hostname !== location.hostname) return;
+        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
+        localStorage.setItem('uid', uid);
+        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
+          v  : 1,
+          tid: 'UA-117488457-1',
+          cid: uid,
+          t  : 'pageview',
+          dp : encodeURIComponent(location.pathname)
+        }));
+      }
+      document.addEventListener('pjax:complete', sendPageView);
+      sendPageView();
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9277f2eb3b52fade687b154751182245";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">蒋先森のBlog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一个刚起航的后端菜鸟</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java8 Stream的介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-12-20 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-20T10:37:14+08:00">2017-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>声明：本文使用JDK1.8</p>
+</blockquote>
+<p>Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。</p>
+<h2 id="生成一个List"><a href="#生成一个List" class="headerlink" title="生成一个List"></a>生成一个List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">&quot;1,2,3,4,10,11,9,66,222,12&quot;</span>;</span><br><span class="line">List&lt;Integer&gt; list = Stream.of(str.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line">                .map(Integer::valueOf)</span><br><span class="line">                .filter(x-&gt; !Objects.equals(x,<span class="number">3</span>))</span><br><span class="line">                .sorted(Comparator.reverseOrder())</span><br><span class="line">                .limit(<span class="number">4</span>)</span><br><span class="line">                .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>上面的代码Stream.of 为我们生成了一个List<String>，但是我们需要的Integer，所以我们还需要使用<strong>map</strong>来转换类型。然后对于生成的列表，我们不想要其中的3，于是我们使用<strong>filter</strong>来过滤掉列表中的3。对于现在列表我们又想是倒序后的列表的前四条数据，于是我们在使用<strong>sorted</strong>来对列表来进行倒序后，再使用<strong>limit</strong>取前四条。顺便说一句，对于比较，推荐使用Objects.equals(a,b).<br>下面来简单的介绍下stream。</p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map：对于Stream中包含的元素使用给定的转换函数进行转换操作，新生成的Stream只包含转换生成的元素<br>map方法是对列表里面的对象的转换，比如上面的map的功能是吧String转换成Integer。除了这样的转换，你也可以对对象进行你需要的操作。比如现在有一个对象ListDTO:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDTO</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">(Integer id, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在这么一个List<ListDTO>，你现在只想得到这个列表中ListDTO对象里面的id，现在你就可以这样操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; idList = beans.stream().map(ListDTO::getId).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>如果你想要得到name的列表，也可以进行上面类似的操作。下面对List列表的元素先转换成大写，在用逗号把元素拼接起来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将字符串换成大写并用逗号拼接起来</span></span><br><span class="line">List&lt;String&gt; G7 = Arrays.asList(<span class="string">&quot;USA&quot;</span>, <span class="string">&quot;Japan&quot;</span>, <span class="string">&quot;France&quot;</span>, <span class="string">&quot;Germany&quot;</span>, <span class="string">&quot;Italy&quot;</span>, <span class="string">&quot;U.K.&quot;</span>,<span class="string">&quot;Canada&quot;</span>);</span><br><span class="line">String G7Countries = G7.stream().map(x -&gt; x.toUpperCase()).collect(Collectors.joining(<span class="string">&quot;, &quot;</span>));</span><br><span class="line">System.out.println(G7Countries);</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">USA, JAPAN, FRANCE, GERMANY, ITALY, U.K., CANADA</span><br></pre></td></tr></table></figure>
+<h3 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h3><p>类似于map，但是flatMap是对Stream之间的转换。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String[][] data = <span class="keyword">new</span> String[][]&#123;&#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>&#125;, &#123;<span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>&#125;, &#123;<span class="string">&quot;e&quot;</span>, <span class="string">&quot;f&quot;</span>&#125;&#125;;</span><br><span class="line">Stream&lt;String[]&gt; temp = Arrays.stream(data);</span><br><span class="line">Stream&lt;String[]&gt; stream = temp.filter(x -&gt; <span class="string">&quot;a&quot;</span>.equals(x.toString()));</span><br></pre></td></tr></table></figure>
+<h3 id="count"><a href="#count" class="headerlink" title="count"></a>count</h3><p>count()是对列表的聚合，统计列表的数量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Long count = list.stream().count();</span><br></pre></td></tr></table></figure>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>对于Stream中包含的元素使用给定的过滤函数进行过滤操作，新生成的Stream只包含符合条件的元素</p>
+<h3 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h3><p>distinct是对stream里面的元素进行去重，有点类似于SQL里面的distinct去重</p>
+<h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><p>对一个Stream进行截断操作，获取其前N个元素，如果原Stream中包含的元素个数小于N，那就获取其所有的元素</p>
+<h2 id="stream-生成-map"><a href="#stream-生成-map" class="headerlink" title="stream 生成 map"></a>stream 生成 map</h2><p>上面我们介绍了stream里面的toList()，下面我们来介绍下如何使用stream直接生成map，而不是像以前一样，需要循环后再一个一个的put进map。虽然我们也可以第三方的jar生成Map，比如Google的某些jar，使用里面的Maps.uniqueIndex()也可以直接把List转换成Map。</p>
+<h3 id="toMap"><a href="#toMap" class="headerlink" title="toMap"></a>toMap</h3><p>利用Collectors里面的toMap对List列表转换Map。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这种toMap，当出现Key相同时，会出现 Duplicate key 问题</span></span><br><span class="line">Map&lt;Integer,String&gt; beanMap = beans.stream()</span><br><span class="line">                .collect(Collectors.toMap(x-&gt;x.getId(), m-&gt;m.getName()));</span><br><span class="line"></span><br><span class="line"><span class="comment">//解决key冲突问题，使用新的value替换原来的value</span></span><br><span class="line">Map&lt;Integer, String&gt; map = beans.stream()</span><br><span class="line">    .collect(Collectors.toMap(SimpleDTO::getId, SimpleDTO::getName, (v1, v2) -&gt; v2));</span><br></pre></td></tr></table></figure>
+<p>前者的toMap使用的是 throwingMerger，在出现key相同时，抛出异常；后者的toMap使用的是mergeFunction，如示例中，如果出现key相同的元素，新的key能覆盖旧的。</p>
+<h3 id="groupingBy"><a href="#groupingBy" class="headerlink" title="groupingBy"></a>groupingBy</h3><p>利用Collectors里面的groupingBy，可以对列表进行分组，总和和排序。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; items = Arrays.asList(<span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;papaya&quot;</span>);</span><br><span class="line"></span><br><span class="line">    Map&lt;String, Long&gt; result = items</span><br><span class="line">            .stream()</span><br><span class="line">            .collect(Collectors</span><br><span class="line">                    .groupingBy(Function.identity(), Collectors.counting()));</span><br><span class="line">    System.out.println(result);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序</span></span><br><span class="line">    Map&lt;String, Long&gt; finalMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//sort a map and add to finalMap</span></span><br><span class="line">    result.entrySet().stream()</span><br><span class="line">            .sorted(Map.Entry.&lt;String, Long&gt;comparingByValue()</span><br><span class="line">                    .reversed()).forEachOrdered(e -&gt; finalMap.put(e.getKey(), e.getValue()));</span><br><span class="line"></span><br><span class="line">    System.out.println(finalMap);</span><br><span class="line">    <span class="comment">//数据统计</span></span><br><span class="line">    List&lt;SimpleDTO&gt; beans = BeanData.getBeanDataList();</span><br><span class="line">    Map&lt;Integer, Long&gt; countMap = beans</span><br><span class="line">            .stream().collect(</span><br><span class="line">                    Collectors.groupingBy(SimpleDTO::getId, Collectors.counting()));</span><br><span class="line">    System.out.println(countMap);</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, List&lt;SimpleDTO&gt;&gt; listMap = beans.stream().collect(</span><br><span class="line">            Collectors.groupingBy(SimpleDTO::getId));</span><br><span class="line">    System.out.println(JSON.toJSON(listMap));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Map 的value值自行聚合</span></span><br><span class="line">    Map&lt;Integer, Set&lt;String&gt;&gt; setMap = beans.stream().collect(</span><br><span class="line">            Collectors.groupingBy(SimpleDTO::getId, Collectors.mapping(SimpleDTO::getName, Collectors.toSet()))</span><br><span class="line">    );</span><br><span class="line">    System.out.println(JSON.toJSON(setMap));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Map的value重新聚合一个新的对象</span></span><br><span class="line">    Map&lt;Integer, List&lt;UserDTO&gt;&gt; collectMap = beans.stream()</span><br><span class="line">            .collect(Collectors.groupingBy(SimpleDTO::getId,</span><br><span class="line">                    Collectors.collectingAndThen(Collectors.toList(), input -&gt; input.stream()</span><br><span class="line">                            .map(m -&gt; &#123;</span><br><span class="line">                                UserDTO user = <span class="keyword">new</span> UserDTO();</span><br><span class="line">                                user.setId(m.getId());</span><br><span class="line">                                user.setUsername(m.getName());</span><br><span class="line">                                <span class="keyword">return</span> user;</span><br><span class="line">                            &#125;).collect(Collectors.toList())</span><br><span class="line">                    )));</span><br><span class="line">    System.out.println(JSON.toJSON(collectMap));</span><br><span class="line"></span><br><span class="line">    SimpleDTO dto1 = <span class="keyword">new</span> SimpleDTO(<span class="number">1</span>, <span class="string">&quot;Jack&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">    SimpleDTO dto2 = <span class="keyword">new</span> SimpleDTO(<span class="number">2</span>, <span class="string">&quot;James&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">    SimpleDTO dto3 = <span class="keyword">new</span> SimpleDTO(<span class="number">3</span>, <span class="string">&quot;Hangzhou&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">    SimpleDTO dto4 = <span class="keyword">new</span> SimpleDTO(<span class="number">3</span>, <span class="string">&quot;Hangzhou&quot;</span>, <span class="string">&quot;4&quot;</span>);</span><br><span class="line">    List&lt;SimpleDTO&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(dto1);</span><br><span class="line">    list.add(dto2);</span><br><span class="line">    list.add(dto3);</span><br><span class="line">    list.add(dto4);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//自行拼接KEY</span></span><br><span class="line">    Map&lt;String, List&lt;SimpleDTO&gt;&gt; mapKey = list.stream()</span><br><span class="line">            .collect(Collectors.groupingBy(e -&gt; fetchGroupKey(e)));</span><br><span class="line">    System.out.println(mapKey);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">fetchGroupKey</span><span class="params">(SimpleDTO dto)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> dto.getId() + <span class="string">&quot;_&quot;</span> + dto.getName();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="总和"><a href="#总和" class="headerlink" title="总和"></a>总和</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; items = Arrays.asList(<span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;banana&quot;</span>, <span class="string">&quot;papaya&quot;</span>);</span><br><span class="line">Map&lt;String,Long&gt; result = items.stream()</span><br><span class="line">                                .collect(Collectors</span><br><span class="line">                                .groupingBy(Function.identity(),Collectors.counting()));</span><br></pre></td></tr></table></figure>
+<p>输出结果:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;papaya=1, banana=1, orange=2, Apple=3&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Long&gt; finalMap = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">        <span class="comment">//Sort a map and add to finalMap</span></span><br><span class="line">        result.entrySet().stream()</span><br><span class="line">                .sorted(Map.Entry.&lt;String, Long&gt;comparingByValue()</span><br><span class="line">                        .reversed()).forEachOrdered(e -&gt; finalMap.put(e.getKey(), e.getValue()));</span><br><span class="line">System.out.println(finalMap);</span><br></pre></td></tr></table></figure>
+<h4 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h4><p>现在有数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;ListDTO&gt; <span class="title">getBeanDataList</span><span class="params">()</span></span>&#123;</span><br><span class="line">      List&lt;ListDTO&gt; listDTOS = Arrays.asList(</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;孙博&quot;</span>), <span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">1</span>,<span class="string">&quot;孙博&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;戴硕&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;戴硕&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">2</span>,<span class="string">&quot;赛克&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;路痴&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">3</span>,<span class="string">&quot;路痴&quot;</span>),</span><br><span class="line">      <span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;赛克&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;二代&quot;</span>),<span class="keyword">new</span> ListDTO(<span class="number">4</span>,<span class="string">&quot;路痴&quot;</span>)</span><br><span class="line">   );</span><br></pre></td></tr></table></figure>
+<p>下面更加其中的ID作为Map的key，对上面的List进行Map.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,List&lt;ListDTO&gt;&gt; listMap = beans.stream().collect(</span><br><span class="line">                Collectors.groupingBy(ListDTO::getId));</span><br></pre></td></tr></table></figure>
+<p>把对象中的name取出并塞到一个Set中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Set&lt;String&gt;&gt; setMap = beans.stream().collect(</span><br><span class="line">Collectors.groupingBy(ListDTO::getId,Collectors.mapping(ListDTO::getName,Collectors.toSet()))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>现在需要对上面的集合，根据ID，对数据进行统计。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Long&gt; countMap = beans</span><br><span class="line">                .stream().collect(</span><br><span class="line">          Collectors.groupingBy(ListDTO::getId,Collectors.counting())</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="Stream-和-parallelStream"><a href="#Stream-和-parallelStream" class="headerlink" title="Stream 和 parallelStream"></a>Stream 和 parallelStream</h2><p><code>Stream</code> 是普通的对流操作，而 <code>parallelStream</code> 是对集合进行并发操作，看下面的对两者的简单比较：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;SimpleDTO&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">        SimpleDTO dto = <span class="keyword">new</span> SimpleDTO();</span><br><span class="line">        dto.setId(i);</span><br><span class="line">        dto.setName(<span class="string">&quot;测试员&quot;</span> + i + <span class="string">&quot;号&quot;</span>);</span><br><span class="line">        dto.setContent(<span class="string">&quot;Stream 测试普通和并行的效率&quot;</span>);</span><br><span class="line">        list.add(dto);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    List&lt;SimpleDTO&gt; testList = list;</span><br><span class="line"></span><br><span class="line">    Long stattTime = System.currentTimeMillis();</span><br><span class="line">    List&lt;String&gt; list1 = list.stream()</span><br><span class="line">            .filter(x -&gt; x.getId() &gt; <span class="number">1000</span>)</span><br><span class="line">            .map(SimpleDTO::getName)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    Long endTime = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;stream 耗时：&quot;</span> + (endTime - stattTime) + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; list2 = testList.parallelStream()</span><br><span class="line">            .filter(x -&gt; x.getId() &gt; <span class="number">1000</span>)</span><br><span class="line">            .map(SimpleDTO::getName)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    Long endTime1 = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;parallelStream 耗时：&quot;</span> + (endTime1 - endTime) + <span class="string">&quot;ms&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stream 耗时：77ms</span><br><span class="line">parallelStream 耗时：19ms</span><br></pre></td></tr></table></figure>
+<p>从最终的耗时可以看出，对于 <code>parallelStream</code> 处理大量数据的时候，效率还是有很大的提升的。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>客官，赏一杯coffee嘛~~~~</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/wechatpay.jpeg" alt="蒋先森 WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/alipay.jpeg" alt="蒋先森 Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Stream/" rel="tag"># Stream</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/mac-homebrew-python/" rel="prev" title="Mac上面安装Python3">
+      <i class="fa fa-chevron-left"></i> Mac上面安装Python3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/read-effective-java-1/" rel="next" title="Effective Java 笔记一">
+      Effective Java 笔记一 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AAList"><span class="nav-number">1.</span> <span class="nav-text">生成一个List</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">1.1.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flatMap"><span class="nav-number">1.2.</span> <span class="nav-text">flatMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count"><span class="nav-number">1.3.</span> <span class="nav-text">count</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">1.4.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#distinct"><span class="nav-number">1.5.</span> <span class="nav-text">distinct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limit"><span class="nav-number">1.6.</span> <span class="nav-text">limit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-%E7%94%9F%E6%88%90-map"><span class="nav-number">2.</span> <span class="nav-text">stream 生成 map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#toMap"><span class="nav-number">2.1.</span> <span class="nav-text">toMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#groupingBy"><span class="nav-number">2.2.</span> <span class="nav-text">groupingBy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E5%92%8C"><span class="nav-number">2.2.1.</span> <span class="nav-text">总和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E7%BB%84"><span class="nav-number">2.2.3.</span> <span class="nav-text">分组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.2.4.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-%E5%92%8C-parallelStream"><span class="nav-number">3.</span> <span class="nav-text">Stream 和 parallelStream</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蒋先森"
+      src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+  <p class="site-author-name" itemprop="name">蒋先森</p>
+  <div class="site-description" itemprop="description">当你的才华还撑不起你的野心时，那你就应该静下心来学习</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tedburner" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tedburner" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋先森</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '596496ecd42725079d5e',
+      clientSecret: 'ee930af15d654db4e6c9cbdf99369075abb55c4c',
+      repo        : 'blog-comments',
+      owner       : 'tedburner',
+      admin       : ['tedburner'],
+      id          : '9de212648ee34e7f0eaecc7736618f7d',
+        language: 'en',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2d/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
