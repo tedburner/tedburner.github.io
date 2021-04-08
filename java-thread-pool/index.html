@@ -23,17 +23,17 @@
     var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="如果本文有错误，希望指出。  在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：  在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 ThreadPoolExecutor">
+  <meta name="description" content="如果本文有错误，希望指出。  在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：  使用线程池可以带来一系列好处：  降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成">
 <meta property="og:type" content="article">
 <meta property="og:title" content="多线程编程 —— 线程池">
 <meta property="og:url" content="https://jlj98.top/java-thread-pool/index.html">
 <meta property="og:site_name" content="蒋先森のBlog">
-<meta property="og:description" content="如果本文有错误，希望指出。  在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：  在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 ThreadPoolExecutor">
+<meta property="og:description" content="如果本文有错误，希望指出。  在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：  使用线程池可以带来一系列好处：  降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a7ad8beaaf5dfaefbd568fe4a9046a5c.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200830090608.png">
 <meta property="article:published_time" content="2018-05-09T08:02:38.000Z">
-<meta property="article:modified_time" content="2021-03-30T12:08:37.294Z">
+<meta property="article:modified_time" content="2021-04-08T15:31:42.629Z">
 <meta property="article:author" content="蒋先森">
 <meta property="article:tag" content="并发编程">
 <meta property="article:tag" content="线程池">
@@ -257,7 +257,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-04-08 23:31:42" itemprop="dateModified" datetime="2021-04-08T23:31:42+08:00">2021-04-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -292,7 +292,6 @@
 </blockquote>
 <p>在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a7ad8beaaf5dfaefbd568fe4a9046a5c.jpg"></p>
-<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个关键字的含义。</p>
 <p>使用线程池可以带来一系列好处：</p>
 <ul>
 <li>降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成的损耗。</li>
@@ -300,10 +299,11 @@
 <li>提高线程的可管理性：线程是稀缺资源，如果无限制创建，不仅会消耗系统资源，还会因为线程的不合理分布导致资源调度失衡，降低系统的稳定性。使用线程池可以进行统一的分配、调优和监控。</li>
 <li>提供更多更强大的功能：线程池具备可拓展性，允许开发人员向其中增加更多的功能。比如延时定时线程池ScheduledThreadPoolExecutor，就允许任务延期执行或定期执行。</li>
 </ul>
+<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个参数的含义。</p>
 <h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><h2 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h2><ul>
 <li>corePoolSize ：池中所保存的线程数，包括空闲线程，除非设置 allowCoreThreadTimeOut 参数，否则创建后会一直存活</li>
 <li>maximumPoolSize：池中允许的最大线程数</li>
-<li>keepAliveTime： 非核心线程空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
+<li>keepAliveTime：<strong>非核心线程</strong>空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
 <li>unit：keepAliveTime 参数的时间单位</li>
 <li>workQueue ：执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务</li>
 <li>threadFactory：执行程序创建新线程时使用的工厂</li>
@@ -340,7 +340,7 @@
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>除了 newWorkStealingPool 之外，其他四个创建方式都存在资源耗尽的风险。在<a target="_blank" rel="noopener" href="https://developer.aliyun.com/topic/java20?source=5176.11533457&userCode=bfol0yvy&type=copy">阿里Java开发手册——嵩山版</a>上面关于线程池创建的注意：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200830090608.png"></p>
 <p>在最新版的Java 开发手册中，在说 Executors 创建线程池弊端中，去掉了 newScheduledThreadPool，在之前的版本中，还是提示 newScheduledThreadPool 因为创建的线程数为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。</p>
-<h2 id="多少的线程数合适？"><a href="#多少的线程数合适？" class="headerlink" title="多少的线程数合适？"></a>多少的线程数合适？</h2><h3 id="CPU-密集型任务"><a href="#CPU-密集型任务" class="headerlink" title="CPU 密集型任务"></a>CPU 密集型任务</h3><p>对于CPU密集型任务，比如加密解密，压缩，计算等一系列需要大量耗费CPU资源的任务，最佳的任务线程数为CPU核心数的1~2倍，如果设置过多线程数，实际并不会起到很好的效果。以内CPU密集型任务会占用大量的CPU资源，所以这时的CPU的每个核心工作基本都是满负荷的，而设置躲过线程，每个线程都会去利用CPU资源来执行任务，这就会造成不必要的上下文切换。</p>
+<h2 id="多少的线程数合适？"><a href="#多少的线程数合适？" class="headerlink" title="多少的线程数合适？"></a>多少的线程数合适？</h2><h3 id="CPU-密集型任务"><a href="#CPU-密集型任务" class="headerlink" title="CPU 密集型任务"></a>CPU 密集型任务</h3><p>对于CPU密集型任务，比如加密解密，压缩，计算等一系列需要大量耗费CPU资源的任务，最佳的任务线程数为CPU核心数的1~2倍，如果设置过多线程数，实际并不会起到很好的效果。以内CPU密集型任务会占用大量的CPU资源，所以这时的CPU的每个核心工作基本都是满负荷的，而设置多过线程，每个线程都会去利用CPU资源来执行任务，这就会造成不必要的上下文切换。</p>
 <h3 id="耗时IO型任务"><a href="#耗时IO型任务" class="headerlink" title="耗时IO型任务"></a>耗时IO型任务</h3><p>耗时IO型任务，比如数据库、文件的读写，网络通信等任务，这种任务的特点是并不会特别消耗CPU资源，但是IO操作很耗时，总体会占用比较多的时候。对于这种任务，最大线程数一般会大于核心数的很多倍，因为IO读写速度相对于CPU的速度而言是比较慢的，如果设置过少的线程数，就会导致CPU资源的浪费。</p>
 <p>《Java 并发编程实战》作者推介的算法：<code>线程数 = CPU 核心数 *（1+平均等待时间/平均工作时间）</code>。</p>
 <p>通过这个公式，我们可以计算出一个合理的线程数量，如果任务的平均等待时间长，线程数就随之增加，而如果平均工作时间长，也就是对于我们上面的 CPU 密集型任务，线程数就随之减少。</p>

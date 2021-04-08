@@ -431,7 +431,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-04-08 23:19:51" itemprop="dateModified" datetime="2021-04-08T23:19:51+08:00">2021-04-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -526,7 +526,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-04-01 20:59:15" itemprop="dateModified" datetime="2021-04-01T20:59:15+08:00">2021-04-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -552,7 +552,7 @@
           <blockquote>
 <p>如果有误，欢迎批评指正。友情提示，本文有点长。<br>SpringBoot 版本 2.0.5.RELEASE。</p>
 </blockquote>
-<p>在学习 <code>SpringBoot</code> 时，会在启动项里面看到在类名上面有一个注解 <code>@@SpringBootApplication</code>。前几天在一个公众号中看到关于一道面试题，题目类似于：知道 <code>@SpringBootApplication</code> 的原理吗？   </p>
+<p>在学习 <code>SpringBoot</code> 时，会在启动项里面看到在类名上面有一个注解 <code>@SpringBootApplication</code>。前几天在一个公众号中看到关于一道面试题，题目类似于：知道 <code>@SpringBootApplication</code> 的原理吗？   </p>
 <p>突然发现自己对于 SpringBoot 还是处在‘知其然而不知所以然’的状态。于是就去官网和网上查看一些资料，于是有了这篇文章。</p>
 <h1 id="SpringBoot-启动项"><a href="#SpringBoot-启动项" class="headerlink" title="SpringBoot 启动项"></a>SpringBoot 启动项</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApplicationStartup</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ApplicationStartup.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h2><p>看下 <code>@SpringBootApplication</code> 注解的详情</p>

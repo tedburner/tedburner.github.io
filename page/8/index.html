@@ -430,7 +430,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-04-08 23:31:42" itemprop="dateModified" datetime="2021-04-08T23:31:42+08:00">2021-04-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -458,7 +458,6 @@
 </blockquote>
 <p>在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a7ad8beaaf5dfaefbd568fe4a9046a5c.jpg"></p>
-<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个关键字的含义。</p>
 <p>使用线程池可以带来一系列好处：</p>
 <ul>
 <li>降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成的损耗。</li>
@@ -466,10 +465,11 @@
 <li>提高线程的可管理性：线程是稀缺资源，如果无限制创建，不仅会消耗系统资源，还会因为线程的不合理分布导致资源调度失衡，降低系统的稳定性。使用线程池可以进行统一的分配、调优和监控。</li>
 <li>提供更多更强大的功能：线程池具备可拓展性，允许开发人员向其中增加更多的功能。比如延时定时线程池ScheduledThreadPoolExecutor，就允许任务延期执行或定期执行。</li>
 </ul>
+<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个参数的含义。</p>
 <h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><h2 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h2><ul>
 <li>corePoolSize ：池中所保存的线程数，包括空闲线程，除非设置 allowCoreThreadTimeOut 参数，否则创建后会一直存活</li>
 <li>maximumPoolSize：池中允许的最大线程数</li>
-<li>keepAliveTime： 非核心线程空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
+<li>keepAliveTime：<strong>非核心线程</strong>空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
 <li>unit：keepAliveTime 参数的时间单位</li>
 <li>workQueue ：执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务</li>
 <li>threadFactory：执行程序创建新线程时使用的工厂</li>
