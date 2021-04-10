@@ -23,16 +23,16 @@
     var CONFIG = {"hostname":"jlj98.top","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":{"gitalk":{"order":-2}},"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Linux 传统的数据传输，一般需要设计到数据的4次拷贝，4次copy，其中四次copy，其中的两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。 比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：   应用程序调用 read 方法，这里">
+  <meta name="description" content="Linux 传统的数据传输，一般需要涉及到数据的4次copy。这4次copy，分别是两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。 比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：   应用程序调用 read 方法，这里会涉及到一次">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 零拷贝">
 <meta property="og:url" content="https://jlj98.top/java-zero-copy/index.html">
 <meta property="og:site_name" content="蒋先森のBlog">
-<meta property="og:description" content="Linux 传统的数据传输，一般需要设计到数据的4次拷贝，4次copy，其中四次copy，其中的两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。 比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：   应用程序调用 read 方法，这里">
+<meta property="og:description" content="Linux 传统的数据传输，一般需要涉及到数据的4次copy。这4次copy，分别是两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。 比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：   应用程序调用 read 方法，这里会涉及到一次">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191105210233.png">
 <meta property="article:published_time" content="2019-11-06T07:29:42.000Z">
-<meta property="article:modified_time" content="2021-03-30T12:08:37.295Z">
+<meta property="article:modified_time" content="2021-04-10T09:00:59.423Z">
 <meta property="article:author" content="蒋先森">
 <meta property="article:tag" content="零拷贝">
 <meta name="twitter:card" content="summary">
@@ -255,7 +255,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-04-10 17:00:59" itemprop="dateModified" datetime="2021-04-10T17:00:59+08:00">2021-04-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -285,13 +285,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Linux 传统的数据传输，一般需要设计到数据的4次拷贝，4次copy，其中四次copy，其中的两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。</p>
+        <p>Linux 传统的数据传输，一般需要涉及到数据的4次copy。这4次copy，分别是两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。</p>
 <p>比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191105210233.png"></p>
 <ul>
 <li>应用程序调用 read 方法，这里会涉及到一次上下文切换（用户态-&gt;内核态），底层采用DMA 读取磁盘文件数据，并把内容存储到内核地址空间的读取缓存。</li>
-<li>由于应用程序无法读取内核地址空间的数据，如果需要程序操作这些数据，必须吧数据从读取缓冲区拷贝到用户缓冲区。这时，read()调用返回，引发一次上下文切换（内核态-&gt;用户态），这样就把数据拷贝到用户地址空间缓冲区了。这样应用程序就可以操作这些数据了。</li>
-<li>我们的目的是需要把数据发送到另外一个服务器，调用Socket的send()方法，这时候又涉及到一次上下文的切换(用户态-&gt;内核态)，同事文件数据被进行第三次拷贝，再次从用户地址空间拷贝到内核地址空间缓冲区。</li>
+<li>由于应用程序无法读取内核地址空间的数据，如果需要程序操作这些数据，必须把数据从读取缓冲区拷贝到用户缓冲区。这时，read()调用返回，引发一次上下文切换（内核态-&gt;用户态），这样就把数据拷贝到用户地址空间缓冲区了。这样应用程序就可以操作这些数据了。</li>
+<li>我们的目的是需要把数据发送到另外一个服务器，调用Socket的send()方法，这时候又涉及到一次上下文的切换(用户态-&gt;内核态)，同时文件数据被进行第三次拷贝，再次从用户地址空间拷贝到内核地址空间缓冲区。</li>
 <li>send() 调用返回，引发第四次上下文切换，同时进行第四次的数据拷贝，通过DMA把数据从目标套接字相关的缓存区传输到协议引擎进行发送。</li>
 </ul>
 <p>在上面的图中，1和4是有DMA负责，不需要CPU参与，但是过程2和3需要CPU的参与。从这样流程中，我们会发现，如果不需要再应用程序中操作文件数据，其中2和3的步骤是多余的，直接把内核态数据读取后直接拷贝到套接字相关的缓冲区，就能提升性能。这就是零拷贝技术。</p>
@@ -416,7 +416,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -429,7 +429,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-count">111</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

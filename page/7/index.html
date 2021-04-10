@@ -219,6 +219,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-index/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql-index/" class="post-title-link" itemprop="url">MySQL 索引</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-24 14:03:04" itemprop="dateCreated datePublished" datetime="2018-07-24T14:03:04+08:00">2018-07-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>欢迎指正。</p>
+</blockquote>
+<p>索引的一些基本认知：</p>
+<ul>
+<li>索引可以加快数据库的检索速度</li>
+<li>表经常进行INSERT/UPDATE/DELETE操作就不要建立索引了，换言之：索引会降低插入、删除、修改等维护任务的速度。</li>
+<li>索引需要占物理和数据空间。</li>
+<li>了解过索引的最左匹配原则</li>
+<li>知道索引的分类：聚集索引和非聚集索引</li>
+<li>MySQL 支持Hash索引和B+树索引两种</li>
+</ul>
+<h1 id="索引的基础知识"><a href="#索引的基础知识" class="headerlink" title="索引的基础知识"></a>索引的基础知识</h1><p>为表设置索引要付出代价的：一是增加了数据库的存储空间，二是在插入和修改数据时要花费较多的时间 (因为索引也要随之变动)。<br>创建索引可以大大提高系统的性能。</p>
+<ul>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性。</li>
+<li>可以大大加快数据的检索速度，这也是创建索引的最主要的原因。</li>
+<li>可以加速表和表之间的连接，</li>
+<li>使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间。</li>
+</ul>
+<h2 id="创建索引的原则"><a href="#创建索引的原则" class="headerlink" title="创建索引的原则"></a>创建索引的原则</h2><p>创建索引的一些原则：</p>
+<ul>
+<li>较频繁的作为查询条件的字段应该创建索引</li>
+<li>唯一性太差的字段不适合单独创建索引，即使频繁作为查询条件</li>
+<li>更新非常频繁的字段不适合创建索引（数据库会将索引数据根据算法排序，数据量大之后重新排序会占用过多资源）</li>
+<li>用于索引的最好的备选数据列是那些出现在WHERE子句、join子句、ORDER BY或GROUP BY子句中的列。</li>
+</ul>
+<h2 id="MySQL-存储结构"><a href="#MySQL-存储结构" class="headerlink" title="MySQL 存储结构"></a>MySQL 存储结构</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql-index/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/problem-java-memory-address/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1050,99 +1157,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-varchar-order-by/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/mysql-varchar-order-by/" class="post-title-link" itemprop="url">MySQL 字符串排序</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-26 17:29:41" itemprop="dateCreated datePublished" datetime="2018-06-26T17:29:41+08:00">2018-06-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前对于MySQL数据库的字符串排序没有深入了解，今天帮同事看这个问题，就深入的了解下。先看下数据库的表，我想查询字母倒序，字符串倒序的一个数据。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/aec7b472f5b49e5e90e495c08a367f7b.jpg"></p>
-<p>根据上面的要求，第一个版本的SQL是下面的样子</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> level <span class="keyword">from</span> test <span class="keyword">order</span> <span class="keyword">by</span> level <span class="keyword">desc</span> limit <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>结果发现最后的数据是 <strong>B9</strong>。咦，这是什么问题，网上看了下，字符的排序规则是先对第一个字符串排序，再下一个字符串，就这样排序，所以就出现之前的问题。于是出现了第二个版本的SQL查询。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> MID(level,<span class="number">2</span>)</span><br><span class="line"><span class="keyword">from</span> test</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">left</span>(level,<span class="number">1</span>) <span class="keyword">DESC</span> , <span class="built_in">CAST</span>(MID(level,<span class="number">2</span>) <span class="keyword">AS</span> UNSIGNED) <span class="keyword">DESC</span></span><br><span class="line">limit <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>从上面的SQL中可以看出，对于字符串的数字，可以使用<code>CAST(MID(level,2) AS UNSIGNED)</code>来转化。在网上查询资料的时候，也发现了下面两种查询</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="number">1</span>  <span class="keyword">order</span> <span class="keyword">by</span> id<span class="operator">+</span><span class="number">0</span> <span class="keyword">desc</span>;  </span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="number">1</span>  <span class="keyword">order</span> <span class="keyword">by</span> id<span class="operator">*</span><span class="number">1</span> <span class="keyword">desc</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="数据库空格对字符串的查找的影响"><a href="#数据库空格对字符串的查找的影响" class="headerlink" title="数据库空格对字符串的查找的影响"></a>数据库空格对字符串的查找的影响</h2><p>MySQL 数据库对字符串影响，空格在字符串的前面和中间是会影响字符串，在字符串后面的空格，MySQL 会忽略。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/mysql-varchar-order-by/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1210,7 +1228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1223,7 +1241,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-count">111</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

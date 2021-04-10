@@ -26,7 +26,7 @@
   <meta name="description" content="如果有误，欢迎批评指正。友情提示，本文有点长。SpringBoot 版本 2.0.5.RELEASE。  在学习 SpringBoot 时，会在启动项里面看到在类名上面有一个注解 @SpringBootApplication。前几天在一个公众号中看到关于一道面试题，题目类似于：知道 @SpringBootApplication 的原理吗？    突然发现自己对于 SpringBoot 还是处在‘">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot 注解之—— @SpringBootApplication">
-<meta property="og:url" content="https://jlj98.top/spring-boot-SpringBootApplication/index.html">
+<meta property="og:url" content="https://jlj98.top/spring-boot-bootstrap/index.html">
 <meta property="og:site_name" content="蒋先森のBlog">
 <meta property="og:description" content="如果有误，欢迎批评指正。友情提示，本文有点长。SpringBoot 版本 2.0.5.RELEASE。  在学习 SpringBoot 时，会在启动项里面看到在类名上面有一个注解 @SpringBootApplication。前几天在一个公众号中看到关于一道面试题，题目类似于：知道 @SpringBootApplication 的原理吗？    突然发现自己对于 SpringBoot 还是处在‘">
 <meta property="og:locale" content="en_US">
@@ -43,14 +43,14 @@
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/7347828f89baad5d99acae01173e0b28.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/3a8a13faa34791bb3fe4deea15cce8d4.jpg">
 <meta property="article:published_time" content="2018-10-12T14:50:13.000Z">
-<meta property="article:modified_time" content="2021-04-01T12:59:15.596Z">
+<meta property="article:modified_time" content="2021-04-10T09:09:28.702Z">
 <meta property="article:author" content="蒋先森">
 <meta property="article:tag" content="SpringBoot">
 <meta property="article:tag" content="SpringBoot启动流程">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a97cd95a4702fe1bb2ba093ebe728d15.jpg">
 
-<link rel="canonical" href="https://jlj98.top/spring-boot-SpringBootApplication/">
+<link rel="canonical" href="https://jlj98.top/spring-boot-bootstrap/">
 
 
 <script id="page-configurations">
@@ -237,7 +237,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-boot-SpringBootApplication/">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-boot-bootstrap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
@@ -267,7 +267,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-01 20:59:15" itemprop="dateModified" datetime="2021-04-01T20:59:15+08:00">2021-04-01</time>
+                <time title="Modified: 2021-04-10 17:09:28" itemprop="dateModified" datetime="2021-04-10T17:09:28+08:00">2021-04-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -541,7 +541,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -554,7 +554,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-count">111</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -704,7 +704,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'blog-comments',
       owner       : 'tedburner',
       admin       : ['tedburner'],
-      id          : 'ed2a537eb28302e8e17ed1883bd48e47',
+      id          : '6c7d7d42c41ef3396012142fb1ba1ef4',
         language: 'en',
       distractionFreeMode: true
     });

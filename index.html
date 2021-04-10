@@ -219,6 +219,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-boot-auto-configuration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/spring-boot-auto-configuration/" class="post-title-link" itemprop="url">Spring Boot 自动装配</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-10 17:03:43 / Modified: 20:07:29" itemprop="dateCreated datePublished" datetime="2021-04-10T17:03:43+08:00">2021-04-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>spring boot 源码版本 2.0.9.RELEASE。spring boot 高版本，没有走AutoConfigurationImportSelector#selectImports方法。</p>
+</blockquote>
+<h2 id="Spring-Boot-自动装配"><a href="#Spring-Boot-自动装配" class="headerlink" title="Spring Boot 自动装配"></a>Spring Boot 自动装配</h2><p>先看下Spring Boot 启动类注释 @SpringBootApplication。在这些注解中，重要的就是两个 <code>@SpringBootConfiguration</code> 和 <code>@EnableAutoConfiguration</code>。从下图可以看到该注解是个组合注解，本文关于自动装配，用了到里面的 <code>@EnableAutoConfiguration</code> 里面的 <code>@Import(AutoConfigurationImportSelector.class)</code>。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210410191336.png"></p>
+<p><code>@Import(&#123;AutoConfigurationImportSelector.class&#125;)</code> 主要功能就是自动配置导入选择器。</p>
+<h3 id="AutoConfigurationImportSelector-selectImports"><a href="#AutoConfigurationImportSelector-selectImports" class="headerlink" title="AutoConfigurationImportSelector#selectImports"></a>AutoConfigurationImportSelector#selectImports</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	AutoConfigurationMetadata autoConfigurationMetadata = AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(<span class="keyword">this</span>.beanClassLoader);</span><br><span class="line">	AnnotationAttributes attributes = getAttributes(annotationMetadata);</span><br><span class="line">       <span class="comment">// 所以的配置存放在configuration中，获取所有依赖的配置</span></span><br><span class="line">	List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata,</span><br><span class="line">			attributes);</span><br><span class="line">	configurations = removeDuplicates(configurations);</span><br><span class="line">	Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">	checkExcludedClasses(configurations, exclusions);</span><br><span class="line">	configurations.removeAll(exclusions);</span><br><span class="line">	configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">	fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">	<span class="keyword">return</span> StringUtils.toStringArray(configurations);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数含义：</p>
+<ul>
+<li>AnnotationMetadata：SpringBoot启动类上的注释的全限定名，比如 <code>@com.springboot.sample.starter.annotation.EnableSampleServer()</code></li>
+<li>AutoConfigurationMetadata：依赖的AutoConfiguration类的元数据</li>
+</ul>
+<h3 id="AutoConfigurationImportSelector-getCandidateConfigurations"><a href="#AutoConfigurationImportSelector-getCandidateConfigurations" class="headerlink" title="AutoConfigurationImportSelector#getCandidateConfigurations"></a>AutoConfigurationImportSelector#getCandidateConfigurations</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/spring-boot-auto-configuration/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-export-service/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1073,102 +1160,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-zero-copy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-zero-copy/" class="post-title-link" itemprop="url">Java 零拷贝</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-06 15:29:42" itemprop="dateCreated datePublished" datetime="2019-11-06T15:29:42+08:00">2019-11-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Linux 传统的数据传输，一般需要设计到数据的4次拷贝，4次copy，其中四次copy，其中的两次用户态和内核态之间Copy需要CPU参与，两次内核态和IO设备间的copy为DMA方式不需要CPU的参与。零拷贝技术主要就是减少用户态和内核态间copy数据次数。</p>
-<p>比如我们现在需要把实现一个场景：从一个文件中读取数据并将数据发送到另一台服务器上。从上图中看出：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20191105210233.png"></p>
-<ul>
-<li>应用程序调用 read 方法，这里会涉及到一次上下文切换（用户态-&gt;内核态），底层采用DMA 读取磁盘文件数据，并把内容存储到内核地址空间的读取缓存。</li>
-<li>由于应用程序无法读取内核地址空间的数据，如果需要程序操作这些数据，必须吧数据从读取缓冲区拷贝到用户缓冲区。这时，read()调用返回，引发一次上下文切换（内核态-&gt;用户态），这样就把数据拷贝到用户地址空间缓冲区了。这样应用程序就可以操作这些数据了。</li>
-<li>我们的目的是需要把数据发送到另外一个服务器，调用Socket的send()方法，这时候又涉及到一次上下文的切换(用户态-&gt;内核态)，同事文件数据被进行第三次拷贝，再次从用户地址空间拷贝到内核地址空间缓冲区。</li>
-<li>send() 调用返回，引发第四次上下文切换，同时进行第四次的数据拷贝，通过DMA把数据从目标套接字相关的缓存区传输到协议引擎进行发送。</li>
-</ul>
-<p>在上面的图中，1和4是有DMA负责，不需要CPU参与，但是过程2和3需要CPU的参与。从这样流程中，我们会发现，如果不需要再应用程序中操作文件数据，其中2和3的步骤是多余的，直接把内核态数据读取后直接拷贝到套接字相关的缓冲区，就能提升性能。这就是零拷贝技术。</p>
-<p>零拷贝技术可以减少数据拷贝和共享总线操作的次数，消除传输数据在存储器之间不必要的中间拷贝次数，从而有效地提高数据传输效率。零拷贝技术减少了用户应用程序地址空间和操作系统内核地址空间之间因为上下文切换而带来的开销。</p>
-<h2 id="Java-层实现零拷贝"><a href="#Java-层实现零拷贝" class="headerlink" title="Java 层实现零拷贝"></a>Java 层实现零拷贝</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-zero-copy/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1236,7 +1231,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1249,7 +1244,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">110</span>
+        <span class="site-state-item-count">111</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
