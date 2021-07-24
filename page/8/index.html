@@ -694,7 +694,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-08 23:31:42" itemprop="dateModified" datetime="2021-04-08T23:31:42+08:00">2021-04-08</time>
+                <time title="Modified: 2021-07-24 16:48:07" itemprop="dateModified" datetime="2021-07-24T16:48:07+08:00">2021-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -730,7 +730,7 @@
 <li>提供更多更强大的功能：线程池具备可拓展性，允许开发人员向其中增加更多的功能。比如延时定时线程池ScheduledThreadPoolExecutor，就允许任务延期执行或定期执行。</li>
 </ul>
 <p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个参数的含义。</p>
-<h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><h2 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h2><ul>
+<h2 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h2><h3 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h3><ul>
 <li>corePoolSize ：池中所保存的线程数，包括空闲线程，除非设置 allowCoreThreadTimeOut 参数，否则创建后会一直存活</li>
 <li>maximumPoolSize：池中允许的最大线程数</li>
 <li>keepAliveTime：<strong>非核心线程</strong>空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
@@ -739,7 +739,7 @@
 <li>threadFactory：执行程序创建新线程时使用的工厂</li>
 <li>handler ：由于超出线程范围和队列容量而使执行</li>
 </ul>
-<h2 id="线程池运行思路"><a href="#线程池运行思路" class="headerlink" title="线程池运行思路"></a>线程池运行思路</h2>
+<h3 id="线程池运行流程"><a href="#线程池运行流程" class="headerlink" title="线程池运行流程"></a>线程池运行流程</h3>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/java-thread-pool/#more" rel="contents">
