@@ -177,14 +177,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/read-effective-java-3/</loc>
+    <loc>https://jlj98.top/read-effective-java-2/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/read-effective-java-2/</loc>
+    <loc>https://jlj98.top/read-effective-java-3/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -212,7 +212,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/problem-pagehelper-limit/</loc>
+    <loc>https://jlj98.top/problem-java-memory-address/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -226,7 +226,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/problem-java-memory-address/</loc>
+    <loc>https://jlj98.top/problem-pagehelper-limit/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -247,14 +247,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/mysql-innodb-myisam/</loc>
+    <loc>https://jlj98.top/mysql-locks/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/mysql-locks/</loc>
+    <loc>https://jlj98.top/mysql-innodb-myisam/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -268,14 +268,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/mysql-index/</loc>
+    <loc>https://jlj98.top/mysql-execute-process/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/mysql-execute-process/</loc>
+    <loc>https://jlj98.top/mysql-index/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -289,14 +289,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/mq-rabbitmq-introduction/</loc>
+    <loc>https://jlj98.top/mq-what-the-different/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/mq-what-the-different/</loc>
+    <loc>https://jlj98.top/mq-rabbitmq-introduction/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -331,13 +331,6 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-vector/</loc>
-    
-    <lastmod>2021-03-30</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://jlj98.top/java-treemap/</loc>
     
     <lastmod>2021-03-30</lastmod>
@@ -345,7 +338,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-time/</loc>
+    <loc>https://jlj98.top/java-vector/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -353,6 +346,13 @@
   
   <url>
     <loc>https://jlj98.top/java-thread/</loc>
+    
+    <lastmod>2021-03-30</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/java-time/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -443,14 +443,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-queue-ConcurrentLinkedQueue/</loc>
+    <loc>https://jlj98.top/java-queue-ArrayBlockingQueue/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-queue-ArrayBlockingQueue/</loc>
+    <loc>https://jlj98.top/java-queue-ConcurrentLinkedQueue/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -464,14 +464,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-proxy-cglib/</loc>
+    <loc>https://jlj98.top/java-polymorphic/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-polymorphic/</loc>
+    <loc>https://jlj98.top/java-proxy-cglib/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -499,14 +499,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-cas/</loc>
+    <loc>https://jlj98.top/java-aqs/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/java-aqs/</loc>
+    <loc>https://jlj98.top/java-cas/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -632,14 +632,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/distributed-lock/</loc>
+    <loc>https://jlj98.top/distributed-transaction/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/distributed-transaction/</loc>
+    <loc>https://jlj98.top/distributed-lock/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -653,14 +653,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/code-standard/</loc>
+    <loc>https://jlj98.top/ddd-thought/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
   </url>
   
   <url>
-    <loc>https://jlj98.top/ddd-thought/</loc>
+    <loc>https://jlj98.top/code-standard/</loc>
     
     <lastmod>2021-03-30</lastmod>
     
@@ -681,6 +681,13 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://jlj98.top/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
   <url>
     <loc>https://jlj98.top/tags/%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/</loc>
@@ -711,6 +718,13 @@
   </url>
   
   <url>
+    <loc>https://jlj98.top/tags/Disruptor/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -718,7 +732,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/</loc>
+    <loc>https://jlj98.top/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -733,20 +747,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/Redis/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/Disruptor/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -802,13 +802,6 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/hexo/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jlj98.top/tags/ArrayList/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -830,7 +823,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/BloomFilter/</loc>
+    <loc>https://jlj98.top/tags/hexo/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -858,6 +851,20 @@
   </url>
   
   <url>
+    <loc>https://jlj98.top/tags/BloomFilter/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/AQS/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/tags/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -873,13 +880,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/CAS/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/AQS/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -921,6 +921,13 @@
   </url>
   
   <url>
+    <loc>https://jlj98.top/tags/%E5%A4%9A%E6%80%81/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -935,7 +942,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/%E5%A4%9A%E6%80%81/</loc>
+    <loc>https://jlj98.top/tags/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/ArrayBlockingQueue/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -956,13 +970,6 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jlj98.top/tags/DelayQueue/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -971,13 +978,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/LinkedBlockingDeque/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/ArrayBlockingQueue/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1054,6 +1054,13 @@
   </url>
   
   <url>
+    <loc>https://jlj98.top/tags/Stream/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/tags/String/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -1062,27 +1069,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/%E5%AF%B9%E8%B1%A1/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/Stream/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/StringBuilder/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/StringBuffer/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1103,6 +1089,27 @@
   </url>
   
   <url>
+    <loc>https://jlj98.top/tags/StringBuilder/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/StringBuffer/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/Thread/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/tags/Java8/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -1117,7 +1124,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/Thread/</loc>
+    <loc>https://jlj98.top/tags/TreeMap/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1125,13 +1132,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/Vector/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/TreeMap/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1229,13 +1229,6 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/%E7%B4%A2%E5%BC%95/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jlj98.top/tags/%E4%BC%98%E5%8C%96%E5%8E%9F%E7%90%86/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
@@ -1243,7 +1236,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E/</loc>
+    <loc>https://jlj98.top/tags/%E7%B4%A2%E5%BC%95/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1251,6 +1244,13 @@
   
   <url>
     <loc>https://jlj98.top/tags/%E9%94%81/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1306,7 +1306,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/tags/PageHelper/</loc>
+    <loc>https://jlj98.top/tags/%E5%AF%B9%E8%B1%A1%E5%9C%B0%E5%9D%80/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1314,6 +1314,13 @@
   
   <url>
     <loc>https://jlj98.top/tags/JVM%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/tags/PageHelper/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1328,13 +1335,6 @@
   
   <url>
     <loc>https://jlj98.top/tags/%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/tags/%E5%AF%B9%E8%B1%A1%E5%9C%B0%E5%9D%80/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1469,7 +1469,21 @@
 
   
   <url>
+    <loc>https://jlj98.top/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://jlj98.top/categories/Algorithm/</loc>
+    <lastmod>2021-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jlj98.top/categories/%E9%98%9F%E5%88%97/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1483,21 +1497,7 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jlj98.top/categories/distributed/</loc>
-    <lastmod>2021-07-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jlj98.top/categories/%E9%98%9F%E5%88%97/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -1518,14 +1518,14 @@
   </url>
   
   <url>
-    <loc>https://jlj98.top/categories/Hexo/</loc>
+    <loc>https://jlj98.top/categories/Java/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://jlj98.top/categories/Java/</loc>
+    <loc>https://jlj98.top/categories/Hexo/</loc>
     <lastmod>2021-07-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

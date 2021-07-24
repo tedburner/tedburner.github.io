@@ -89,11 +89,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/read-effective-java-3/</loc>
+    <loc>https://jlj98.top/read-effective-java-2/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/read-effective-java-2/</loc>
+    <loc>https://jlj98.top/read-effective-java-3/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -109,7 +109,7 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/problem-pagehelper-limit/</loc>
+    <loc>https://jlj98.top/problem-java-memory-address/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -117,7 +117,7 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/problem-java-memory-address/</loc>
+    <loc>https://jlj98.top/problem-pagehelper-limit/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -129,11 +129,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mysql-innodb-myisam/</loc>
+    <loc>https://jlj98.top/mysql-locks/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mysql-locks/</loc>
+    <loc>https://jlj98.top/mysql-innodb-myisam/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -141,11 +141,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mysql-index/</loc>
+    <loc>https://jlj98.top/mysql-execute-process/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mysql-execute-process/</loc>
+    <loc>https://jlj98.top/mysql-index/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -153,11 +153,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mq-rabbitmq-introduction/</loc>
+    <loc>https://jlj98.top/mq-what-the-different/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/mq-what-the-different/</loc>
+    <loc>https://jlj98.top/mq-rabbitmq-introduction/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -177,19 +177,19 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-vector/</loc>
-    <lastmod>2021-03-30</lastmod>
-  </url>
-  <url>
     <loc>https://jlj98.top/java-treemap/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-time/</loc>
+    <loc>https://jlj98.top/java-vector/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
     <loc>https://jlj98.top/java-thread/</loc>
+    <lastmod>2021-03-30</lastmod>
+  </url>
+  <url>
+    <loc>https://jlj98.top/java-time/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -241,11 +241,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-queue-ConcurrentLinkedQueue/</loc>
+    <loc>https://jlj98.top/java-queue-ArrayBlockingQueue/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-queue-ArrayBlockingQueue/</loc>
+    <loc>https://jlj98.top/java-queue-ConcurrentLinkedQueue/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -253,11 +253,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-proxy-cglib/</loc>
+    <loc>https://jlj98.top/java-polymorphic/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-polymorphic/</loc>
+    <loc>https://jlj98.top/java-proxy-cglib/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -273,11 +273,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-cas/</loc>
+    <loc>https://jlj98.top/java-aqs/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/java-aqs/</loc>
+    <loc>https://jlj98.top/java-cas/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -349,11 +349,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/distributed-lock/</loc>
+    <loc>https://jlj98.top/distributed-transaction/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/distributed-transaction/</loc>
+    <loc>https://jlj98.top/distributed-lock/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
@@ -361,11 +361,11 @@
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/code-standard/</loc>
+    <loc>https://jlj98.top/ddd-thought/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
-    <loc>https://jlj98.top/ddd-thought/</loc>
+    <loc>https://jlj98.top/code-standard/</loc>
     <lastmod>2021-03-30</lastmod>
   </url>
   <url>
