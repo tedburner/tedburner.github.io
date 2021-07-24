@@ -4073,7 +4073,7 @@
   <entry>
     <title>Spring Boot 实现动态定时任务</title>
     <url>/springboot-dynamic-job/</url>
-    <content><![CDATA[<p>最近在项目中配到一些问题，一个定时任务在运行过程中崩溃，导致定时任务没有执行完成，业务那边想能够在不重启任务的情况下，重启任务继续跑，而且希望在不重启服务的情况下，能够动态的修改定时任务时间。所以有了这一篇文章。</p>
+    <content><![CDATA[<p>最近在项目中碰到一些问题，一个定时任务在运行过程中崩溃，导致定时任务没有执行完成，业务那边想能够在不重启任务的情况下，重启任务继续跑，而且希望在不重启服务的情况下，能够动态的修改定时任务时间。所以有了这一篇文章。</p>
 <p>一般情况下，在Spring Boot 项目中，想使用定时任务，只需要使用 <code>@EnableScheduling</code> 注解开启定时任务即可，然后在定时任务调度的任务上，添加<code>@Scheduled</code>，修改自己需要的任务周期。</p>
 <h2 id="普通定时任务"><a href="#普通定时任务" class="headerlink" title="普通定时任务"></a>普通定时任务</h2><p>下面是一般情况下，在开启<code>@EnableScheduling</code>注解情况下，一个简单的示例：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleJob</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Scheduled(cron = &quot;* * * * * ?&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> time = System.currentTimeMillis();</span><br><span class="line">        log.info(<span class="string">&quot;当前时间：&#123;&#125;&quot;</span>, time);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
