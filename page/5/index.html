@@ -219,6 +219,213 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/jvm-classloader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/jvm-classloader/" class="post-title-link" itemprop="url">深入理解虚拟机 —— 类的加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-21 15:05:08" itemprop="dateCreated datePublished" datetime="2018-09-21T15:05:08+08:00">2018-09-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-18 22:46:56" itemprop="dateModified" datetime="2021-05-18T22:46:56+08:00">2021-05-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><a href="https://jlj98.top/jvm-memory-area/">深入理解虚拟机 —— Java内存区域</a></li>
+<li><a href="https://jlj98.top/jvm-gc/">深入理解虚拟机 —— 垃圾收集器</a></li>
+</ul>
+<p>类被加载到虚拟机的内存中开始，到卸载出内存为止，它的整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/ebd2ba4b7e318811fb688705868bf751.jpg"></p>
+<h1 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h1><h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><p>在加载阶段，需要完成以下3件事情：</p>
+<ul>
+<li>通过一个类的全限定名来获取定义此类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转化为<strong>方法区</strong>的运行时数据结构</li>
+<li>在内存中生成一个代表这个类的  <code>java.lang.Class</code> 对象，作为<strong>方法区</strong>这个类的各种数据的访问入口。</li>
+</ul>
+<p>加载阶段结束后，Java 虚拟机外部的二进制字节流就按照虚拟机所设定的格式存储在方法区之中，方法区中的数据存储格式完全由虚拟机实现自行定义。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>验证是连接阶段的第一步，这一阶段的目的是为了确保 Class 文件的字节流包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。   </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/jvm-classloader/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-hashtable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-hashtable/" class="post-title-link" itemprop="url">Java集合框架 —— Hashtable</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-19 10:40:19" itemprop="dateCreated datePublished" datetime="2018-09-19T10:40:19+08:00">2018-09-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>声明：本文使用JDK1.8，如果有错希望指出</p>
+</blockquote>
+<p>在Java面试的时候，HashMap 和 Hashtable 经常被问，就想仔细分析下两者。</p>
+<p><a href="https://jlj98.top/Java-HashMap/">Java集合框架 —— HashMap</a></p>
+<h1 id="HashMap-和-Hashtable-的区别"><a href="#HashMap-和-Hashtable-的区别" class="headerlink" title="HashMap 和 Hashtable 的区别"></a>HashMap 和 Hashtable 的区别</h1><p>HashMap 和 Hashtable 都是实现 Map 接口，两者主要的区别是线程安全性，同步，以及速度。   </p>
+<table>
+<thead>
+<tr>
+<th>HashMap</th>
+<th>Hashtable</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>键值接受null</td>
+<td>键值对不能为null</td>
+</tr>
+<tr>
+<td>非synchronized</td>
+<td>Hashtable是synchronized，线程安全</td>
+</tr>
+<tr>
+<td>单线程下HashMap的速度比Hashtable快</td>
+<td>sychronized意味着在一次仅有一个线程能够更改Hashtable</td>
+</tr>
+<tr>
+<td>迭代器(Iterator)是fail-fast迭代器</td>
+<td>Hashtable的enumerator迭代器不是fail-fast的</td>
+</tr>
+</tbody></table>
+<p>因此仅在需要线程安全的时候使用Hashtable，而如果Java5以上，还是使用 ConcurrentHashMap。   </p>
+<p><a href="https://jlj98.top/Java-ConcurrentHashMap/">Java并发容器 ——— ConcurrentHashMap</a>。</p>
+<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/76ba345ad74c7606a5dc7ddc853f98d0.jpg"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-hashtable/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-treemap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -931,195 +1138,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-server-mater-salve/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/redis-server-mater-salve/" class="post-title-link" itemprop="url">Redis 服务集群</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-02 23:39:15" itemprop="dateCreated datePublished" datetime="2018-09-02T23:39:15+08:00">2018-09-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Redis系列：</p>
-<ul>
-<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
-<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
-<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
-<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
-</ul>
-<h1 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h1><p>在 Redis 中，用户可以通过执行 <code>SLAVEOF</code> 命令或者设置 <code>slaveof</code> 选项，让一个服务器去复制另一个服务器，被复制的叫主服务器（master），对主服务器进行复制的叫从服务器（slave）。</p>
-<p>命令是在从服务器上执行的。</p>
-<h2 id="旧版复制功能"><a href="#旧版复制功能" class="headerlink" title="旧版复制功能"></a>旧版复制功能</h2><p>对于初次复制，旧版复制功能能够很好完成，但是对于短线后的复制来说，其效率非常低。主要是这种复制对于短线后的从服务器来说，会把主服务器的所有 RDB 文件发送给从服务器。<br>SYNC 命令是一个非常耗费资源的操作。每次执行命令，主从服务器需要执行下面操作：</p>
-<ul>
-<li>主服务器需要执行 BGSAVE 命令来生成 RDB 文件，这个操作会耗费主服务器大量的 CPU、内存和磁盘I/O资源</li>
-<li>主服务器需要将自己生成的 RDB 文件发送给从服务器，这个发送会耗费注册服务器大量的网络资源，并对主服务器响应命令请求的时间产生影响</li>
-<li>接收到 RDB 文件的从服务器需要载入主服务器发来的 RDB 文件，并在载入期间，从服务器会因为阻塞而没办法处理请求</li>
-</ul>
-<h2 id="新版复制功能"><a href="#新版复制功能" class="headerlink" title="新版复制功能"></a>新版复制功能</h2><p>PSYNC 代替 SYNC 命令来执行复制的同步操作。<code>PSYNC &lt;runid&gt; &lt;offset&gt;</code>:其中 runid 是上一次复制的主服务器的运行ID,而 offset则是从服务器当前的复制偏移量,接收到这个命令的主服务器会通过这两个参数来判断应该对从服务器执行哪种同步操作。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/redis-server-mater-salve/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/distributed-lock/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/distributed-lock/" class="post-title-link" itemprop="url">分布式锁</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-08-28 22:10:56" itemprop="dateCreated datePublished" datetime="2018-08-28T22:10:56+08:00">2018-08-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/distributed/" itemprop="url" rel="index"><span itemprop="name">distributed</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>现实生产环境中为什么需要分布式锁？   </p>
-<p>在现在的公司的生产环境中，一个项目的部署最起码需要两台服务器，你不可以在你产品上线部署的时候，不让用户使用你们公司的产品，而且分布式部署，通过Nginx的负载均衡，也可以减轻单台服务器的压力，带来性能和效率上的提升。那么问题来了，在分布式部署产品的时候，就会产生一个问题，如何保证数据的一致性。当某个资源在多个系统之间，存在着共享的时候，为了保证大家访问这个资源数据是一致性的，就必须保证统一时刻只能有只有一个客户端出来，不能并发执行。单机部署，我们需要考虑并发问题，我们往往采用线程间加锁的机制。但是在分布式系统时代，为了实现我们之前的问题，就必须考虑分布式锁了。   </p>
-<p>分布式锁指的是在分布式部署环境下，通过锁机制来让多客户端互斥的对共享资源镜像访问。   </p>
-<p>目前主流的分布式锁的技术：</p>
-<ul>
-<li>基于数据库实现</li>
-<li>基于Redis实现（本篇主要讲的内容）</li>
-<li>基于Memcached实现</li>
-<li>基于 ZooKeeper实现</li>
-</ul>
-<h1 id="基于数据库实现"><a href="#基于数据库实现" class="headerlink" title="基于数据库实现"></a>基于数据库实现</h1><p>基于数据库实现分布式锁，主要是依靠数据库的乐观锁或者悲观锁来实现。这里可以看下我之前的博客—<a href="https://jlj98.top/mysql-locks/">MySQL数据库锁机制</a>。</p>
-<h2 id="基于乐观锁"><a href="#基于乐观锁" class="headerlink" title="基于乐观锁"></a>基于乐观锁</h2><p>在数据库表里面引入一个版本号(version)，通过这个字段来控制数据是否更新。</p>
-<h2 id="基于悲观锁"><a href="#基于悲观锁" class="headerlink" title="基于悲观锁"></a>基于悲观锁</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/distributed-lock/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1191,7 +1209,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1204,7 +1222,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

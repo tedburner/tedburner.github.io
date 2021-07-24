@@ -219,6 +219,193 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-reference-queue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-reference-queue/" class="post-title-link" itemprop="url">引用队列 ReferenceQueue</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-02-18 10:52:06" itemprop="dateCreated datePublished" datetime="2019-02-18T10:52:06+08:00">2019-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果有什么错误的地方，希望指出。</p>
+</blockquote>
+<p>前几天有个面试，在面试最后的时候，面试官说问个比较偏僻的知识点，问了关于Java引用的。于是我就把<a href="https://jlj98.top/jvm-gc/#%E5%BC%95%E7%94%A8">四种引用</a>说了下。然后又问，你知道引用队列嘛？然后我懵逼了，只能说我不知道。</p>
+<p>关于Java中的引用，可以看上面的链接，引用主要用于GC中的。</p>
+<p>引用队列 ReferenceQueue 是用来配合引用工作的，没有 ReferenceQueue 一样可以运行。创建引用的时候可以指定关联的队列，<strong>当GC释放对象内存的时候，会将引用加入到引用队列的队列末尾，这相当于是一种通知机制</strong>。当关联的引用队列中有数据的时候，意味着引用指向的堆内存中的对象被回收。通过这种方式，JVM允许我们在对象被销毁后，做一些我们自己想做的事情。JVM提供了一个ReferenceHandler线程，将引用加入到注册的引用队列中。</p>
+<p>关于引用队列，其类位于ref中，如图所示：</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190218110328.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引用队列</span></span><br><span class="line">ReferenceQueue&lt;String&gt; rq = newReferenceQueue&lt;String&gt;();</span><br><span class="line"><span class="comment">// 软引用</span></span><br><span class="line">SoftReference&lt;String&gt; sr = newSoftReference&lt;String&gt;(<span class="keyword">new</span> String(<span class="string">&quot;Soft&quot;</span>),rq);</span><br><span class="line"><span class="comment">// 弱引用</span></span><br><span class="line">WeakReference&lt;String&gt; wr = newWeakReference&lt;String&gt;(<span class="keyword">new</span> String(<span class="string">&quot;Weak&quot;</span>),rq);</span><br><span class="line"><span class="comment">// 幽灵引用</span></span><br><span class="line">PhantomReference&lt;String&gt; pr = newPhantomReference&lt;String&gt;(<span class="keyword">new</span> String(<span class="string">&quot;Phantom&quot;</span>),rq);</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 从引用队列中弹出一个对象引用</span></span><br><span class="line">Reference&lt;? extends String&gt; ref = rq.poll();</span><br></pre></td></tr></table></figure>
+<p>ReferenceQueue 提供了三种方法来移除队列：</p>
+<ul>
+<li>poll()：用于移除并返回该队列中的下一个引用对象，如果队列为空，则返回null</li>
+<li>remove()：用于移除并返回该队列中的下一个引用对象，该方法会在队列返回可用引用对象之前一直阻塞</li>
+<li>remove (long timeout)：用于移除并返回队列中的下一个引用对象。该方法会在队列返回可用引用对象之前一直阻塞，或者在超出指定超时后结束。如果超出指定超时，则返回null。如果指定超时为0，意味着将无限期地等待。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReferenceQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ReferenceQueue&lt;<span class="keyword">byte</span>[]&gt; referenceQueue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> _1M = <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Object object = <span class="keyword">new</span> Object();</span><br><span class="line">        Map&lt;Object, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">                WeakReference&lt;<span class="keyword">byte</span>[]&gt; k;</span><br><span class="line">                <span class="keyword">while</span> ((k = (WeakReference) referenceQueue.remove()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    System.out.println((cnt++) + <span class="string">&quot;回收了:&quot;</span> + k);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="comment">//结束循环</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line">        thread.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[_1M];</span><br><span class="line">            WeakReference&lt;<span class="keyword">byte</span>[]&gt; weakReference = <span class="keyword">new</span> WeakReference&lt;&gt;(bytes, referenceQueue);</span><br><span class="line">            map.put(weakReference, object);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;map.size-&gt;&quot;</span> + map.size());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-reference-queue/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-execute-process/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql-execute-process/" class="post-title-link" itemprop="url">MySQL查询和更新原理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-02-15 18:55:34" itemprop="dateCreated datePublished" datetime="2019-02-15T18:55:34+08:00">2019-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在对于MySQL的优化，网上有很多小技巧，比如加<a href="https://jlj98.top/mysql-index/">索引</a>。不过前几天在极客时间上买了门《MySQL实战45讲》。这篇文章主要是在学习过程中关于MySQL原理的一些笔记。</p>
+<p>在学习如何优化的过程中，最好对于MySQL查询的过程有一定的理解，这样有利于如何进行优化。下面这张图片是MySQL的逻辑框架：</p>
+<img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200423095355.png" width="50%" height="50%">
+
+<p>MySQL从图中可以看出，一般分为三部分：客户端、核心服务、存储引擎。客户端这个就不说了，主要是Java这些客户端；而关于存储引擎的，在之前整理的一篇文章有简绍——<a href="https://jlj98.top/mysql-innodb-myisam/">MySQL的存储引擎 —— InnoDB和MyIsAM</a>。所以今天主要是讲解下关于核心服务。</p>
+<h1 id="MySQL优化原理"><a href="#MySQL优化原理" class="headerlink" title="MySQL优化原理"></a>MySQL优化原理</h1><h2 id="MySQL查询过程"><a href="#MySQL查询过程" class="headerlink" title="MySQL查询过程"></a>MySQL查询过程</h2><blockquote>
+<p>mysql&gt; select * from T where ID=10；</p>
+</blockquote>
+<p>当我们输入上面这一条SQL查询语句的时候，发生了什么？</p>
+<p>这里面主要涉及的是核心服务中的模块：连接器、查询缓存、分析器、优化器、执行器等，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引擎的功能都在这一层实现，比如存储过程、触发器、视图等。</p>
+<h3 id="连接器"><a href="#连接器" class="headerlink" title="连接器"></a>连接器</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql-execute-process/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-future-callback/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -939,206 +1126,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-polymorphic/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-polymorphic/" class="post-title-link" itemprop="url">Java 多态</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-12-14 11:14:25" itemprop="dateCreated datePublished" datetime="2018-12-14T11:14:25+08:00">2018-12-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：如果本文有错误，希望指出。</p>
-</blockquote>
-<p>虽然学习和使用 Java 好多年了，但是对于多态的整体概念还是有点模糊。今天在看之前写的关于<a href="https://jlj98.top/java-reflect/">反射</a>博文时，突然想到了 Java 的三大特性——多态。其他两个分别是**<a target="_blank" rel="noopener" href="https://github.com/tedburner/JavaGuide/blob/master/%E7%9F%A5%E8%AF%86%E7%82%B9/Java/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.md#java-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%E5%B0%81%E8%A3%85%E7%BB%A7%E6%89%BF%E5%A4%9A%E6%80%81">封装、继承</a>**。只是想起多态的继承、重写，对于别的有点模糊了，于是就像自己整理下。</p>
-<h1 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h1><p>多态指的是对象的多种形态。继承是多态的实现基础。当使用多态方式调用方法时，首先检查父类中是否有该方法，如果没有，则编译错误；如果有，再去调用子类的同名方法。</p>
-<p>多态的分类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PolymorphicCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        show(<span class="keyword">new</span> Cat());</span><br><span class="line">        show(<span class="keyword">new</span> Dog());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//向上转型</span></span><br><span class="line">        Animal animal = <span class="keyword">new</span> Cat();</span><br><span class="line">        animal.eat();<span class="comment">//调用的是Cat的 eat</span></span><br><span class="line">        <span class="comment">//当使用多态方式调用方法时，首先检查父类中是否有该方法，</span></span><br><span class="line">        <span class="comment">// 如果没有，则编译错误；如果有，再去调用子类的同名方法</span></span><br><span class="line">        animal.work();<span class="comment">//编译报错</span></span><br><span class="line">        <span class="comment">//向下转型</span></span><br><span class="line">        Cat cat = (Cat) animal;</span><br><span class="line">        cat.work();<span class="comment">//调用的是Cat的work</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">(Animal animal)</span> </span>&#123;</span><br><span class="line">        animal.eat();</span><br><span class="line">        <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Cat) &#123;</span><br><span class="line">            Cat cat = (Cat) animal;</span><br><span class="line">            cat.work();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (animal <span class="keyword">instanceof</span> Dog) &#123;</span><br><span class="line">            Dog dog = (Dog) animal;</span><br><span class="line">            dog.work();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫吃鱼....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;猫抓老鼠....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;狗吃骨头....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;look door....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="向上转型"><a href="#向上转型" class="headerlink" title="向上转型"></a>向上转型</h2><p><code>Animal animal = new Cat();</code> 对于这个对象的创建，就是体现了向上转型。</p>
-<p>子类引用的对象转换为父类类型成为向上转型。通俗的说就是将子类对象转化为父类对象，此处对象可以是接口。</p>
-<h2 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-polymorphic/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-genericity-super-extends/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-genericity-super-extends/" class="post-title-link" itemprop="url">Java 泛型中 ? super T 和 ? extends T 的区别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-12-11 10:19:19" itemprop="dateCreated datePublished" datetime="2018-12-11T10:19:19+08:00">2018-12-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近在看阿里出的一本书 —— 《码出高效 Java 开发手册》，这本书不是之前那本关于 <a target="_blank" rel="noopener" href="http://techforum-img.cn-hangzhou.oss-pub.aliyun-inc.com/Java_1512024443940.pdf">Java 开发注意规范的手册</a>，这本书内容还是不错的，干货满满。</p>
-<p>在看书的时候，就看到了关于上面讲的知识点，于是想到之前在看 Java 一些源码时候，也看到一些关于这个泛型的写法，当时还没注意，比如下面关于 ThreadLocal 源码是看到的。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181211102804.png"></p>
-<p>这样以后看 Java 的源码就能看懂这些泛型的写法了。</p>
-<? super T> 和 <? extends T> 是 Java 泛型中的 “通配符“和”边界”的概念。
-- <? super T> ： 是指“上界通配符”。 A super B 表示 A 是 B 的父类或者祖先，在 B 上面。
-- <? extends T>：是指“下界通配符”。A extends B 表示 A 是 B 的子类或者孙类，在 B 的下面。
-
-<? extends T>与<? super T>两种语法，但是两者的区别非常微妙。简单来说，<? extends T>是 Get first，适用于消费集合元素为主的场景；<? super T>是 Put First，适用于生产集合元素为主的场景。
-
-# <? extends T>
-<? extends T>可以赋值给任何 T 及 T 子类的集合，上界为T，取出来的类型带有泛型限制，向上强制转型为T。null可以表示任何类型，所以除nul外，任何元素都不得添加进<? extends T>集合内。
-
-# <? super T>
-<? super T>可以赋值给任何 T 及 T 的父类集合，下界为T。在生活中，投票选举类似于 <? super T> 的操作。选举代表时，你只能往里投选票，取数据时，根本不知道是谁的票，相当于泛型丢失。有人说，这只是一种生活场景，在系统设计中。很难有这样的情形。再举例说明一下，我们在填写对主管的年度评价时，提交后若想再次访问之前的链接修改评价，就会被告之：“您已经完成对主管的年度反馈,谢谢参与。" extends的场景是put功能受限，而 super的场景是get功能受限。
-
-# 集合和泛型
-下面的代码和说明出自《码出高效，Java开发手册》
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第一阶段：泛型出现之前的集合定义方式</span></span><br><span class="line">        List a1 = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        a1.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a1.add(<span class="keyword">new</span> Integer(<span class="number">111</span>));</span><br><span class="line">        a1.add(<span class="keyword">new</span> String(<span class="string">&quot;Hello World&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Object o : a1)&#123;</span><br><span class="line">            System.out.println(o);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第二段：把a1 引用赋值给a2，注意a2与a1的区别是增加了泛型限制&lt;Object&gt;</span></span><br><span class="line">        List&lt;Object&gt; a2 = a1;</span><br><span class="line">        a2.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a2.add(<span class="keyword">new</span> Integer(<span class="number">222</span>));</span><br><span class="line">        a2.add(<span class="keyword">new</span> String(<span class="string">&quot;hello a2a2&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第三段:把a1引用赋值给a3,注意a3与a1的区别是增加了泛型&lt;Integer&gt;</span></span><br><span class="line">        List&lt;Integer&gt; a3 = a1;</span><br><span class="line">        a3.add(<span class="keyword">new</span> Integer(<span class="number">333</span>));</span><br><span class="line">        <span class="comment">//下方两行编译出错,不允许增加非 Integer类型进入集合</span></span><br><span class="line">        a3.add(<span class="keyword">new</span> Object());</span><br><span class="line">        a3.add(<span class="keyword">new</span> String(<span class="string">&quot;hello a3a3&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第四段:把a1引用赋值给a4,a1与a4的区别是增加了通配符</span></span><br><span class="line">        List&lt;?&gt; a4 = a1;</span><br><span class="line">        a1.remove(<span class="number">0</span>);</span><br><span class="line">        a4.clear();</span><br><span class="line">        <span class="comment">//编译出错。不允许增加任何元素</span></span><br><span class="line">        a4.add(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-第一段说明：在定义List之后,毫不犹豫地往集合里装入三种不同的对象：Object、 Integer 和 String，遍历没有问题，但是贸然以为里边的元素都是 Integer，使用强制转化，则抛出 ClassCastException异常。
-
-第二段说明：把a赋值给a2，a2是 List<object>类型的，也可以再往里装入三种不同的对象。很多程序员认为List和List<object>是完全相同的，至少从目前这两段来看是这样的。
-
-第三段说明：由于泛型在JDK5之后才出现，考虑到向前兼容，因此历史代码有时需要赋值给新泛型代码，从编译器角度是允许的。这种代码似乎有点反人类，在实际故障案例中经常出现。
-
-第四段说明：问号在正则表达式中可以匹配任何字符，List<?><p>称为通配符集合。它可以接受任何类型的集合引用赋值，不能添加任何元素，但可以 remove 和 clear，并非 immutable集合。List&lt;?&gt;一般作为参数来接收外部的集合，或者返回一个不知道具体元素类型的集合。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li>《码出高效：Java开发手册》</li>
-</ul>
-</object></object>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-genericity-super-extends/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1210,7 +1197,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1223,7 +1210,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

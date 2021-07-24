@@ -219,6 +219,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-server-mater-salve/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/redis-server-mater-salve/" class="post-title-link" itemprop="url">Redis 服务集群</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-02 23:39:15" itemprop="dateCreated datePublished" datetime="2018-09-02T23:39:15+08:00">2018-09-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Redis系列：</p>
+<ul>
+<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
+<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
+<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
+<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
+</ul>
+<h1 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h1><p>在 Redis 中，用户可以通过执行 <code>SLAVEOF</code> 命令或者设置 <code>slaveof</code> 选项，让一个服务器去复制另一个服务器，被复制的叫主服务器（master），对主服务器进行复制的叫从服务器（slave）。</p>
+<p>命令是在从服务器上执行的。</p>
+<h2 id="旧版复制功能"><a href="#旧版复制功能" class="headerlink" title="旧版复制功能"></a>旧版复制功能</h2><p>对于初次复制，旧版复制功能能够很好完成，但是对于短线后的复制来说，其效率非常低。主要是这种复制对于短线后的从服务器来说，会把主服务器的所有 RDB 文件发送给从服务器。<br>SYNC 命令是一个非常耗费资源的操作。每次执行命令，主从服务器需要执行下面操作：</p>
+<ul>
+<li>主服务器需要执行 BGSAVE 命令来生成 RDB 文件，这个操作会耗费主服务器大量的 CPU、内存和磁盘I/O资源</li>
+<li>主服务器需要将自己生成的 RDB 文件发送给从服务器，这个发送会耗费注册服务器大量的网络资源，并对主服务器响应命令请求的时间产生影响</li>
+<li>接收到 RDB 文件的从服务器需要载入主服务器发来的 RDB 文件，并在载入期间，从服务器会因为阻塞而没办法处理请求</li>
+</ul>
+<h2 id="新版复制功能"><a href="#新版复制功能" class="headerlink" title="新版复制功能"></a>新版复制功能</h2><p>PSYNC 代替 SYNC 命令来执行复制的同步操作。<code>PSYNC &lt;runid&gt; &lt;offset&gt;</code>:其中 runid 是上一次复制的主服务器的运行ID,而 offset则是从服务器当前的复制偏移量,接收到这个命令的主服务器会通过这两个参数来判断应该对从服务器执行哪种同步操作。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/redis-server-mater-salve/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/distributed-lock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/distributed-lock/" class="post-title-link" itemprop="url">分布式锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-28 22:10:56" itemprop="dateCreated datePublished" datetime="2018-08-28T22:10:56+08:00">2018-08-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/distributed/" itemprop="url" rel="index"><span itemprop="name">distributed</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>现实生产环境中为什么需要分布式锁？   </p>
+<p>在现在的公司的生产环境中，一个项目的部署最起码需要两台服务器，你不可以在你产品上线部署的时候，不让用户使用你们公司的产品，而且分布式部署，通过Nginx的负载均衡，也可以减轻单台服务器的压力，带来性能和效率上的提升。那么问题来了，在分布式部署产品的时候，就会产生一个问题，如何保证数据的一致性。当某个资源在多个系统之间，存在着共享的时候，为了保证大家访问这个资源数据是一致性的，就必须保证统一时刻只能有只有一个客户端出来，不能并发执行。单机部署，我们需要考虑并发问题，我们往往采用线程间加锁的机制。但是在分布式系统时代，为了实现我们之前的问题，就必须考虑分布式锁了。   </p>
+<p>分布式锁指的是在分布式部署环境下，通过锁机制来让多客户端互斥的对共享资源镜像访问。   </p>
+<p>目前主流的分布式锁的技术：</p>
+<ul>
+<li>基于数据库实现</li>
+<li>基于Redis实现（本篇主要讲的内容）</li>
+<li>基于Memcached实现</li>
+<li>基于 ZooKeeper实现</li>
+</ul>
+<h1 id="基于数据库实现"><a href="#基于数据库实现" class="headerlink" title="基于数据库实现"></a>基于数据库实现</h1><p>基于数据库实现分布式锁，主要是依靠数据库的乐观锁或者悲观锁来实现。这里可以看下我之前的博客—<a href="https://jlj98.top/mysql-locks/">MySQL数据库锁机制</a>。</p>
+<h2 id="基于乐观锁"><a href="#基于乐观锁" class="headerlink" title="基于乐观锁"></a>基于乐观锁</h2><p>在数据库表里面引入一个版本号(version)，通过这个字段来控制数据是否更新。</p>
+<h2 id="基于悲观锁"><a href="#基于悲观锁" class="headerlink" title="基于悲观锁"></a>基于悲观锁</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/distributed-lock/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-thread/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -536,7 +725,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-05-30 15:43:32" itemprop="dateModified" datetime="2021-05-30T15:43:32+08:00">2021-05-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -969,194 +1158,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-ArrayBlockingQueue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-queue-ArrayBlockingQueue/" class="post-title-link" itemprop="url">Java阻塞队列 —— ArrayBlockingQueue</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-29 13:10:49" itemprop="dateCreated datePublished" datetime="2018-07-29T13:10:49+08:00">2018-07-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：如果本文有错误，希望指出。   </p>
-</blockquote>
-<p><code>ArrayBlockingQueue</code> 是一个数组实现的有界阻塞队列，采用FIFO算法对队列元素进行排序。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayBlockingQueue queue = <span class="keyword">new</span> ArrayBlockingQueue(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
-<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayBlockingQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractQueue</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt;, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">817911632652898426L</span>;</span><br><span class="line">    <span class="comment">//一个定长数组，维护ArrayBlockingQueue的元素</span></span><br><span class="line">    <span class="keyword">final</span> Object[] items;</span><br><span class="line">    <span class="comment">//为ArrayBlockingQueue对首位置</span></span><br><span class="line">    <span class="keyword">int</span> takeIndex;</span><br><span class="line">    <span class="comment">//ArrayBlockingQueue对尾位置</span></span><br><span class="line">    <span class="keyword">int</span> putIndex;</span><br><span class="line">    <span class="comment">//元素个数</span></span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="comment">//重入锁，出列入列都必须获取该锁，两个步骤公用一个锁</span></span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock;</span><br><span class="line">    <span class="comment">//出列条件</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty;</span><br><span class="line">    <span class="comment">//入列条件</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Condition notFull;</span><br><span class="line">    <span class="keyword">transient</span> Itrs itrs = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>ArrayBlockingQueue继承AbstractQueue，实现BlockingQueue接口。AbstractQueue提供了对queue操作的骨干实现。BlockingQueue继承java.util.Queue为阻塞队列的核心接口，提供了在多线程环境下的出列、入列操作，作为使用者，则不需要关心队列在什么时候阻塞线程，什么时候唤醒线程，所有一切均由BlockingQueue来完成。<br>ArrayBlockingQueue内部使用可重入锁ReentrantLock + Condition来完成多线程环境的并发操作。</p>
-<h1 id="入队"><a href="#入队" class="headerlink" title="入队"></a>入队</h1><h2 id="add-E-e"><a href="#add-E-e" class="headerlink" title="add(E e)"></a>add(E e)</h2><p>add(E e)调用父类AbstractQueue接口，如果添加成功，返回true，否则抛出 <code>IllegalStateException(&quot;Queue full&quot;)</code> 异常。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.add(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (offer(e))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;Queue full&quot;</span>);</span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-queue-ArrayBlockingQueue/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-ConcurrentLinkedQueue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-queue-ConcurrentLinkedQueue/" class="post-title-link" itemprop="url">Java并发容器 —— ConcurrentLinkedQueue</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-27 15:08:00" itemprop="dateCreated datePublished" datetime="2018-07-27T15:08:00+08:00">2018-07-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：如果本文有错误，希望指出。</p>
-</blockquote>
-<p>对于实现线程安全队列，现在有两种方式：1、使用阻塞算法；2、使用非阻塞算法。使用阻塞算法的队列是锁的应用。非阻塞则是CAS算法的应用。</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>CoucurrentLinkedQueue是一个基于链接节点的无界线程安全队列，采用 FIFO 对节点排序。CoucurrentLinkedQueue是一个非阻塞队列。<br>CoucurrentLinkedQueue规定了如下几个不变性：</p>
-<ul>
-<li>在入队的最后一个元素的next为null</li>
-<li>队列中所有未删除的节点的item都不能为null且都能从head节点遍历到</li>
-<li>对于要删除的节点，不是直接将其设置为null，而是先将其item域设置为null（迭代器会跳过item为null的节点）</li>
-<li>允许head和tail更新滞后。这是什么意思呢？意思就说是head、tail不总是指向第一个元素和最后一个元素。</li>
-</ul>
-<h2 id="CoucurrentLinkedQueue结构"><a href="#CoucurrentLinkedQueue结构" class="headerlink" title="CoucurrentLinkedQueue结构"></a>CoucurrentLinkedQueue结构</h2><p><code>CoucurrentLinkedQueue</code> 继承 <code>AbstractQueue</code>。CoucurrentLinkedQueue 是由head节点和tair节点组成，每个节点（Node）又节点元素（item）和主项下一个节点的（next）组成。默认情况下head节点存储的元素为空，tair节点等于head节点。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/414e8693eda05a70cd2ea034bbcc99bc.jpg"></p>
-<p>CoucurrentLinkedQueue主要方法：</p>
-<ul>
-<li>add/offer：add是调用offer方法的，指定元素插入到队列尾部</li>
-<li>poll：拉取头部元素</li>
-<li>remove：删除元素</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-queue-ConcurrentLinkedQueue/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1228,7 +1229,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1241,7 +1242,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

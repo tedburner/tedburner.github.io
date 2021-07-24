@@ -31,11 +31,11 @@
 <meta property="og:description" content="声明：如果本文有错误，希望指出。  在之前的一篇博文中简单介绍了 Java 中的一些锁：Java 中各种锁。最近在极客时间上买了杨晓峰的《Java核心技术36讲》，今天看到关于标题的东西，于是想记录下自己的学习。Synchronized 和 ReentrantLock 这两个都是可重入锁，指的是同一线程在外层函数获取锁之后，内层函数仍然可以获取该锁，且不受影响。 Synchronized 可重入">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181113202347.png">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210518134817.png">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181129172656.png">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210409192513.png">
-<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210320161626.png">
 <meta property="article:published_time" content="2018-10-16T13:36:26.000Z">
-<meta property="article:modified_time" content="2021-04-10T09:00:59.423Z">
+<meta property="article:modified_time" content="2021-05-18T14:46:56.357Z">
 <meta property="article:author" content="蒋先森">
 <meta property="article:tag" content="并发编程">
 <meta property="article:tag" content="lock">
@@ -260,7 +260,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-10 17:00:59" itemprop="dateModified" datetime="2021-04-10T17:00:59+08:00">2021-04-10</time>
+                <time title="Modified: 2021-05-18 22:46:56" itemprop="dateModified" datetime="2021-05-18T22:46:56+08:00">2021-05-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -295,11 +295,19 @@
 </blockquote>
 <p>在之前的一篇博文中简单介绍了 Java 中的一些锁：<a href="https://jlj98.top/java-lock/">Java 中各种锁</a>。<br>最近在极客时间上买了杨晓峰的《Java核心技术36讲》，今天看到关于标题的东西，于是想记录下自己的学习。<br>Synchronized 和 ReentrantLock 这两个都是可重入锁，指的是同一线程在外层函数获取锁之后，内层函数仍然可以获取该锁，且不受影响。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/tedburner/JavaExample/tree/master/src/main/java/com/example/common/concurrent/lock/reentrant">Synchronized 可重入测试源码</a></p>
-<h1 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSth&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;method&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Synchronized-锁的原理"><a href="#Synchronized-锁的原理" class="headerlink" title="Synchronized 锁的原理"></a>Synchronized 锁的原理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSth&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;method&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用<code>javac SynchronizedTest.java</code> 和 <code>javap -c -s -v -l  SynchronizedTest</code> 命令查看编译后的Test.class的字节码，可以很容易看出在代码块上和方法上是有区别的。代码块上使用 <code>monitorenter/monitorexit</code> 指令来实现的；方法上是使用 <code>ACC_SYNCHRONIZED</code>。详情看下面的图片，是编译后的字节码：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181113202347.png"></p>
 <p>在 Java6 之前，Monitor 的实现完全是依靠操作系统内部的互斥锁，因为需要用户状态到内核状态的切换，所有同步操作是一个重量级操作。</p>
-<p>现在的JVM提供三种不同的 Monitor 实现方式：</p>
+<p>Synchronized 底层原理，Synchronized 有2个队列 waitSet 和 entrtyList。</p>
+<ul>
+<li>当多个线程进入同步代码块时，首先进入entryList</li>
+<li>有一个线程获取到monitor锁后，就赋值给当前线程，并且计数器+1</li>
+<li>如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁</li>
+<li>如果线程执行完毕，同样释放锁，计数器-1，当前线程置为null</li>
+</ul>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210518134817.png"></p>
+<h2 id="锁的优化机制"><a href="#锁的优化机制" class="headerlink" title="锁的优化机制"></a>锁的优化机制</h2><p>现在的JVM提供三种不同的 Monitor 实现方式：</p>
 <ul>
 <li>偏向锁</li>
 <li>轻量级锁</li>
@@ -311,26 +319,25 @@
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181129172656.png"></p>
 <p>Mark Word：默认存储对象的HashCode，分代年龄和锁标志位信息。这些信息都是与对象自身定义无关的数据，所以Mark Word被设计成一个非固定的数据结构以便在极小的空间内存存储尽量多的数据。它会根据对象的状态复用自己的存储空间，也就是说在运行期间Mark Word里存储的数据会随着锁标志位的变化而变化。</p>
 <p>Klass Point：对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
-<h2 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h2><p>没有对资源进行锁定，所有线程都能访问和修改，但同时只有一个线程修改成功。</p>
-<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>在锁竞争不强烈的情况下，通常一个线程会多次获取同一个锁，为了减少获取锁的代价引入了偏向锁，会在 Java 对象头中记录锁的 <code>ThreadID</code>。</p>
+<h3 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h3><p>没有对资源进行锁定，所有线程都能访问和修改，但同时只有一个线程修改成功。</p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>在锁竞争不强烈的情况下，通常一个线程会多次获取同一个锁，为了减少获取锁的代价引入了偏向锁，会在 Java 对象头中记录锁的 <code>ThreadID</code>。</p>
 <ul>
 <li>当线程发现对相同的ThreadID存在是，判断于当前线程是否同一个线程；</li>
 <li>如果相同则不需要再次加锁、解锁；</li>
 <li>如果不是，则判断<code>ThreadID</code>是否存活。如果不存活，设置为无锁状态，其他线程竞争设置偏向锁；如果存活，查找<code>ThreadID</code>堆栈信息判断是否需要继续持有锁。如果需要持有则升级<code>ThreadID</code>线程的锁为轻量级锁，不需要持有则撤销锁，设置为无锁状态等待其他线程竞争。</li>
 </ul>
 <p>因为偏向锁的撤销操作还是比较重的，导致进入安全点，因此在竞争比较激烈时，会影响性能，可以使用<code>-XX:-UseBiasedLocking=false</code> 禁用偏向锁。</p>
-<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>当偏向锁升级为轻量级锁时，其他线程尝试通过 <code>CAS</code> 方法设置对象头来获取锁。</p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p>当偏向锁升级为轻量级锁时，其他线程尝试通过 <code>CAS</code> 方法设置对象头来获取锁。</p>
 <ul>
 <li>先在当前线程中的栈帧中设置 <code>Lock Record</code>，用来存储当前对象头中的 <code>Mark word</code> 的拷贝；<br>复制 <code>Mark word</code> 的内容到 <code>Lock Record</code>，并尝试使用 CAS 将 <code>Mark word </code>的指针指向<code>Lock Record</code>；</li>
 <li>如果替换成功，则获取轻量级锁；替换不成功，则自旋重试一定次数</li>
 <li>自旋一定次数或者有新的线程来竞争锁时，轻量级锁升级为重量级锁。</li>
 </ul>
-<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p>自旋是消耗CPU的，因此在自旋一段时间，或者一个线程在自旋的时候，又有新的线程来竞争，则升级为重量级锁。</p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>自旋是消耗CPU的，因此在自旋一段时间，或者一个线程在自旋的时候，又有新的线程来竞争，则升级为重量级锁。</p>
 <p>重量级锁，通过monitor实现，底层实现是依赖操作系统的互斥锁实现。</p>
 <p>需要从用户态切换到内核态，成本比较高。</p>
 <p>上面就是所谓的锁的升级，而对于锁的降级，当JVM 进入安全点的时候，会检查是否有闲置的 Monitor，然后试图进行降级。</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210409192513.png"></p>
-<h2 id="对象、监视器，同步队列和执行线程间的关系"><a href="#对象、监视器，同步队列和执行线程间的关系" class="headerlink" title="对象、监视器，同步队列和执行线程间的关系"></a>对象、监视器，同步队列和执行线程间的关系</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210320161626.png"></p>
 <h2 id="锁消除和锁粗化"><a href="#锁消除和锁粗化" class="headerlink" title="锁消除和锁粗化"></a>锁消除和锁粗化</h2><h3 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h3><p>我们知道Vector的方法是由synchronized修饰的，它是线程安全的，但是我们可能仅在线程内使用，作为局部变量使用。不同线程调用时，都会创建不同的 Vector，因此，执行 add()方法的时候，使用同步操作，就是白白浪费系统资源。这时，我们可以通过编译器将其优化，将锁消除。<code>-server -XX:+DoEscapeAnalysis -XX:+EliminateLocks</code>，前提是Java必须运行在server模式下，同时必须开启逃逸分析。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> </span>&#123;</span><br><span class="line">    Vector&lt;String&gt; vector = <span class="keyword">new</span> Vector&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++) &#123;</span><br><span class="line">        vector.add(i+<span class="string">&quot;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(vector);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h3><p>在一些情况下，我们希望多次锁的请求能够合并成一个请求，以降低最短时间内大量锁的请求、同步、释放带来的性能消耗。</p>
@@ -441,7 +448,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronized"><span class="nav-number">1.</span> <span class="nav-text">Synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E9%94%81"><span class="nav-number">1.1.</span> <span class="nav-text">无锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">1.2.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">1.3.</span> <span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">1.4.</span> <span class="nav-text">重量级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E3%80%81%E7%9B%91%E8%A7%86%E5%99%A8%EF%BC%8C%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97%E5%92%8C%E6%89%A7%E8%A1%8C%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.5.</span> <span class="nav-text">对象、监视器，同步队列和执行线程间的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4%E5%92%8C%E9%94%81%E7%B2%97%E5%8C%96"><span class="nav-number">1.6.</span> <span class="nav-text">锁消除和锁粗化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4"><span class="nav-number">1.6.1.</span> <span class="nav-text">锁消除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E7%B2%97%E5%8C%96"><span class="nav-number">1.6.2.</span> <span class="nav-text">锁粗化</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Synchronized-%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Synchronized 锁的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E4%BC%98%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">锁的优化机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%94%81"><span class="nav-number">2.1.</span> <span class="nav-text">无锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">2.2.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.3.</span> <span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.4.</span> <span class="nav-text">重量级锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4%E5%92%8C%E9%94%81%E7%B2%97%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">锁消除和锁粗化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4"><span class="nav-number">3.1.</span> <span class="nav-text">锁消除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E7%B2%97%E5%8C%96"><span class="nav-number">3.2.</span> <span class="nav-text">锁粗化</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -457,7 +464,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -470,7 +477,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

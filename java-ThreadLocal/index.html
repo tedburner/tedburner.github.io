@@ -34,14 +34,14 @@
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/cb0807512850a1ff54de2be570a2afea.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/c33ac0b3ab33797a1fe8a000388d31e9.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/c445d42e6c69474ddaa9d79b4cb33ddc.jpg">
-<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/e57072579349f477ae27537f7d7a808f.jpg">
+<meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210412214501.png">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/1b21be84147d34226b604d57c2589f1a.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/0903514258514082721d839fbede5c67.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/7f08d6516ee4fd781629b169a2dd2c20.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/0c6ddb2d3674cf6fecba6b797bb8a754.jpg">
 <meta property="og:image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/849b64181522efa2a3386f91c39b1725.jpg">
 <meta property="article:published_time" content="2018-05-14T07:22:00.000Z">
-<meta property="article:modified_time" content="2021-03-30T12:08:37.283Z">
+<meta property="article:modified_time" content="2021-05-18T14:46:56.357Z">
 <meta property="article:author" content="蒋先森">
 <meta property="article:tag" content="Java并发编程">
 <meta property="article:tag" content="ThreadLocal">
@@ -265,7 +265,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+                <time title="Modified: 2021-05-18 22:46:56" itemprop="dateModified" datetime="2021-05-18T22:46:56+08:00">2021-05-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -306,7 +306,7 @@
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/c445d42e6c69474ddaa9d79b4cb33ddc.jpg"></p>
 <p>可以看这个 **<a target="_blank" rel="noopener" href="http://ifeve.com/notsafesimpledateformat/">原因</a>**，讲解的挺详细的。</p>
 <h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p>ThreadLocal为变量在每个线程中都创建了一个副本，所以每个线程可以访问自己内部的副本变量，不同线程之间不会互相干扰。Java中的ThreadLocal类允许我们创建只能被同一个线程读写的变量。因此，如果一段代码含有一个ThreadLocal变量的引用，即使两个线程同时执行这段代码，它们也无法访问到对方的ThreadLocal变量。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/e57072579349f477ae27537f7d7a808f.jpg"></p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20210412214501.png"></p>
 <h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>每一个线程持有一个ThreadLocalMap。</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/1b21be84147d34226b604d57c2589f1a.jpg"></p>
 <p>一个Thread中只有一个 ThreadLocalMap，一个 ThreadLocalMap 中可以有多个 ThreadLocal 对象，其中一个 ThreadLocal 对象对应一个ThreadLocalMap中的一个Entry（也就是说：一个Thread可以依附有多个ThreadLocal对象）。</p>
@@ -323,14 +323,16 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entry[] oldTab = table;</span><br><span class="line">    <span class="keyword">int</span> oldLen = oldTab.length;</span><br><span class="line">    <span class="keyword">int</span> newLen = oldLen * <span class="number">2</span>; <span class="comment">//旧的大小的2倍</span></span><br><span class="line">    Entry[] newTab = <span class="keyword">new</span> Entry[newLen];</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; oldLen; ++j) &#123;</span><br><span class="line">        Entry e = oldTab[j];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="keyword">null</span>) &#123; <span class="comment">//如果key为null，回收value</span></span><br><span class="line">                e.value = <span class="keyword">null</span>; <span class="comment">// Help the GC</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> h = k.threadLocalHashCode &amp; (newLen - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">while</span> (newTab[h] != <span class="keyword">null</span>)</span><br><span class="line">                    h = nextIndex(h, newLen);</span><br><span class="line">                newTab[h] = e;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    setThreshold(newLen);</span><br><span class="line">    size = count;</span><br><span class="line">    table = newTab;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="ThreadLocal-内存回收"><a href="#ThreadLocal-内存回收" class="headerlink" title="ThreadLocal 内存回收"></a>ThreadLocal 内存回收</h2><p>ThreadLocal 涉及到两个层面的内存回收。</p>
 <h3 id="ThreadLocal-层面的内存回收"><a href="#ThreadLocal-层面的内存回收" class="headerlink" title="ThreadLocal 层面的内存回收"></a>ThreadLocal 层面的内存回收</h3><p>当线程死亡，所有的保存的线程局部变量就会被回收，其实这里只线程 Thread 对象中的 ThreadLocal.ThreadLocalMap threadLocals 会被回收。</p>
-<h3 id="ThreadLocalMap-层面的内存回收"><a href="#ThreadLocalMap-层面的内存回收" class="headerlink" title="ThreadLocalMap 层面的内存回收"></a>ThreadLocalMap 层面的内存回收</h3><p>当线程存活的时间够长，并且该线程保存的线程局部变量很多，就需要在线程的生命期内进行 ThreadLocalMap 的内存回收。<br>Entry 对象的key 是WeakReference 的包装，当 ThreadLocalMap 的 <code>private Entry[] table</code>，已经被占用达到 <strong>2/3</strong> (线程拥有的局部变量超过10个)时，就会尝试回收。在 <code>ThreadLocalMap.set</code> 方法中有回收的代码：</p>
+<h3 id="ThreadLocalMap-层面的内存回收"><a href="#ThreadLocalMap-层面的内存回收" class="headerlink" title="ThreadLocalMap 层面的内存回收"></a>ThreadLocalMap 层面的内存回收</h3><p>当线程存活的时间够长，并且该线程保存的线程局部变量很多，就需要在线程的生命期内进行 ThreadLocalMap 的内存回收。 </p>
+<p>Entry 对象的key 是WeakReference 的包装，当 ThreadLocalMap 的 <code>private Entry[] table</code>，已经被占用达到 <strong>2/3</strong> (线程拥有的局部变量超过10个)时，就会尝试回收。在 <code>ThreadLocalMap.set</code> 方法中有回收的代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)</span><br><span class="line">                rehash();</span><br></pre></td></tr></table></figure>
 <p><code>cleanSomeSlots</code> 具体回收代码：</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/0c6ddb2d3674cf6fecba6b797bb8a754.jpg"></p>
 <h2 id="ThreadLocal-可能引起的-OOM-问题"><a href="#ThreadLocal-可能引起的-OOM-问题" class="headerlink" title="ThreadLocal 可能引起的 OOM 问题"></a>ThreadLocal 可能引起的 OOM 问题</h2><p>在一个线程结束的时候，<code>Thread</code> 会调用 <code>exit</code> 方法进行回收。</p>
 <p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/849b64181522efa2a3386f91c39b1725.jpg"></p>
 <p>但是，当我们使用线程池的时候，这意味着当前线程未必会退出。这可能使得一些大的对象设置到 ThreadLocal 中，导致出现 OOM。比如当线程是设置固定值，第一次处理业务时，向 ThreadLocalMap 中存放了一个很大的对象，第二次，第三次。。。，线程一直在运行，这会导致这个线程的出现 OOM。</p>
-<h3 id="ThreadLocalMap的key为弱引用"><a href="#ThreadLocalMap的key为弱引用" class="headerlink" title="ThreadLocalMap的key为弱引用"></a>ThreadLocalMap的key为弱引用</h3><p>关于弱引用、强引用这些，可以看<a href="https://jlj98.top/jvm-gc/">深入理解虚拟机——垃圾收集器</a>，这里面稍微讲解了下这方面。<br>ThreadLocalMap 会在下一次GC的时候，回收掉 key，而ThreadLocal 在下一次调用 get、set 和 remove，会清除并重构 ThreadLocalMap，其方法是 <code>expungeStaleEntry</code>。</p>
+<h3 id="ThreadLocalMap的key为弱引用"><a href="#ThreadLocalMap的key为弱引用" class="headerlink" title="ThreadLocalMap的key为弱引用"></a>ThreadLocalMap的key为弱引用</h3><p>关于弱引用、强引用这些，可以看<a href="https://jlj98.top/jvm-gc/">深入理解虚拟机——垃圾收集器</a>，这里面稍微讲解了下这方面。</p>
+<p>ThreadLocalMap 会在下一次GC的时候，回收掉 key，而ThreadLocal 在下一次调用 get、set 和 remove，会清除并重构 ThreadLocalMap，其方法是 <code>expungeStaleEntry</code>。</p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/33c5579ef44f">深入浅出ThreadLocal</a></li>
 <li><a target="_blank" rel="noopener" href="http://ifeve.com/notsafesimpledateformat/">线程不安全的SimpleDateFormat</a></li>
@@ -458,7 +460,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -471,7 +473,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">112</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
