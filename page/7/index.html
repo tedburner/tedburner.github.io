@@ -219,6 +219,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-PriorityBlockingQueue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-queue-PriorityBlockingQueue/" class="post-title-link" itemprop="url">Java阻塞队列 —— PriorityBlockingQueue</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-29 15:23:36" itemprop="dateCreated datePublished" datetime="2018-07-29T15:23:36+08:00">2018-07-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>声明：如果本文有错误，希望指出。   </p>
+</blockquote>
+<p><code>PriorityBlockingQueue</code> 是一个支持优先级的无界阻塞队列。在Thread中，我们可以通过 <code>setPriority(int newPriority)</code> 来设置优先级，线程优先级高的线程先执行，优先级低的后执行。 <code>PriorityBlockingQueue</code> 默认情况下元素采用自然顺序升序排序，当然我们也可以通过构造函数来指定Comparator来对元素进行排序。需要注意的是PriorityBlockingQueue不能保证同优先级元素的顺序。<br><code>PriorityBlockingQueue</code>底层是二叉堆构成实现的，下面先介绍一些二叉堆知识点。</p>
+<h2 id="二叉堆"><a href="#二叉堆" class="headerlink" title="二叉堆"></a>二叉堆</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/9c4b230d24565454573b0e58cf7fce8d.jpg"></p>
+<p>二叉堆是一种特殊的堆，就结构性而言就是完全二叉树或者是近似完全二叉树，满足树结构性和堆序性。树机构特性就是完全二叉树应该有的结构，堆序性则是：父节点的键值总是保持固定的序关系于任何一个子节点的键值，且每个节点的左子树和右子树都是一个二叉堆。</p>
+<h2 id="队列结构定义"><a href="#队列结构定义" class="headerlink" title="队列结构定义"></a>队列结构定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PriorityBlockingQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractQueue</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt;, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">5595510919245408276L</span>;</span><br><span class="line">    <span class="comment">//默认初始化大小11</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">11</span>;</span><br><span class="line">    <span class="comment">//定义列表最大容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_ARRAY_SIZE = Integer.MAX_VALUE - <span class="number">8</span>;</span><br><span class="line">    <span class="comment">//二叉堆数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> Object[] queue;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> size;<span class="comment">//队列个数</span></span><br><span class="line">    <span class="comment">// 比较器，如果为空，则为自然顺序</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> Comparator&lt;? <span class="keyword">super</span> E&gt; comparator;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="入队"><a href="#入队" class="headerlink" title="入队"></a>入队</h2><p>PriorityBlockingQueue是无界的，所以不可能会阻塞。内部调用offer(E e)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        offer(e); <span class="comment">// never need to block</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> offer(e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (e == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">int</span> n, cap;</span><br><span class="line">        Object[] array;</span><br><span class="line">        <span class="keyword">while</span> ((n = size) &gt;= (cap = (array = queue).length))</span><br><span class="line">            tryGrow(array, cap);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Comparator&lt;? <span class="keyword">super</span> E&gt; cmp = comparator;</span><br><span class="line">            <span class="comment">// 根据比较器是否为null，做不同的处理</span></span><br><span class="line">            <span class="keyword">if</span> (cmp == <span class="keyword">null</span>)</span><br><span class="line">                siftUpComparable(n, e, array);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                siftUpUsingComparator(n, e, array, cmp);</span><br><span class="line">            size = n + <span class="number">1</span>;</span><br><span class="line">            notEmpty.signal();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//采用自然排序，调用siftUpComparable方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">siftUpComparable</span><span class="params">(<span class="keyword">int</span> k, T x, Object[] array)</span> </span>&#123;</span><br><span class="line">        Comparable&lt;? <span class="keyword">super</span> T&gt; key = (Comparable&lt;? <span class="keyword">super</span> T&gt;) x;</span><br><span class="line">        <span class="keyword">while</span> (k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> parent = (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">            Object e = array[parent];</span><br><span class="line">            <span class="keyword">if</span> (key.compareTo((T) e) &gt;= <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            array[k] = e;</span><br><span class="line">            k = parent;</span><br><span class="line">        &#125;</span><br><span class="line">        array[k] = key;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//当比较器不为null时，采用所指定的比较器，调用siftUpUsingComparator方法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">siftUpUsingComparator</span><span class="params">(<span class="keyword">int</span> k, T x, Object[] array,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       Comparator&lt;? <span class="keyword">super</span> T&gt; cmp)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (k &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> parent = (k - <span class="number">1</span>) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">            Object e = array[parent];</span><br><span class="line">            <span class="keyword">if</span> (cmp.compare(x, (T) e) &gt;= <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            array[k] = e;</span><br><span class="line">            k = parent;</span><br><span class="line">        &#125;</span><br><span class="line">        array[k] = x;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-queue-PriorityBlockingQueue/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-ArrayBlockingQueue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1079,97 +1168,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/jmm-jvm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/jmm-jvm/" class="post-title-link" itemprop="url">内存模型和内存结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-28 14:35:54" itemprop="dateCreated datePublished" datetime="2018-06-28T14:35:54+08:00">2018-06-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前有点傻傻的分不清内存模型和内存结构的区别，以为都是指的是JVM。直到前段时间在一篇博客上看到这两者的区别，才知道这两者指的是不同的东西。</p>
-<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><p>内存结构就是我们常说的JVM，比如，堆、栈等。这些就是Java的内存结构。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/5bce8da420efd10d81b348427057c660.jpg"></p>
-<p>关于JVM可以看 <strong>深入理解Java虚拟机（周志明）</strong> 写的这本书。下面两篇博客是我看这本书的一些笔记：</p>
-<ul>
-<li><a href="https://jlj98.top/jvm-memory-area/">深入理解虚拟机-Java内存区域</a></li>
-<li><a href="https://jlj98.top/jvm-gc/">深入理解虚拟机–垃圾收集器</a></li>
-</ul>
-<h2 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h2><p>Java内存模型(即Java Memory Model，简称JMM)本身是一种抽象的概念，并不真实存在，它描述的是<strong>一组规则或规范</strong>，通过这组规范定义了程序中各个变量（包括实例字段，静态字段和构成数组对象的元素）的访问方式。Java虚拟机定义JMM来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，用于存储线程私有的数据，而Java内存模型中规定所有变量都存储在主内存，主内存是共享内存区域，所有线程都可以访问，但线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝的自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存，不能直接操作主内存中的变量，工作内存中存储着主内存中的变量副本拷贝，前面说过，工作内存是每个线程的私有数据区域，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成，其简要访问过程如下图：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/683938430ad9246803a21b944038d361.jpg"></p>
-<p>简单的总结，Java多线程之间通过共享内存来进行通信，但由于采用共享通信，在通信过程中会出现可见性、原子性、顺序性等问题，而JMM就是围绕多线程通信以及其相关的一系列特性建立的模型。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jmm-jvm/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1241,7 +1239,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1254,7 +1252,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

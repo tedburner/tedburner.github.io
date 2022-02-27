@@ -219,6 +219,126 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/kubernetes-install-with-kubeadm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/kubernetes-install-with-kubeadm/" class="post-title-link" itemprop="url">使用 Kubeadm 安装 Kubernetes 集群</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-18 10:29:54" itemprop="dateCreated datePublished" datetime="2020-03-18T10:29:54+08:00">2020-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index"><span itemprop="name">Kubernetes</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>kubernetes 是一个开源的，用于管理云平台中多个主机上的容器化的应用，Kubernetes的目标是让部署容器化的应用简单并且高效（powerful），Kubernetes提供了应用部署，规划，更新，维护的一种机制。</p>
+<p>Kubernetes 有多种安装方式，比如麻烦无比的二进制安装方式，本篇文章主要讲解如何使用 Kubeadm 来安装 Kubernetes 集群。</p>
+<h2 id="前期准备工作"><a href="#前期准备工作" class="headerlink" title="前期准备工作"></a>前期准备工作</h2><table>
+<thead>
+<tr>
+<th>系统</th>
+<th>角色</th>
+<th>IP</th>
+<th>主机名</th>
+<th>内存(2G以上)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Centos 7</td>
+<td>master</td>
+<td>192.168.60.11</td>
+<td>k8s-master-11.cn</td>
+<td>2G</td>
+</tr>
+<tr>
+<td>Centos 7</td>
+<td>node</td>
+<td>192.168.60.16</td>
+<td>k8s-node-16.cn</td>
+<td>2G</td>
+</tr>
+<tr>
+<td>Centos 7</td>
+<td>node</td>
+<td>192.168.60.170</td>
+<td>k8s-node-170.cn</td>
+<td>2G</td>
+</tr>
+</tbody></table>
+<p>本文搭建的只是 Kubernetes 集群，而不是 Kubernetes 高可用集群，高可用集群需要多台 master 节点来避免 master 节点中某台服务可能宕机。下面这些前期准备，需要在所以服务器上执行一遍。由于本文使用的操作系统是 Centos，其中你是 Ubuntu 用户，请查看<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">官方具体的操作</a>。</p>
+<p>根据表格中的信息修改服务器主机名的，具体的主机名请根据自己实际命名修改。需要注意的是，必须保证每台服务器的主机名唯一。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改主机名</span></span><br><span class="line">hostnamectl set-hostname k8s-master-11.cn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看主机名</span></span><br><span class="line">hostname</span><br></pre></td></tr></table></figure>
+<p>向每台服务器上的 <code>/etc/hosts</code> 文件添加一下配置。因为只有三台服务器，我们直接修改 hosts 文件来指定，如果是很大的集群，每次添加一个节点，都要修改每台服务器的 hosts 文件，这样会很麻烦，所以可以选择使用dns去解析，但是我们这里只有几台服务器，就直接修改 hosts 文件即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.60. k8s-master-252.cn</span><br><span class="line">192.168.60.227 k8s-node-227.cn</span><br><span class="line">192.168.60.15 k8s-node-15.cn</span><br></pre></td></tr></table></figure>
+<p>关闭防火墙</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/kubernetes-install-with-kubeadm/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-container-namespace-cgroups/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1036,93 +1156,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/rpc-zk-registry-discovery/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/rpc-zk-registry-discovery/" class="post-title-link" itemprop="url">RPC系列之基于ZooKeeper实现服务注册中心</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-05-04 15:38:47" itemprop="dateCreated datePublished" datetime="2019-05-04T15:38:47+08:00">2019-05-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/rpc/" itemprop="url" rel="index"><span itemprop="name">rpc</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近在看与RPC相关的东西，在GitHub上看到一个使用Java实现的简单RPC框架，于是自己也想用Java实现一个简单的RPC，以便加深对于RPC框架的理解。本篇文章主要是记录如何使用ZooKeeper作为RPC框架的注册中心，实现服务的注册和发现。</p>
-<h1 id="什么是RPC？"><a href="#什么是RPC？" class="headerlink" title="什么是RPC？"></a>什么是RPC？</h1><p>RPC，即 Remote Procedure Call（远程过程调用），说得通俗一点就是：调用远程计算机上的服务，就像调用本地服务一样。正式的描述是：一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。</p>
-<h1 id="基于ZooKeeper实现的服务注册中心"><a href="#基于ZooKeeper实现的服务注册中心" class="headerlink" title="基于ZooKeeper实现的服务注册中心"></a>基于ZooKeeper实现的服务注册中心</h1><p>如果对于dubbo这款国产RPC框架有一定的了解，就知道最开始它是基于ZooKeeper实现服务的注册和发现的。关于服务的注册和发现，主要是把服务名以及服务相关的服务器IP地址注册到注册中心，在使用服务的时候，只需要根据服务名，就可以得到所有服务地址IP，然后根据一定的负载均衡策略来选择IP地址。</p>
-<p>下图是服务的注册和发现接口：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190504154853.png"></p>
-<h2 id="服务的注册"><a href="#服务的注册" class="headerlink" title="服务的注册"></a>服务的注册</h2><p>在ZooKeeper的节点概念中，Znode有四种类型，PERSISTENT（持久节点）、PERSISTENT_SEQUENTIAL（持久的连续节点）、EPHEMERAL（临时节点）、EPHEMERAL_SEQUENTIAL（临时的连续节点）。Znode的类型在创建时确定并且之后不能再修改。</p>
-<p>关于服务的注册，其实就是把服务和IP注册到ZooKeeper的节点中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/rpc-zk-registry-discovery/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1194,7 +1227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1207,7 +1240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

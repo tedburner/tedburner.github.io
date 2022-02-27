@@ -219,6 +219,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-stream/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-stream/" class="post-title-link" itemprop="url">Java8 Stream的介绍</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-12-20 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-20T10:37:14+08:00">2017-12-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-07 21:57:08" itemprop="dateModified" datetime="2022-01-07T21:57:08+08:00">2022-01-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>声明：本文使用JDK1.8</p>
+</blockquote>
+<p>Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。</p>
+<h2 id="生成一个List"><a href="#生成一个List" class="headerlink" title="生成一个List"></a>生成一个List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">&quot;1,2,3,4,10,11,9,66,222,12&quot;</span>;</span><br><span class="line">List&lt;Integer&gt; list = Stream.of(str.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line">                .map(Integer::valueOf)</span><br><span class="line">                .filter(x-&gt; !Objects.equals(x,<span class="number">3</span>))</span><br><span class="line">                .sorted(Comparator.reverseOrder())</span><br><span class="line">                .limit(<span class="number">4</span>)</span><br><span class="line">                .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>上面的代码Stream.of 为我们生成了一个List<string>，但是我们需要的Integer，所以我们还需要使用<strong>map</strong>来转换类型。然后对于生成的列表，我们不想要其中的3，于是我们使用<strong>filter</strong>来过滤掉列表中的3。对于现在列表我们又想是倒序后的列表的前四条数据，于是我们在使用<strong>sorted</strong>来对列表来进行倒序后，再使用<strong>limit</strong>取前四条。顺便说一句，对于比较，推荐使用Objects.equals(a,b).<br>下面来简单的介绍下stream。</string></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map：对于Stream中包含的元素使用给定的转换函数进行转换操作，新生成的Stream只包含转换生成的元素<br>map方法是对列表里面的对象的转换，比如上面的map的功能是吧String转换成Integer。除了这样的转换，你也可以对对象进行你需要的操作。比如现在有一个对象ListDTO:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDTO</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">(Integer id, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在这么一个List<listdto>，你现在只想得到这个列表中ListDTO对象里面的id，现在你就可以这样操作：</listdto></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; idList = beans.stream().map(ListDTO::getId).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-stream/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/mac-homebrew-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -546,7 +636,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -559,7 +649,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

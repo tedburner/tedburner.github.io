@@ -219,6 +219,100 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/distributed-transaction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/distributed-transaction/" class="post-title-link" itemprop="url">分布式事务</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-28 11:00:38" itemprop="dateCreated datePublished" datetime="2018-09-28T11:00:38+08:00">2018-09-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/distributed/" itemprop="url" rel="index"><span itemprop="name">distributed</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果本文有错，希望在下面的留言区指正。</p>
+</blockquote>
+<p>在之前的一篇文章中，写了一篇 <a href="https://jlj98.top/spring-transaction/">Spring 事务管理</a>。</p>
+<p>本地事务管理主要考虑的是单台服务器上面的事务回滚。那么，如果在分布式服务之间如何管理事务呢？   </p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/4ad51e568742f123fb93d08934e2b929.jpg"></p>
+<p>如上图所示的分布式调用，客户端 client 调用服务A，而服务A 除了本身的对数据库的修改，还需要调用服务B和服务C。如果在调用服务B成功后在调用服务C，但是这时候服务C出错了，这时候如何解决事务的回滚？</p>
+<h1 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h1><p>CAP 理论是分布式系统的一个基础理论，描述任何一个分布式系统最多只能满足下面三种特性中的两个：</p>
+<ul>
+<li>一致性（Consistency）：对某个指定的客户端来说，读操作保证能够返回最新的写操作结果。</li>
+<li>可用性（Availability）：非故障的节点在合理的时间内返回合理的响应（不是错误和超时的响应）。</li>
+<li>分区容忍性（Partition tolerance）：当出现网络分区后，系统能够继续“履行职责”。</li>
+</ul>
+<h2 id="CAP-的选择"><a href="#CAP-的选择" class="headerlink" title="CAP 的选择"></a>CAP 的选择</h2><p>虽然 CAP 理论定义是三个要素中只能取两个，但放到分布式环境下来思考，对于一个分布式系统而言，分区容错性可以说是一个最基本的要求。分布式系统的组件必然是需要部署到不同节点，否则也就无所谓分布式系统了，因此必然出现子网络。而对于分布式系统而言，网络问题有时一个必定会出现的异常情况，因此分区容错性也就成为一个分布式系统必然需要面对和解决的问题了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/distributed-transaction/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/jvm-classloader/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1048,96 +1142,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-what-is-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/docker-what-is-docker/" class="post-title-link" itemprop="url">Docker —— Docker 简单介绍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-05 18:05:47" itemprop="dateCreated datePublished" datetime="2018-09-05T18:05:47+08:00">2018-09-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>本篇只是也是本人在学习了解 Docker 的记录</p>
-</blockquote>
-<p>现在在互联网公司中，Docker 的使用已经非常普遍了，在一些大公司中，都在内部实现容器化（PS:这些也是网上了解到了）。Docker 是一个划时代的开源项目，它彻底释放了计算虚拟化的威力，极大提高了应用的维护效率，总之，Docker 容器化给计算机行业带来了大变革。Docker 在容器的基础上，进行了进一步的封装，从文件系统、网络互联到进程隔离等等，极大的简化了容器的创建和维护。使得 Docker 技术比虚拟机技术更为轻便、快捷。</p>
-<p>下面是传统虚拟化方式和 Docker 的比较。传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/af94f045a65a123feb0e973238d0419d.jpg"><br><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/5ac1fcf840bb0fef081b5e5ad2fc8bbf.jpg"></p>
-<p>如果了解<a href="https://jlj98.top/docker-container-namespace-cgroups/">Docker —— 容器的隔离与限制</a>后，会发现上面关于Docker的描述不是很正确，对于容器来说，其实是运行在宿主机上的，而不是Docker Engine 上。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200114193503.png" alt="container-w150"> </p>
-<h1 id="为什么使用-Docker"><a href="#为什么使用-Docker" class="headerlink" title="为什么使用 Docker"></a>为什么使用 Docker</h1><h2 id="更高效的利用系统资源"><a href="#更高效的利用系统资源" class="headerlink" title="更高效的利用系统资源"></a>更高效的利用系统资源</h2><p>由于容器不需要进行硬件虚拟以及运行完整操作系统等额外开销，Docker 对系统资源的利用率更高。无论是应用执行速度、内存损耗或者文件存储速度，都要比传统虚拟机技术更高效。因此，相比虚拟机技术，一个相同配置的主机，往往可以运行更多数量的应用。</p>
-<h2 id="更快速的启动时间"><a href="#更快速的启动时间" class="headerlink" title="更快速的启动时间"></a>更快速的启动时间</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/docker-what-is-docker/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1209,7 +1213,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1222,7 +1226,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

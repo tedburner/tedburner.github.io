@@ -219,6 +219,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-basic-knowledge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/redis-basic-knowledge/" class="post-title-link" itemprop="url">Redis —— 初识Redis</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-28 18:06:47" itemprop="dateCreated datePublished" datetime="2018-04-28T18:06:47+08:00">2018-04-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Redis系列：</p>
+<ul>
+<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
+<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
+<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
+<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://redis.io/">Redis官网</a><br><a target="_blank" rel="noopener" href="http://www.redis.cn/">Redis中文官网</a></p>
+<h1 id="什么是Redis"><a href="#什么是Redis" class="headerlink" title="什么是Redis"></a>什么是Redis</h1><p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如字符串（string）、散列（hash）、列表（list）、集合（set）、有序集合（sorted set）与范围查询、bitmaps、 hyperloglogs 和地理空间（geospatial） 索引半径查询。Redis内置了复制（replication），Lua脚本（Lua scripting），LRU驱动事件（LRU eviction），事务（transactions）和不同级别的磁盘持久化（persistence）， 并通过 Redis Sentinel 和自动 Redis Cluster 提供高可用性（high availability）。</p>
+<p>Redis 支持很多特性，例如将内存中的数据持久化到硬盘中，使用复制来扩展读性能，使用分片来扩展写性能。</p>
+<h1 id="Redis-优势"><a href="#Redis-优势" class="headerlink" title="Redis 优势"></a>Redis 优势</h1><ul>
+<li>性能极高：Redis能读的速度是110000次/s，写的速度是81000次/s </li>
+<li>丰富的数据类型：Redis支持二进制案例的 Strings， Lists， Hashes， Sets 及 Ordered Sets 数据类型操作</li>
+<li>原子：Redis的所有操作都是原子性的，意思就是要么成功执行要么失败完全不执行。单个操作是原子性的。多个操作也支持事务，但不保证原子性</li>
+<li>丰富的特性：Redis还支持 publish/subscribe、通知、key 过期等特性</li>
+</ul>
+<h1 id="Redis-能做什么？"><a href="#Redis-能做什么？" class="headerlink" title="Redis 能做什么？"></a>Redis 能做什么？</h1><p>开发人员都只带Redis可以用来做缓存，除了缓存以外还可以做什么？<br>下面来自老钱的 <strong><a target="_blank" rel="noopener" href="https://juejin.im/book/5afc2e5f6fb9a07a9b362527">Redis 深度历险：核心原理与应用实践</a></strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/redis-basic-knowledge/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-boot-docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1005,96 +1102,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-stream/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-stream/" class="post-title-link" itemprop="url">Java8 Stream的介绍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2017-12-20 10:37:14" itemprop="dateCreated datePublished" datetime="2017-12-20T10:37:14+08:00">2017-12-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-07 21:57:08" itemprop="dateModified" datetime="2022-01-07T21:57:08+08:00">2022-01-07</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：本文使用JDK1.8</p>
-</blockquote>
-<p>Java8提供了丰富的lambda的API。今天我们来讲讲关于其中的stream（流的操作）。对于List集合，有了stream的流操作，感觉如虎添翼。</p>
-<h2 id="生成一个List"><a href="#生成一个List" class="headerlink" title="生成一个List"></a>生成一个List</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">&quot;1,2,3,4,10,11,9,66,222,12&quot;</span>;</span><br><span class="line">List&lt;Integer&gt; list = Stream.of(str.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line">                .map(Integer::valueOf)</span><br><span class="line">                .filter(x-&gt; !Objects.equals(x,<span class="number">3</span>))</span><br><span class="line">                .sorted(Comparator.reverseOrder())</span><br><span class="line">                .limit(<span class="number">4</span>)</span><br><span class="line">                .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
-<p>上面的代码Stream.of 为我们生成了一个List<string>，但是我们需要的Integer，所以我们还需要使用<strong>map</strong>来转换类型。然后对于生成的列表，我们不想要其中的3，于是我们使用<strong>filter</strong>来过滤掉列表中的3。对于现在列表我们又想是倒序后的列表的前四条数据，于是我们在使用<strong>sorted</strong>来对列表来进行倒序后，再使用<strong>limit</strong>取前四条。顺便说一句，对于比较，推荐使用Objects.equals(a,b).<br>下面来简单的介绍下stream。</string></p>
-<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map：对于Stream中包含的元素使用给定的转换函数进行转换操作，新生成的Stream只包含转换生成的元素<br>map方法是对列表里面的对象的转换，比如上面的map的功能是吧String转换成Integer。除了这样的转换，你也可以对对象进行你需要的操作。比如现在有一个对象ListDTO:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListDTO</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ListDTO</span><span class="params">(Integer id, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>现在这么一个List<listdto>，你现在只想得到这个列表中ListDTO对象里面的id，现在你就可以这样操作：</listdto></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; idList = beans.stream().map(ListDTO::getId).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-stream/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1166,7 +1173,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1179,7 +1186,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
