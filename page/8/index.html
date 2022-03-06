@@ -219,6 +219,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/springboot-mvn-profileactive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/springboot-mvn-profileactive/" class="post-title-link" itemprop="url">SpringBoot maven 配置多环境部署</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-02 11:42:06" itemprop="dateCreated datePublished" datetime="2018-07-02T11:42:06+08:00">2018-07-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index"><span itemprop="name">Spring Boot</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在实际项目开发中，线上数据和开发测试的环境不可能是一样的，不然每次上线还要进行删除测试数据，而进行版本迭代的时候，开发人员可以之间操作线上用户数据进行开发，作为一个开发人员，你觉得这样合理吗？<br>针对上面的问题，在实际项目开发过程中，一般就会出现不同的开发环境，比如有开发环境，测试环境，线上环境。但是对于一些中小型公司来说，其实数据库、Redis什么的，只需要两套，一套是线上正式环境，一套开发测试环境。    </p>
+<h2 id="SpringBoot"><a href="#SpringBoot" class="headerlink" title="SpringBoot"></a>SpringBoot</h2><p>对于SpringBoot来说，进行多环境开发配置，很简单的，看下面的:</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/2b18f9544ca290b926d49d254a3173f5.jpg"></p>
+<p>通过修改配置文件的命名，在<em>application.yml</em>中选择自己需要加载那那个配置文件。并在相对于的配置文件中加入下面的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">project:</span><br><span class="line">  name: production</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>  application.yml中的名字必须和你命名的配置问价后面部分相同。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 配置正式和测试库，分别是production/test</span></span><br><span class="line">spring:</span><br><span class="line">  profiles:</span><br><span class="line">    active: <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p>对于启动jar包，选择不同的配置环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar &lt;jar包&gt; --spring.profiles.active=<span class="built_in">test</span>/production</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/springboot-mvn-profileactive/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/jmm-jvm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1038,93 +1127,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/jvm-gc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/jvm-gc/" class="post-title-link" itemprop="url">深入理解虚拟机 —— 垃圾收集器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-04-29 22:11:22" itemprop="dateCreated datePublished" datetime="2018-04-29T22:11:22+08:00">2018-04-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Java与C++之间有一堵由内存动态分配和垃圾收集技术所围成的“高墙”，墙外面的人想进去，墙里面的人却想出来。   </p>
-<h2 id="判断对象死亡"><a href="#判断对象死亡" class="headerlink" title="判断对象死亡"></a>判断对象死亡</h2><p>Java虚拟机中如何判断Java对象死亡，需要被回收的呢？</p>
-<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>给对象添加一个计数器，当被引用，就加1，当失效就减一，当计数器为零的时候就是对象不再引用。这种算法实现简单，判断效率也高。</p>
-<p>首先，引用计数算法无法解决「循环引用无法回收」的问题，即两个对象互相引用，所以各对象的计数器的值都是 1，即使这些对象都成了垃圾（无外部引用），GC 也无法将它们回收。当然上面这一点还不是引用计数法最大的弊端，引用计数算法最大的问题在于：计数器值的增减处理非常繁重，譬如对根对象的引用，此外，多个线程之间共享对象时需要对计数器进行原子递增/递减，这本身又带来了一系列新的复杂性和问题，计数器对应用程序的整体运行速度的影响。</p>
-<p>案例：Redis 中的对象，就是使用引用计数来判断对象是否应该被回收，在 redisObject 结构体中使用了 refcount 来计数。</p>
-<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>通过一系列的称为“GC Roots”的对象作为起始点，从这些节点开始往下搜索，搜索所有走过的路径称为引用链，当一个对象到GC Roots没有任何引用的时候，则证明该对象不可用。</p>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/jvm-gc/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1196,7 +1198,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1209,7 +1211,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

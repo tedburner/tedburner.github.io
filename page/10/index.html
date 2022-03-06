@@ -219,6 +219,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/read-effective-java-1/" class="post-title-link" itemprop="url">Effective Java 笔记一</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-09 10:37:14" itemprop="dateCreated datePublished" datetime="2018-04-09T10:37:14+08:00">2018-04-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近比较空，就抽时间看了《Efffectice Java》这本书，虽然这本书的第二版和现在的Java版本有点老了，但是看了一遍后，感觉，其中的一些思想，平时写代码的时候需要注意的地方，还是讲的不错的。</p>
+<h2 id="用静态工厂方法代替构造器"><a href="#用静态工厂方法代替构造器" class="headerlink" title="用静态工厂方法代替构造器"></a>用静态工厂方法代替构造器</h2><p>对于Map的new，在Java的后面的版本中，已经修改了，不需要如书上说的创建一个newMap的静态工厂类，可以如下进行创建一个新的Map:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<h2 id="遇到多个构造器参数时要考虑用构建器"><a href="#遇到多个构造器参数时要考虑用构建器" class="headerlink" title="遇到多个构造器参数时要考虑用构建器"></a>遇到多个构造器参数时要考虑用构建器</h2><h3 id="重叠构造器模式"><a href="#重叠构造器模式" class="headerlink" title="重叠构造器模式"></a>重叠构造器模式</h3><p>这种模式就是利用重载，不断调用构造函数，生成需要的bean：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span></span>&#123;</span><br><span class="line">    <span class="comment">//必要的参数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> one;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> two;</span><br><span class="line">    <span class="comment">//可选的参数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> three;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> four;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass1</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(one,two,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two,<span class="keyword">int</span> three)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(one,two,three,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClass</span><span class="params">(<span class="keyword">int</span> one,<span class="keyword">int</span> two,<span class="keyword">int</span> three,<span class="keyword">int</span> four)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.one=one;</span><br><span class="line">        <span class="keyword">this</span>.two=two;</span><br><span class="line">        <span class="keyword">this</span>.three=three;</span><br><span class="line">        <span class="keyword">this</span>.four=four;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot; one=&quot;</span>+<span class="keyword">this</span>.one+<span class="string">&quot; two=&quot;</span>+<span class="keyword">this</span>.two+<span class="string">&quot; three=&quot;</span>+<span class="keyword">this</span>.three+<span class="string">&quot; four=&quot;</span>+<span class="keyword">this</span>.four;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这代代码可以看出，这种写法有点复杂，个人觉得实际开发中，不会去使用</p>
+<h3 id="JavaB-ean"><a href="#JavaB-ean" class="headerlink" title="JavaB ean"></a>JavaB ean</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-stream/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -636,7 +723,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -649,7 +736,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
