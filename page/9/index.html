@@ -219,6 +219,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-static-final-abstract/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-static-final-abstract/" class="post-title-link" itemprop="url">Java关键字</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-01 21:35:18" itemprop="dateCreated datePublished" datetime="2018-05-01T21:35:18+08:00">2018-05-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在Java这门面向对象编程语言中，有几个关键字是必须了解的，下面是我在学习的记录笔记。</p>
+<h1 id="static"><a href="#static" class="headerlink" title="static"></a>static</h1><p>在平时，我们调用一个类里面的属性或者方法的时候，需要new一个新的类，然后调用类的方法或者属性。<br>static表示全局或者静态的意思。可用来修饰成员变量或者方法。被static修饰的成员变量和方法独立于该类的任何对象，也就是说，它不依赖类特定的实例，就是被这个修饰的不需要实例化就可以使用，就可以被类的所有实例共享。<br>static代码块也叫静态代码块，在类中独立于类成员的static语句块，<strong>JVM加载时</strong> 会执行这些静态代码块。<br>在静态方法中，不能访问非静态方法或者是非静态变量。如代码中，准确的来说，只有被static修饰的变量和方法，才能不需要实例化直接使用，即使在static修饰的方法中，也不能直接调用没有实例化的非静态方法或者是非静态变量。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/bc734d93d090090a2e8a1364402af6fb.jpg"></p>
+<h1 id="final"><a href="#final" class="headerlink" title="final"></a>final</h1><p>一旦使用了final，该变量就不可修改；如果方法被final修饰，那么这个方法就不可被子类重写；final类，是不能被子类继承的。这里有一篇<a target="_blank" rel="noopener" href="https://juejin.im/post/5ae9b82c6fb9a07ac3634941">博客</a>讲的挺详细的。 </p>
+<ul>
+<li>final 修饰类,表示该类不可以被继承</li>
+<li>final 修饰变量,分两种情况,如果修饰的是基本类型变量,那么只能被赋值一次,不能被赋值两次, 如果修饰的是引用类型变量,那么引用指向的内存地址将不可变,但是引用类型内的属性可以被修改</li>
+<li>final 修饰方法,表示该方法不可以被子类重写,但是可以被子类继承使用</li>
+</ul>
+<p>final的好处：  </p>
+<ul>
+<li>final关键字提高了性能。JVM和java的应用都会缓存final变量  </li>
+<li>final变量可以安全的在多线程环境下进行共享；</li>
+<li>使用final关键字，JVM会对方法、变量及类进行优化。   </li>
+</ul>
+<p>final修饰的变量是引用类型变量,那么引用指向的内存地址将不可变,但是引用类型内的属性可以被修改。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-static-final-abstract/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/jvm-gc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1019,89 +1115,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/read-effective-java-2/" class="post-title-link" itemprop="url">Effective Java 笔记二</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-04-09 15:26:30" itemprop="dateCreated datePublished" datetime="2018-04-09T15:26:30+08:00">2018-04-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><h2 id="使类和成员的可访问性最小化"><a href="#使类和成员的可访问性最小化" class="headerlink" title="使类和成员的可访问性最小化"></a>使类和成员的可访问性最小化</h2><p>1、尽可能地使每个类或者成员不被外界访问。换句话说，应该使用与你正在编写的软件的对应功能相一致的、尽可能最小的访问级别。例如，想在实体类的中，使用private定义属性值。</p>
-<h2 id="在公有类中使用访问方法而非公有域"><a href="#在公有类中使用访问方法而非公有域" class="headerlink" title="在公有类中使用访问方法而非公有域"></a>在公有类中使用访问方法而非公有域</h2><h2 id="使可变性最小化"><a href="#使可变性最小化" class="headerlink" title="使可变性最小化"></a>使可变性最小化</h2><h3 id="不要提供任何会修改对象状态的方法-也称为-mutator"><a href="#不要提供任何会修改对象状态的方法-也称为-mutator" class="headerlink" title="不要提供任何会修改对象状态的方法(也称为 mutator)"></a>不要提供任何会修改对象状态的方法(也称为 mutator)</h3><h3 id="保证类不会被扩展。"><a href="#保证类不会被扩展。" class="headerlink" title="保证类不会被扩展。"></a>保证类不会被扩展。</h3><p>这样可以防止粗心或者恶意的子类假装对象的状态已经改变，从而破坏该类的不可变行为。为了防止子类化，一般做法是使这个类成为 final的，但是后面我们还会讨论到其他的做法。</p>
-<h3 id="使所有的域都是final的。"><a href="#使所有的域都是final的。" class="headerlink" title="使所有的域都是final的。"></a>使所有的域都是final的。</h3><p>通过系统的强制方式，这可以清楚地表明你的意图。而且，如果一个指向新创建实例的引用在缺乏同步机制的情况下，从一个线程被传递到另一个线程，就必需确保正确的行为，正如内存模型( memory model)中所述。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/read-effective-java-2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1173,7 +1186,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1186,7 +1199,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

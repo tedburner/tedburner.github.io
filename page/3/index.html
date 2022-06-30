@@ -219,6 +219,94 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/sharding-sphere-sharding-databases-tables/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/sharding-sphere-sharding-databases-tables/" class="post-title-link" itemprop="url">基于 Sharding-Sphere 实现的分库分表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-06-10 11:47:54" itemprop="dateCreated datePublished" datetime="2019-06-10T11:47:54+08:00">2019-06-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">分库分表</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>现在国内对于数据库分库分表的开源方案，主要是mycat和sharding-sphere，本文主要是自己对于sharding-sphere使用的一些记录。</p>
+<h1 id="sharding-sphere简单介绍"><a href="#sharding-sphere简单介绍" class="headerlink" title="sharding-sphere简单介绍"></a>sharding-sphere简单介绍</h1><p>Sharding-JDBC 采用在 JDBC 层扩展分库分表，支持读写分离，是一个以 jar 形式提供服务的轻量级组件，其核心思路是小而美地完成最核心的事情，基于 JDBC 层进行分片的好处是轻量、简单、兼容性好以及无需额外的运维工作。缺点是无法跨语言，目前仅支持 Java。</p>
+<p>Sharding-Sphere的3个产品的数据分片主要流程是一致的。核心思想是：SQL解析 =&gt; 执行器优化 =&gt; SQL路由 =&gt; SQL改写 =&gt; SQL执行 =&gt; 结果归并的流程组成。(详情查看官网文档)</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190610143517.png"></p>
+<h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><p><strong>开发环境：</strong> 项目搭建使用的是 Spring Boot + Sharding-Sphere + MyBatis。</p>
+<p>注意：Sharding-Sphere 对于Spring-Boot 好像还不支持2.x版本以上，请选择1.x版本，详细源码，请查看相应的demo。</p>
+<p>分别创建2个数据库，然后创建相应的表，创建数据库DDL如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_order` (</span><br><span class="line">  `order_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `status` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `user_id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> (`order_id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">344805296301932545</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_order_item` (</span><br><span class="line">  `order_item_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `order_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `status` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `user_id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> (`order_item_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/sharding-sphere-sharding-databases-tables/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-spi/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1032,92 +1120,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/disruptor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/disruptor/" class="post-title-link" itemprop="url">高性能队列 —— Disruptor</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-12-19 09:45:35" itemprop="dateCreated datePublished" datetime="2018-12-19T09:45:35+08:00">2018-12-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%98%9F%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">队列</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>LMAX Disruptor是一个高性能的线程间消息传递库。它源于LMAX对并发性，性能和非阻塞算法的研究，如今构成了其Exchange基础架构的核心部分。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://tech.meituan.com/disruptor.html">高性能队列——Disruptor</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/LMAX-Exchange/disruptor">GitHub地址</a></li>
-</ul>
-
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/disruptor/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1189,7 +1191,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1202,7 +1204,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

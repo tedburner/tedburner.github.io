@@ -219,6 +219,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-need-to-know/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/dubbo-need-to-know/" class="post-title-link" itemprop="url">Dubbo源码分析开篇介绍</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-20 22:05:28" itemprop="dateCreated datePublished" datetime="2020-10-20T22:05:28+08:00">2020-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index"><span itemprop="name">dubbo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>源码版本是 2.7.8</p>
+</blockquote>
+<p>Dubbo 是一款高性能、轻量级基于 Java 开发的 RPC 开源框架，是阿里 SOA 服务化治理方案的核心框架。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201030221757.png"></p>
+<h2 id="什么是-RPC"><a href="#什么是-RPC" class="headerlink" title="什么是 RPC ?"></a>什么是 RPC ?</h2><p>PC英文全名为Remote Procedure Call，也叫远程过程调用，其实就是一个计算机通信协议，它是一种通过网络从远程计算机程序上请求服务,而不需要了解底层网络技术的协议。计算机通信协议有很多种，对于开发来说，很多熟悉的是HTTP协议，我这里就做个简单的比较，HTTP协议是属于应用层的，而RPC跨越了传输层和应用层。HTTP本身的三次握手协议，每发送一次请求，都会有一次建立连接的过程，就会带来一定的延迟，并且HTTP本身的报文庞大，而RPC可以按需连接，调用结束后就断掉，也可以是长链接，多个远程过程调用共享同一个链接，可以看出来RPC的效率要高于HTTP，但是相对于开发简单快速的HTTP服务,RPC服务就会显得复杂一些。</p>
+<h2 id="Dubbo-框架设计"><a href="#Dubbo-框架设计" class="headerlink" title="Dubbo 框架设计"></a>Dubbo 框架设计</h2><p>先介绍下Dubbo框架的各个模块</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201030222206.png"></p>
+<h3 id="dubbo-registry-注册中心模块"><a href="#dubbo-registry-注册中心模块" class="headerlink" title="dubbo-registry 注册中心模块"></a>dubbo-registry 注册中心模块</h3><p>基于注册中心下发地址的集群方式，以及对各种注册中心的抽象。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/dubbo-need-to-know/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-reentrantlock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1068,94 +1157,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/sharding-sphere-sharding-databases-tables/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/sharding-sphere-sharding-databases-tables/" class="post-title-link" itemprop="url">基于 Sharding-Sphere 实现的分库分表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-06-10 11:47:54" itemprop="dateCreated datePublished" datetime="2019-06-10T11:47:54+08:00">2019-06-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/" itemprop="url" rel="index"><span itemprop="name">分库分表</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>现在国内对于数据库分库分表的开源方案，主要是mycat和sharding-sphere，本文主要是自己对于sharding-sphere使用的一些记录。</p>
-<h1 id="sharding-sphere简单介绍"><a href="#sharding-sphere简单介绍" class="headerlink" title="sharding-sphere简单介绍"></a>sharding-sphere简单介绍</h1><p>Sharding-JDBC 采用在 JDBC 层扩展分库分表，支持读写分离，是一个以 jar 形式提供服务的轻量级组件，其核心思路是小而美地完成最核心的事情，基于 JDBC 层进行分片的好处是轻量、简单、兼容性好以及无需额外的运维工作。缺点是无法跨语言，目前仅支持 Java。</p>
-<p>Sharding-Sphere的3个产品的数据分片主要流程是一致的。核心思想是：SQL解析 =&gt; 执行器优化 =&gt; SQL路由 =&gt; SQL改写 =&gt; SQL执行 =&gt; 结果归并的流程组成。(详情查看官网文档)</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20190610143517.png"></p>
-<h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><p><strong>开发环境：</strong> 项目搭建使用的是 Spring Boot + Sharding-Sphere + MyBatis。</p>
-<p>注意：Sharding-Sphere 对于Spring-Boot 好像还不支持2.x版本以上，请选择1.x版本，详细源码，请查看相应的demo。</p>
-<p>分别创建2个数据库，然后创建相应的表，创建数据库DDL如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_order` (</span><br><span class="line">  `order_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `status` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `user_id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> (`order_id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">344805296301932545</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_order_item` (</span><br><span class="line">  `order_item_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `order_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `status` <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `user_id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> (`order_item_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/sharding-sphere-sharding-databases-tables/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1227,7 +1228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1240,7 +1241,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

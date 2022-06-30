@@ -219,6 +219,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-ioc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/spring-ioc/" class="post-title-link" itemprop="url">Spring IoC 容器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-04 13:27:34" itemprop="dateCreated datePublished" datetime="2018-07-04T13:27:34+08:00">2018-07-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Spring IoC容器：Spring通过控制反转实现了松散耦合，对象们给出它们的依赖，而不是创建或查找依赖的对象们。开发人员在开发过程中，把对象的创建和销毁交给了spring容器，在使用的时候，只需要向容器申请就好了。这样就是的程序实现了解耦。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/8d6283f75c7f5433f3a4c659f3e071bc.jpg"></p>
+<h2 id="Spring-IOC容器和bean介绍"><a href="#Spring-IOC容器和bean介绍" class="headerlink" title="Spring IOC容器和bean介绍"></a>Spring IOC容器和bean介绍</h2><p>IoC也被称为依赖注入（DI）。它是一个过程，对象通过构造函数参数，工厂方法的参数或在工厂方法构造或返回后在对象实例上设置的属性来定义它们的依赖关系，即它们使用的其他对象。容器在创建bean时会注入这些依赖关系。这个过程基本上是相反的，因此名为Inversion of Control（IoC），通过使用类的直接构造或诸如Service Locator模式之类的机制来控制其依赖关系的实例化或位置的bean本身。   </p>
+<p>在<code>org.springframework.beans</code>和<code>org.springframework.context</code>包是Spring框架的IoC容器的基础。该 <code>BeanFactory</code>接口提供了一种能够管理任何类型对象的高级配置机制。 ApplicationContext 是BeanFactory 的一个子接口。它增加了与Spring的AOP功能更容易的集成; 消息资源处理（用于国际化），事件发布; 和特定于应用层的上下文（例如，WebApplicationContext 用于Web应用程序中）。</p>
+<h2 id="Spring容器"><a href="#Spring容器" class="headerlink" title="Spring容器"></a>Spring容器</h2><p>Sping的容器可以分为两种类型</p>
+<ul>
+<li><p>BeanFactory：<code>org.springframework.beans.factory.BeanFactory</code> 接口是最简单的容器，提供了基本的 DI 支持。最常用的 BeanFactory 实现就是 XmlBeanFactory 类，它根据XML文件中的定义加载beans，该容器从XML文件读取配置元数据并用它去创建一个完全配置的系统或应用。</p>
+</li>
+<li><p>ApplicationContext 应用上下文：<code>org.springframework.context.ApplicationContext</code> 基于BeanFactory之上构建，并提供面向应用的服务。该接口<code>org.springframework.context.ApplicationContext</code> 表示 Spring IoC 容器，并负责实例化，配置和组装上述bean。容器通过读取配置元数据获取有关要实例化，配置和组装的对象的指示信息。配置元数据用XML，Java注释或Java代码表示。它允许您表示组成应用程序的对象以及这些对象之间丰富的相互依赖关系。</p>
+</li>
+</ul>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/f9e0f42c943069b714ed8d7a1365b8a8.jpg"></p>
+<p>在Spring框架中的核心组件只有三个：Core、Context 和 Bean。它们构建起了整个Spring的骨骼架构，没有它们就不可能有AOP、Web等特性功能。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/spring-ioc/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/springboot-mvn-profileactive/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1031,102 +1124,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-static-final-abstract/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-static-final-abstract/" class="post-title-link" itemprop="url">Java关键字</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-01 21:35:18" itemprop="dateCreated datePublished" datetime="2018-05-01T21:35:18+08:00">2018-05-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在Java这门面向对象编程语言中，有几个关键字是必须了解的，下面是我在学习的记录笔记。</p>
-<h1 id="static"><a href="#static" class="headerlink" title="static"></a>static</h1><p>在平时，我们调用一个类里面的属性或者方法的时候，需要new一个新的类，然后调用类的方法或者属性。<br>static表示全局或者静态的意思。可用来修饰成员变量或者方法。被static修饰的成员变量和方法独立于该类的任何对象，也就是说，它不依赖类特定的实例，就是被这个修饰的不需要实例化就可以使用，就可以被类的所有实例共享。<br>static代码块也叫静态代码块，在类中独立于类成员的static语句块，<strong>JVM加载时</strong> 会执行这些静态代码块。<br>在静态方法中，不能访问非静态方法或者是非静态变量。如代码中，准确的来说，只有被static修饰的变量和方法，才能不需要实例化直接使用，即使在static修饰的方法中，也不能直接调用没有实例化的非静态方法或者是非静态变量。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/bc734d93d090090a2e8a1364402af6fb.jpg"></p>
-<h1 id="final"><a href="#final" class="headerlink" title="final"></a>final</h1><p>一旦使用了final，该变量就不可修改；如果方法被final修饰，那么这个方法就不可被子类重写；final类，是不能被子类继承的。这里有一篇<a target="_blank" rel="noopener" href="https://juejin.im/post/5ae9b82c6fb9a07ac3634941">博客</a>讲的挺详细的。 </p>
-<ul>
-<li>final 修饰类,表示该类不可以被继承</li>
-<li>final 修饰变量,分两种情况,如果修饰的是基本类型变量,那么只能被赋值一次,不能被赋值两次, 如果修饰的是引用类型变量,那么引用指向的内存地址将不可变,但是引用类型内的属性可以被修改</li>
-<li>final 修饰方法,表示该方法不可以被子类重写,但是可以被子类继承使用</li>
-</ul>
-<p>final的好处：  </p>
-<ul>
-<li>final关键字提高了性能。JVM和java的应用都会缓存final变量  </li>
-<li>final变量可以安全的在多线程环境下进行共享；</li>
-<li>使用final关键字，JVM会对方法、变量及类进行优化。   </li>
-</ul>
-<p>final修饰的变量是引用类型变量,那么引用指向的内存地址将不可变,但是引用类型内的属性可以被修改。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-static-final-abstract/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1198,7 +1195,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1211,7 +1208,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

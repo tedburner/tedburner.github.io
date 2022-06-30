@@ -219,6 +219,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/read-effective-java-2/" class="post-title-link" itemprop="url">Effective Java 笔记二</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-09 15:26:30" itemprop="dateCreated datePublished" datetime="2018-04-09T15:26:30+08:00">2018-04-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="类和接口"><a href="#类和接口" class="headerlink" title="类和接口"></a>类和接口</h1><h2 id="使类和成员的可访问性最小化"><a href="#使类和成员的可访问性最小化" class="headerlink" title="使类和成员的可访问性最小化"></a>使类和成员的可访问性最小化</h2><p>1、尽可能地使每个类或者成员不被外界访问。换句话说，应该使用与你正在编写的软件的对应功能相一致的、尽可能最小的访问级别。例如，想在实体类的中，使用private定义属性值。</p>
+<h2 id="在公有类中使用访问方法而非公有域"><a href="#在公有类中使用访问方法而非公有域" class="headerlink" title="在公有类中使用访问方法而非公有域"></a>在公有类中使用访问方法而非公有域</h2><h2 id="使可变性最小化"><a href="#使可变性最小化" class="headerlink" title="使可变性最小化"></a>使可变性最小化</h2><h3 id="不要提供任何会修改对象状态的方法-也称为-mutator"><a href="#不要提供任何会修改对象状态的方法-也称为-mutator" class="headerlink" title="不要提供任何会修改对象状态的方法(也称为 mutator)"></a>不要提供任何会修改对象状态的方法(也称为 mutator)</h3><h3 id="保证类不会被扩展。"><a href="#保证类不会被扩展。" class="headerlink" title="保证类不会被扩展。"></a>保证类不会被扩展。</h3><p>这样可以防止粗心或者恶意的子类假装对象的状态已经改变，从而破坏该类的不可变行为。为了防止子类化，一般做法是使这个类成为 final的，但是后面我们还会讨论到其他的做法。</p>
+<h3 id="使所有的域都是final的。"><a href="#使所有的域都是final的。" class="headerlink" title="使所有的域都是final的。"></a>使所有的域都是final的。</h3><p>通过系统的强制方式，这可以清楚地表明你的意图。而且，如果一个指向新创建实例的引用在缺乏同步机制的情况下，从一个线程被传递到另一个线程，就必需确保正确的行为，正如内存模型( memory model)中所述。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -723,7 +806,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -736,7 +819,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -219,6 +219,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-proxy-cglib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-proxy-cglib/" class="post-title-link" itemprop="url">Java 动态代理机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-10 10:26:04" itemprop="dateCreated datePublished" datetime="2018-10-10T10:26:04+08:00">2018-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果有错，希望指出</p>
+</blockquote>
+<p>动态代理在Java中有着广泛的应用，比如 Spring Aop、Hibernate 数据查询、RPC、Java 注解对象的获取。静态代理的代理关系在编译时确定，而动态代理的代理关系是在编译期确定的。主要了解：JDK Proxy 和 cglib 动态代理。</p>
+<p>动态代理可以提供另一个对象的访问，同时可以隐藏实际对象的具体实例。</p>
+<h1 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h1><p>再说动态代理之前，先了解下静态代理。</p>
+<p>静态代理是代理模式实现方式之一，在程序运行前，由程序员创建或者特定工具自动生成源代码并对其编译生成 .class 文件。静态代理的实现需要三步：</p>
+<ul>
+<li>定义业务接口</li>
+<li>实现业务接口</li>
+<li>定义代理类并实现业务接口</li>
+</ul>
+<p>最后就可以直接通过客户顿进行调用静态代理了。</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181214100514.png"></p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181214100542.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-proxy-cglib/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-reflect/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1062,95 +1157,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-command/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/docker-command/" class="post-title-link" itemprop="url">Docker —— Docker 命令使用大全</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-08 23:31:51" itemprop="dateCreated datePublished" datetime="2018-09-08T23:31:51+08:00">2018-09-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>记录 Dcoker 使用过程中的一些命令</p>
-</blockquote>
-<p>在之前的一片文章——<a href="https://jlj98.top/docker-what-is-docker/">Docker —— Docker 简单介绍</a> 中介绍了 Docker。这篇主要是记录一些 Docker 的实际使用情况，以后再使用过程中如果有新的命令，也会记录。   </p>
-<p>关于 Docker 的安装，网上有很多的教程，这里就不一一介绍了，主要说下关于 windows的安装，需要注意window版本必须是企业版，不然不能安装 Docker for Windows，主要是它需要Windows的 Hyper-V 功能，不然只能安装 Docker 之前的 DockerToolBox。</p>
-<h1 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h1><h2 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h2><p>在 Docker Hub 上有大量高质量的镜像可以使用，只需要使用</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull &lt;镜像名&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="运行镜像"><a href="#运行镜像" class="headerlink" title="运行镜像"></a>运行镜像</h2> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it &lt;镜像名&gt;</span><br></pre></td></tr></table></figure>
-<p> docker run 就是运行容器的命令，具体格式下面讲解下：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/docker-command/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1222,7 +1228,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1235,7 +1241,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

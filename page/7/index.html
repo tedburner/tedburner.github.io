@@ -219,6 +219,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-LinkedBlockingDeque/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-queue-LinkedBlockingDeque/" class="post-title-link" itemprop="url">Java阻塞队列 —— LinkedBlockingDeque 和 LinkedBlockingQueue</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-30 14:50:27" itemprop="dateCreated datePublished" datetime="2018-07-30T14:50:27+08:00">2018-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>声明：如果本文有错误，希望指出。 </p>
+</blockquote>
+<p><code>LinkedBlockingDeque</code> 则是一个由链表组成的双向阻塞队列。可以从对头、对尾两端插入和移除元素，同样意味着 <code>LinkedBlockingDeque</code> 支持FIFO、FILO两种操作方式。<code>LinkedBlockingDeque</code> 是可选容量的，在初始化时可以设置容量防止其过度膨胀，如果不设置，默认容量大小为Integer.MAX_VALUE。</p>
+<p>LinkedBlockingQueue 是一个由链表组成的，只能从一端出一端入，支持 FIFO，并通过 ReentrantLock 和 两个Condition实现。</p>
+<h1 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h1><h2 id="结构定义"><a href="#结构定义" class="headerlink" title="结构定义"></a>结构定义</h2><p>通过上面的Lock可以看出，LinkedBlockingDeque底层实现机制与LinkedBlockingQueue一样，依然是通过互斥锁ReentrantLock 来实现，notEmpty 、notFull 两个Condition做协调生产者、消费者问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedBlockingDeque</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractQueue</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">BlockingDeque</span>&lt;<span class="title">E</span>&gt;, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">        E item;</span><br><span class="line">        Node&lt;E&gt; prev;</span><br><span class="line">        Node&lt;E&gt; next;</span><br><span class="line">        Node(E x) &#123;</span><br><span class="line">            item = x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">transient</span> Node&lt;E&gt; first;<span class="comment">// 双向链表的表头</span></span><br><span class="line">    <span class="keyword">transient</span> Node&lt;E&gt; last;<span class="comment">// 双向链表的表尾</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> capacity;<span class="comment">//容量</span></span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = lock.newCondition();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Condition notFull = lock.newCondition();</span><br></pre></td></tr></table></figure>
+<h2 id="基本API"><a href="#基本API" class="headerlink" title="基本API"></a>基本API</h2><p>LinkedBlockingDeque 的add、put、offer、take、peek、poll系列方法都是通过调用XXXFirst，XXXLast方法。因此只需要了解putFirst、putLast、pollFirst、pollLast。</p>
+<h3 id="putFirst"><a href="#putFirst" class="headerlink" title="putFirst"></a>putFirst</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-queue-LinkedBlockingDeque/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-DelayQueue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1084,99 +1173,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-ioc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/spring-ioc/" class="post-title-link" itemprop="url">Spring IoC 容器</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-04 13:27:34" itemprop="dateCreated datePublished" datetime="2018-07-04T13:27:34+08:00">2018-07-04</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Spring IoC容器：Spring通过控制反转实现了松散耦合，对象们给出它们的依赖，而不是创建或查找依赖的对象们。开发人员在开发过程中，把对象的创建和销毁交给了spring容器，在使用的时候，只需要向容器申请就好了。这样就是的程序实现了解耦。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/8d6283f75c7f5433f3a4c659f3e071bc.jpg"></p>
-<h2 id="Spring-IOC容器和bean介绍"><a href="#Spring-IOC容器和bean介绍" class="headerlink" title="Spring IOC容器和bean介绍"></a>Spring IOC容器和bean介绍</h2><p>IoC也被称为依赖注入（DI）。它是一个过程，对象通过构造函数参数，工厂方法的参数或在工厂方法构造或返回后在对象实例上设置的属性来定义它们的依赖关系，即它们使用的其他对象。容器在创建bean时会注入这些依赖关系。这个过程基本上是相反的，因此名为Inversion of Control（IoC），通过使用类的直接构造或诸如Service Locator模式之类的机制来控制其依赖关系的实例化或位置的bean本身。   </p>
-<p>在<code>org.springframework.beans</code>和<code>org.springframework.context</code>包是Spring框架的IoC容器的基础。该 <code>BeanFactory</code>接口提供了一种能够管理任何类型对象的高级配置机制。 ApplicationContext 是BeanFactory 的一个子接口。它增加了与Spring的AOP功能更容易的集成; 消息资源处理（用于国际化），事件发布; 和特定于应用层的上下文（例如，WebApplicationContext 用于Web应用程序中）。</p>
-<h2 id="Spring容器"><a href="#Spring容器" class="headerlink" title="Spring容器"></a>Spring容器</h2><p>Sping的容器可以分为两种类型</p>
-<ul>
-<li><p>BeanFactory：<code>org.springframework.beans.factory.BeanFactory</code> 接口是最简单的容器，提供了基本的 DI 支持。最常用的 BeanFactory 实现就是 XmlBeanFactory 类，它根据XML文件中的定义加载beans，该容器从XML文件读取配置元数据并用它去创建一个完全配置的系统或应用。</p>
-</li>
-<li><p>ApplicationContext 应用上下文：<code>org.springframework.context.ApplicationContext</code> 基于BeanFactory之上构建，并提供面向应用的服务。该接口<code>org.springframework.context.ApplicationContext</code> 表示 Spring IoC 容器，并负责实例化，配置和组装上述bean。容器通过读取配置元数据获取有关要实例化，配置和组装的对象的指示信息。配置元数据用XML，Java注释或Java代码表示。它允许您表示组成应用程序的对象以及这些对象之间丰富的相互依赖关系。</p>
-</li>
-</ul>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/f9e0f42c943069b714ed8d7a1365b8a8.jpg"></p>
-<p>在Spring框架中的核心组件只有三个：Core、Context 和 Bean。它们构建起了整个Spring的骨骼架构，没有它们就不可能有AOP、Web等特性功能。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/spring-ioc/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1248,7 +1244,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1261,7 +1257,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
