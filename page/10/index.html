@@ -219,6 +219,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/read-effective-java-3/" class="post-title-link" itemprop="url">Effective Java 笔记三</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-04-10 10:10:13" itemprop="dateCreated datePublished" datetime="2018-04-10T10:10:13+08:00">2018-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%BB%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">读书</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="检查参数的有效性"><a href="#检查参数的有效性" class="headerlink" title="检查参数的有效性"></a>检查参数的有效性</h2><p>绝大多数方法和构造器对于传递给它们的参数值都会有某些限制。例如，索引值必须是非负数，对象引用不能为null，等等，这些都是很常见的。对于参数的校验，可以使用 @NotNull</p>
+<h2 id="必要时进行保护性拷贝"><a href="#必要时进行保护性拷贝" class="headerlink" title="必要时进行保护性拷贝"></a>必要时进行保护性拷贝</h2><h2 id="谨慎设计方法签名"><a href="#谨慎设计方法签名" class="headerlink" title="谨慎设计方法签名"></a>谨慎设计方法签名</h2><h2 id="慎用重载"><a href="#慎用重载" class="headerlink" title="慎用重载"></a>慎用重载</h2><p>在Java中，参数类型或者个数不一样，对返回参数没有要求，叫做重载。</p>
+<h2 id="慎用可变参数"><a href="#慎用可变参数" class="headerlink" title="慎用可变参数"></a>慎用可变参数</h2><p>可变参数如下代码所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">static int sum(int... args) &#123;</span><br><span class="line">   int sum = 0;</span><br><span class="line">   <span class="keyword">for</span> (int arg : args) &#123;</span><br><span class="line">       sum += arg;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/read-effective-java-3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/read-effective-java-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -806,7 +890,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -819,7 +903,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -851,7 +935,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

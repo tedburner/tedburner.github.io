@@ -219,6 +219,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-loadbalance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/dubbo-loadbalance/" class="post-title-link" itemprop="url">Dubbo源码分析之负载均衡</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-24 23:03:42" itemprop="dateCreated datePublished" datetime="2020-10-24T23:03:42+08:00">2020-10-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index"><span itemprop="name">dubbo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>源码版本是 2.7.8</p>
+</blockquote>
+<p>Dubbo 提供一下几种负载均衡</p>
+<ul>
+<li>RandomLoadBalance：加权随机算法</li>
+<li>RoundRobinLoadBalance：加权轮询负载均衡</li>
+<li>LeastActiveLoadBalance：最小活跃数负载均衡。活跃调用数越小，表明该服务提供者效率越高，单位时间内可处理更多的请求。</li>
+<li>ConsistentHashLoadBalance：一致性Hash负载均衡</li>
+<li>ShortestResponseLoadBalance：最短响应负载均衡</li>
+</ul>
+<p>Dubbo 的负载均衡代码位于 <code>dubbo-cluster</code> 目录下。抽象类 <code>AbstractLoadBalance</code> 实现了 <code>LoadBalance</code>，然后dubbo提供的几种负载均衡方法，实现了<code>AbstractLoadBalance#doSelect</code></p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201025215509.png"></p>
+<h2 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SPI(RandomLoadBalance.NAME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LoadBalance</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Adaptive(&quot;loadbalance&quot;)</span></span><br><span class="line">    &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">select</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> <span class="keyword">throws</span> RpcException</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>负载均衡主要是从服务提供者列表中，选择一个。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractLoadBalance</span> <span class="keyword">implements</span> <span class="title">LoadBalance</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calculateWarmupWeight</span><span class="params">(<span class="keyword">int</span> uptime, <span class="keyword">int</span> warmup, <span class="keyword">int</span> weight)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ww = (<span class="keyword">int</span>) ((<span class="keyword">float</span>) uptime / ((<span class="keyword">float</span>) warmup / (<span class="keyword">float</span>) weight));</span><br><span class="line">        <span class="keyword">return</span> ww &lt; <span class="number">1</span> ? <span class="number">1</span> : (ww &gt; weight ? weight : ww);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">select</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtils.isEmpty(invokers)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (invokers.size() == <span class="number">1</span>) &#123;<span class="comment">//当只有一个提供者时，直接返回</span></span><br><span class="line">            <span class="keyword">return</span> invokers.get(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//选择一个服务</span></span><br><span class="line">        <span class="keyword">return</span> doSelect(invokers, url, invocation);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//具体的负载均衡策略由子类来实现</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">abstract</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">doSelect</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//权重方法</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getWeight</span><span class="params">(Invoker&lt;?&gt; invoker, Invocation invocation)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> weight = invoker.getUrl().getMethodParameter(invocation.getMethodName(), Constants.WEIGHT_KEY, Constants.DEFAULT_WEIGHT);</span><br><span class="line">        <span class="keyword">if</span> (weight &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> timestamp = invoker.getUrl().getParameter(Constants.REMOTE_TIMESTAMP_KEY, <span class="number">0L</span>);</span><br><span class="line">            <span class="keyword">if</span> (timestamp &gt; <span class="number">0L</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> uptime = (<span class="keyword">int</span>) (System.currentTimeMillis() - timestamp);</span><br><span class="line">                <span class="keyword">int</span> warmup = invoker.getUrl().getParameter(Constants.WARMUP_KEY, Constants.DEFAULT_WARMUP);</span><br><span class="line">                <span class="keyword">if</span> (uptime &gt; <span class="number">0</span> &amp;&amp; uptime &lt; warmup) &#123;</span><br><span class="line">                    weight = calculateWarmupWeight(uptime, warmup, weight);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> weight &gt;= <span class="number">0</span> ? weight : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="RandomLoadBalance-随机选择算法"><a href="#RandomLoadBalance-随机选择算法" class="headerlink" title="RandomLoadBalance (随机选择算法)"></a>RandomLoadBalance (随机选择算法)</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/dubbo-loadbalance/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-need-to-know/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1061,102 +1158,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-locks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/mysql-locks/" class="post-title-link" itemprop="url">MySQL 数据库锁机制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-22 23:23:01" itemprop="dateCreated datePublished" datetime="2019-07-22T23:23:01+08:00">2019-07-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据库是一个多用户共享的资源，这样的话对于多个用户在存取同一数据的时候，就会出现问题，举个最经典的问题—-票务系统，如何保证数据的正确性。当只剩下最后1张票的时候，两个用户同时取到数据并更新，那么最后是谁买到票了呢？</p>
-<h2 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h2><p>数据库事务是指单个逻辑工作单元执行一系列操作，要么完成执行，要么完成不执行。数据库事务必须满足ACID(原子性、一致性、隔离性、持久性)。</p>
-<ul>
-<li>原子性：对于其数据的修改，要么全部执行，要么完全不执行。原子性消除了系统处理操作子集的可能。</li>
-<li>一致性：事务完成时，必须是所有的数据都保持一致</li>
-<li>隔离性：由并发事务所做的修改必须与任何其他事务并发事务所做的修改隔离</li>
-<li>持久性:完成事务后，对系统的修改时永久性的</li>
-</ul>
-<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/b00b75a1a8a7269cd68335b55f8c2e49.jpg"></p>
-<ul>
-<li>未提交读：当前事务未提交、其他事务也能读到</li>
-<li>提交读：当前事务提交之后，其他事务才能看到</li>
-<li>可重复读：该级别解决了同一事务多次读取同样记录的结果是一致的。但是理论上，还是无法解决另一个幻读问题。幻读 是指当前事务读取某个范围内的记录时，其他事务在该范围又加入新的纪录，之前的事务再次从该范围读取数据时，会产生幻行。这个的换行是对于 insert 操作来说的，对于 update 操作能保证没有幻行问题。</li>
-<li>可串行化：最高的事务隔离级别。强制事务串行化执行，避免了幻读问题，这种级别会在数据的每一行都加锁，会产生大量的超时和锁竞争，实际中很少用到，除非要确保数据的一致性且没有并发问题</li>
-</ul>
-<h3 id="怎么理解脏读、不可重复读和幻读"><a href="#怎么理解脏读、不可重复读和幻读" class="headerlink" title="怎么理解脏读、不可重复读和幻读"></a>怎么理解脏读、不可重复读和幻读</h3><h4 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h4><p>脏读是读到了未提交事务的数据。只有在读未提交隔离级别下，才会出现脏读。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/mysql-locks/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1228,7 +1229,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1241,7 +1242,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1273,7 +1274,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

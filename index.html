@@ -219,6 +219,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-sseemitter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/spring-sseemitter/" class="post-title-link" itemprop="url">Spring SseEmitter 消息推送，并实现大模型流式接口</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-09-15 19:21:19 / Modified: 20:34:41" itemprop="dateCreated datePublished" datetime="2023-09-15T19:21:19+08:00">2023-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在处理项目中，处理关于大模型流式接口的对接，并将处理后的数据，按照流式方式发送给前端。在了解实现方案中，发现基于 OkHttp Sse + Spring SseEmitter 的技术方案。OkHttp Sse 实现对大模型输出的流式结果进行监控处理，并通过 Spring SseEmitter 将处理后的结果输出到前端。</p>
+<h2 id="Spring-SseEmitter"><a href="#Spring-SseEmitter" class="headerlink" title="Spring SseEmitter"></a>Spring SseEmitter</h2><p>服务端主动推送：SSE (Server Send Event)。html5新标准，用来从服务端实时推送数据到浏览器端，直接建立在当前http连接上，本质上是保持一个http长连接，轻量协议简单的服务器数据推送的场景，使用服务器推送事件， SSE技术是基于单工通信模式，只是单纯的客户端向服务端发送请求，服务端不会主动发送给客户端。服务端采取的策略是抓住这个请求不放，等数据更新的时候才返回给客户端，当客户端接收到消息后，再向服务端发送请求，周而复始。</p>
+<p>SseEmitter 是SpringMVC(4.2+)提供的一种技术,它是基于<strong>Http协议</strong>的，相比WebSocket，它更轻量，但是它只能从服务端向客户端<strong>单向</strong>发送信息。</p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>代码实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模拟流式结果输出</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@GetMapping(value = &quot;stream_query&quot;, produces = &#123;MediaType.TEXT_EVENT_STREAM_VALUE&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SseEmitter <span class="title">streamQuery</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    SseEmitter emitter = <span class="keyword">new</span> SseEmitter(<span class="number">60000L</span>);</span><br><span class="line">    Flux.interval(Duration.ofSeconds(<span class="number">1</span>))</span><br><span class="line">            .map(data -&gt; <span class="string">&quot;Server Message # &quot;</span> + data)</span><br><span class="line">            .doOnCancel(emitter::complete)</span><br><span class="line">            .subscribe(data -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    emitter.send(SseEmitter.event().data(data));</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    log.error(<span class="string">&quot;发送数据异常&quot;</span>, e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    <span class="keyword">return</span> emitter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/202309152006678.mp4"></p>
+<h3 id="与-WebSocket-比较"><a href="#与-WebSocket-比较" class="headerlink" title="与 WebSocket 比较"></a>与 WebSocket 比较</h3><p>Spring SseEmitter 和 WebSocket 都实现了服务端向客户端推送数据，不过  WebSocket 是 <strong>全双工通信</strong>，客户端和服务端可以互相通信。而 SseEmitter 只能从服务端向 客户端推送（该功能以及包含在 spring boot jar 中）。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/spring-sseemitter/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/problem-fatsjon-final/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1018,103 +1099,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/dubbo-loadbalance/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/dubbo-loadbalance/" class="post-title-link" itemprop="url">Dubbo源码分析之负载均衡</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-10-24 23:03:42" itemprop="dateCreated datePublished" datetime="2020-10-24T23:03:42+08:00">2020-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/dubbo/" itemprop="url" rel="index"><span itemprop="name">dubbo</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>源码版本是 2.7.8</p>
-</blockquote>
-<p>Dubbo 提供一下几种负载均衡</p>
-<ul>
-<li>RandomLoadBalance：加权随机算法</li>
-<li>RoundRobinLoadBalance：加权轮询负载均衡</li>
-<li>LeastActiveLoadBalance：最小活跃数负载均衡。活跃调用数越小，表明该服务提供者效率越高，单位时间内可处理更多的请求。</li>
-<li>ConsistentHashLoadBalance：一致性Hash负载均衡</li>
-<li>ShortestResponseLoadBalance：最短响应负载均衡</li>
-</ul>
-<p>Dubbo 的负载均衡代码位于 <code>dubbo-cluster</code> 目录下。抽象类 <code>AbstractLoadBalance</code> 实现了 <code>LoadBalance</code>，然后dubbo提供的几种负载均衡方法，实现了<code>AbstractLoadBalance#doSelect</code></p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20201025215509.png"></p>
-<h2 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SPI(RandomLoadBalance.NAME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LoadBalance</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Adaptive(&quot;loadbalance&quot;)</span></span><br><span class="line">    &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">select</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> <span class="keyword">throws</span> RpcException</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>负载均衡主要是从服务提供者列表中，选择一个。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractLoadBalance</span> <span class="keyword">implements</span> <span class="title">LoadBalance</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calculateWarmupWeight</span><span class="params">(<span class="keyword">int</span> uptime, <span class="keyword">int</span> warmup, <span class="keyword">int</span> weight)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ww = (<span class="keyword">int</span>) ((<span class="keyword">float</span>) uptime / ((<span class="keyword">float</span>) warmup / (<span class="keyword">float</span>) weight));</span><br><span class="line">        <span class="keyword">return</span> ww &lt; <span class="number">1</span> ? <span class="number">1</span> : (ww &gt; weight ? weight : ww);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">select</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtils.isEmpty(invokers)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (invokers.size() == <span class="number">1</span>) &#123;<span class="comment">//当只有一个提供者时，直接返回</span></span><br><span class="line">            <span class="keyword">return</span> invokers.get(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//选择一个服务</span></span><br><span class="line">        <span class="keyword">return</span> doSelect(invokers, url, invocation);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//具体的负载均衡策略由子类来实现</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">abstract</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">doSelect</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//权重方法</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getWeight</span><span class="params">(Invoker&lt;?&gt; invoker, Invocation invocation)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> weight = invoker.getUrl().getMethodParameter(invocation.getMethodName(), Constants.WEIGHT_KEY, Constants.DEFAULT_WEIGHT);</span><br><span class="line">        <span class="keyword">if</span> (weight &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> timestamp = invoker.getUrl().getParameter(Constants.REMOTE_TIMESTAMP_KEY, <span class="number">0L</span>);</span><br><span class="line">            <span class="keyword">if</span> (timestamp &gt; <span class="number">0L</span>) &#123;</span><br><span class="line">                <span class="keyword">int</span> uptime = (<span class="keyword">int</span>) (System.currentTimeMillis() - timestamp);</span><br><span class="line">                <span class="keyword">int</span> warmup = invoker.getUrl().getParameter(Constants.WARMUP_KEY, Constants.DEFAULT_WARMUP);</span><br><span class="line">                <span class="keyword">if</span> (uptime &gt; <span class="number">0</span> &amp;&amp; uptime &lt; warmup) &#123;</span><br><span class="line">                    weight = calculateWarmupWeight(uptime, warmup, weight);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> weight &gt;= <span class="number">0</span> ? weight : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="RandomLoadBalance-随机选择算法"><a href="#RandomLoadBalance-随机选择算法" class="headerlink" title="RandomLoadBalance (随机选择算法)"></a>RandomLoadBalance (随机选择算法)</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/dubbo-loadbalance/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1186,7 +1170,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1199,7 +1183,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1231,7 +1215,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -219,6 +219,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-under-structure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/redis-under-structure/" class="post-title-link" itemprop="url">Redis —— 底层结构</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-31 11:00:32" itemprop="dateCreated datePublished" datetime="2018-07-31T11:00:32+08:00">2018-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Redis系列：</p>
+<ul>
+<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
+<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
+<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
+<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
+</ul>
+<p>对于Redis的一些基本知识，在之前的博客<a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a>中简单的介绍了。最近打算了解下Redis的一些底层内容，买了本书《Redis设计与实现》，这本书才看，也不好评价好坏。之所以选择这个本，是因为看到说这本书讲的是Redis的一些底层内容。</p>
+<h2 id="Redis对象"><a href="#Redis对象" class="headerlink" title="Redis对象"></a>Redis对象</h2><p>redis源码里面的结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>; <span class="comment">// 类型  </span></span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;<span class="comment">// 编码方式 </span></span><br><span class="line">    <span class="keyword">unsigned</span> lru:LRU_BITS; <span class="comment">// 对象的「热度」</span></span><br><span class="line">    <span class="keyword">int</span> refcount; <span class="comment">// 引用计数</span></span><br><span class="line">    <span class="keyword">void</span> *ptr; <span class="comment">// 对象的 body</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
+<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h3><p>在 LRU 模式下，lru 字段存储的是 Redis 时钟 server.lruclock。Redis 时钟是一个 24bit 的整数，默认是 Unix 时间戳对 2^24 取模的结果，大约 97 天清零一次。当某个 key 被访问一次，它的对象头的 lru 字段值就会被更新为 server.lruclock。</p>
+<p>默认 Redis 时钟值每毫秒更新一次，在定时任务 serverCron 里主动设置。Redis 的很多定时任务都是在 serverCron 里面完成的，比如大型 hash 表的渐进式迁移、过期 key 的主动淘汰、触发 bgsave、bgaofrewrite 等等。</p>
+<p>如果 server.lruclock 没有折返 (对 2^24 取模)，它就是一直递增的，这意味着对象的 LRU 字段不会超过 server.lruclock 的值。如果超过了，说明  server.lruclock 折返了。通过这个逻辑就可以精准计算出对象多长时间没有被访问——对象的空闲时间。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/redis-under-structure/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-queue-LinkedBlockingDeque/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1074,105 +1167,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-aop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/spring-aop/" class="post-title-link" itemprop="url">Spring Aop</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-05 13:27:41" itemprop="dateCreated datePublished" datetime="2018-07-05T13:27:41+08:00">2018-07-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>AOP（Aspect Orient Programming），一般称为面向切面编程，作为面向对象的一种补充，用于处理系统中分布于各个模块的横切关注点，比如事务管理、日志、缓存等等。AOP实现的关键在于AOP框架自动创建的AOP代理，AOP代理主要分为静态代理和动态代理，静态代理的代表为AspectJ；而动态代理则以Spring AOP为代表。静态代理是编译期实现，动态代理是运行期实现，可想而知前者拥有更好的性能。本文主要介绍Spring AOP的两种代理实现机制，JDK动态代理和CGLIB动态代理，<a href="https://jlj98.top/java-proxy-cglib/">关于Java代理</a>。</p>
-<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ul>
-<li>增强（Adivce）</li>
-<li>切点（Pointcut)</li>
-<li>连接点（Join point)</li>
-<li>切面（Aspect）</li>
-<li>引入（Introduction）</li>
-<li>织入（Weaving）</li>
-</ul>
-<p>Spring 的 AOP 代理由 Spring 的 IoC 容器负责生成、管理，其依赖关系也由 IoC 容器负责管理。因此，AOP 代理可以直接使用容器中的其他 Bean 实例作为目标，这种关系可由 IoC 容器的依赖注入提供。<br>aop开发时，其中需要程序员参与的只有 3 个部分：</p>
-<ul>
-<li>定义普通业务组件。</li>
-<li>定义切入点，一个切入点可能横切多个业务组件。</li>
-<li>定义增强处理，增强处理就是在 AOP 框架为普通业务组件织入的处理动作。</li>
-</ul>
-<h1 id="什么是Spring-AOP"><a href="#什么是Spring-AOP" class="headerlink" title="什么是Spring AOP"></a>什么是Spring AOP</h1><p>Spring AOP面向切面编程，将日志、事务等相对独立且重复的功能抽取出来，利用Spring的配置文件或者注解的形式将这些功能织入进去，提高了复用性。 </p>
-<p>采用技术：AOP 实现的关键就在于 AOP 框架自动创建的 AOP 代理，AOP 代理则可分为静态代理和动态代理两大类，其中静态代理是指使用 AOP 框架提供的命令进行编译，从而在编译阶段就可生成 AOP 代理类，因此也称为编译时增强；而动态代理则在运行时借助于 JDK 动态代理、CGLIB 等在内存中“临时”生成 AOP 动态代理类，因此也被称为运行时增强。 </p>
-<p>Spring AOP 采用的是动态代理，在运行期间对业务方法进行增强，所以不会生成新类，对于动态代理技术，Spring AOP提供了对JDK动态代理的支持以及CGLib的支持。前者是基于反射技术的实现，后者是基于继承的机制实现。Spring AOP默认使用AOP代理的标准JDK动态代理。这使得任何接口（或接口集）都可以被代理。Spring AOP也可以使用CGLIB代理。这是代理类而不是接口所必需的。默认情况下，如果业务对象未实现接口，则使用CGLIB。由于优化的做法是编程接口而不是类，业务类通常实现一个或多个业务接口。</p>
-<h1 id="业务中的一些切面"><a href="#业务中的一些切面" class="headerlink" title="业务中的一些切面"></a>业务中的一些切面</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/spring-aop/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1244,7 +1238,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1257,7 +1251,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1289,7 +1283,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

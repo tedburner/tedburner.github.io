@@ -219,6 +219,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-dockerfile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/docker-dockerfile/" class="post-title-link" itemprop="url">Docker —— Docker 使用 Dockerfile 构建</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-09 22:46:42" itemprop="dateCreated datePublished" datetime="2018-09-09T22:46:42+08:00">2018-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果有什么错误的地方，希望指出。</p>
+</blockquote>
+<p>在之前学习 Spring Boot 项目的时候，使用过 Dockerfile 来构建生产 Docker 镜像 —— <a href="https://jlj98.top/spring-boot-docker/">Spring Boot 在 Docker 上部署</a>，在之前的文章中稍微介绍了两种构建 Docker 镜像的方法，一种是基于 Dockerfile，一种是基于 pom.xml 内的插件直接构建。同时在之前的博文中简单介绍了一点关于 Dockerfile 的内容，这篇文字主要是详细了解下关于 Dockerfile 中的一些命令。  </p>
+<h1 id="使用-Dockerfile-构建镜像"><a href="#使用-Dockerfile-构建镜像" class="headerlink" title="使用 Dockerfile 构建镜像"></a>使用 Dockerfile 构建镜像</h1><p>镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。    </p>
+<p>Dockerfile 是一个文本文件，其内包含了一条条的指令(Instruction)，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。   </p>
+<p>比如构架一个 nginx 镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FROM nginx</span><br><span class="line">RUN <span class="built_in">echo</span> <span class="string">&#x27;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&#x27;</span> &gt; /usr/share/nginx/html/index.html</span><br></pre></td></tr></table></figure>
+<h2 id="FROM-指定基础镜像"><a href="#FROM-指定基础镜像" class="headerlink" title="FROM 指定基础镜像"></a>FROM 指定基础镜像</h2><p>所谓定制镜像，那一定是以一个镜像为基础，在其上进行定制。就像我们之前运行了一个 nginx 镜像的容器，再进行修改一样，基础镜像是必须指定的。而 FROM 就是指定基础镜像，因此一个 Dockerfile 中 FROM 是必备的指令，并且必须是第一条指令。   </p>
+<p>在 Docker Store 上有非常多的高质量的官方镜像，有可以直接拿来使用的服务类的镜像，如 nginx 、 redis 、 mongo 、 mysql 、 httpd 、 php 、 tomcat 等；也有一些方便开发、构建、运行各种语言应用的镜像，如 node 、 openjdk 、 python 、 ruby 、 golang 等。可以在其中寻找一个最符合我们最终目标的镜像为基础镜像进行定制。   </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/docker-dockerfile/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-command/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1055,99 +1145,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-under-structure/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/redis-under-structure/" class="post-title-link" itemprop="url">Redis —— 底层结构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-31 11:00:32" itemprop="dateCreated datePublished" datetime="2018-07-31T11:00:32+08:00">2018-07-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Redis系列：</p>
-<ul>
-<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
-<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
-<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
-<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
-</ul>
-<p>对于Redis的一些基本知识，在之前的博客<a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a>中简单的介绍了。最近打算了解下Redis的一些底层内容，买了本书《Redis设计与实现》，这本书才看，也不好评价好坏。之所以选择这个本，是因为看到说这本书讲的是Redis的一些底层内容。</p>
-<h2 id="Redis对象"><a href="#Redis对象" class="headerlink" title="Redis对象"></a>Redis对象</h2><p>redis源码里面的结构体：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>; <span class="comment">// 类型  </span></span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;<span class="comment">// 编码方式 </span></span><br><span class="line">    <span class="keyword">unsigned</span> lru:LRU_BITS; <span class="comment">// 对象的「热度」</span></span><br><span class="line">    <span class="keyword">int</span> refcount; <span class="comment">// 引用计数</span></span><br><span class="line">    <span class="keyword">void</span> *ptr; <span class="comment">// 对象的 body</span></span><br><span class="line">&#125; robj;</span><br></pre></td></tr></table></figure>
-<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h3><p>在 LRU 模式下，lru 字段存储的是 Redis 时钟 server.lruclock。Redis 时钟是一个 24bit 的整数，默认是 Unix 时间戳对 2^24 取模的结果，大约 97 天清零一次。当某个 key 被访问一次，它的对象头的 lru 字段值就会被更新为 server.lruclock。</p>
-<p>默认 Redis 时钟值每毫秒更新一次，在定时任务 serverCron 里主动设置。Redis 的很多定时任务都是在 serverCron 里面完成的，比如大型 hash 表的渐进式迁移、过期 key 的主动淘汰、触发 bgsave、bgaofrewrite 等等。</p>
-<p>如果 server.lruclock 没有折返 (对 2^24 取模)，它就是一直递增的，这意味着对象的 LRU 字段不会超过 server.lruclock 的值。如果超过了，说明  server.lruclock 折返了。通过这个逻辑就可以精准计算出对象多长时间没有被访问——对象的空闲时间。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/redis-under-structure/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1219,7 +1216,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1232,7 +1229,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1264,7 +1261,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

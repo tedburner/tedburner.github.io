@@ -219,6 +219,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-locks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql-locks/" class="post-title-link" itemprop="url">MySQL 数据库锁机制</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-22 23:23:01" itemprop="dateCreated datePublished" datetime="2019-07-22T23:23:01+08:00">2019-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>数据库是一个多用户共享的资源，这样的话对于多个用户在存取同一数据的时候，就会出现问题，举个最经典的问题—-票务系统，如何保证数据的正确性。当只剩下最后1张票的时候，两个用户同时取到数据并更新，那么最后是谁买到票了呢？</p>
+<h2 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h2><p>数据库事务是指单个逻辑工作单元执行一系列操作，要么完成执行，要么完成不执行。数据库事务必须满足ACID(原子性、一致性、隔离性、持久性)。</p>
+<ul>
+<li>原子性：对于其数据的修改，要么全部执行，要么完全不执行。原子性消除了系统处理操作子集的可能。</li>
+<li>一致性：事务完成时，必须是所有的数据都保持一致</li>
+<li>隔离性：由并发事务所做的修改必须与任何其他事务并发事务所做的修改隔离</li>
+<li>持久性:完成事务后，对系统的修改时永久性的</li>
+</ul>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/b00b75a1a8a7269cd68335b55f8c2e49.jpg"></p>
+<ul>
+<li>未提交读：当前事务未提交、其他事务也能读到</li>
+<li>提交读：当前事务提交之后，其他事务才能看到</li>
+<li>可重复读：该级别解决了同一事务多次读取同样记录的结果是一致的。但是理论上，还是无法解决另一个幻读问题。幻读 是指当前事务读取某个范围内的记录时，其他事务在该范围又加入新的纪录，之前的事务再次从该范围读取数据时，会产生幻行。这个的换行是对于 insert 操作来说的，对于 update 操作能保证没有幻行问题。</li>
+<li>可串行化：最高的事务隔离级别。强制事务串行化执行，避免了幻读问题，这种级别会在数据的每一行都加锁，会产生大量的超时和锁竞争，实际中很少用到，除非要确保数据的一致性且没有并发问题</li>
+</ul>
+<h3 id="怎么理解脏读、不可重复读和幻读"><a href="#怎么理解脏读、不可重复读和幻读" class="headerlink" title="怎么理解脏读、不可重复读和幻读"></a>怎么理解脏读、不可重复读和幻读</h3><h4 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h4><p>脏读是读到了未提交事务的数据。只有在读未提交隔离级别下，才会出现脏读。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql-locks/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/sharding-sphere-sharding-databases-tables/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1030,96 +1126,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-cas/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-cas/" class="post-title-link" itemprop="url">Java并发编程——CAS</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-12-27 14:44:19" itemprop="dateCreated datePublished" datetime="2018-12-27T14:44:19+08:00">2018-12-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>如果本文有错，希望在下面的留言区指正。</p>
-</blockquote>
-<p>在之前的一些源码分析中，为了实现并发，Doug Lea 大佬在Java8及以上，大量使用了 CAS 操作。JDK 提供的关于 CAS 原子操作的类在下面工具包里面：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181227151546.png"></p>
-<p>JDK为Java基本类型都提供了CAS工具类。</p>
-<h1 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h1><p>以 <code>AtomicInteger</code> 为例，进行分析：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(<span class="keyword">int</span> expect, <span class="keyword">int</span> update)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="keyword">this</span>, valueOffset, expect, update);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如上面的源码，对于 CAS 操作，这里会出现3个值，expect、update、value。只有当expect和内存中的value相同时，才把value更新为update。</p>
-<h1 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h1><p>假设如下事件序列：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-cas/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1191,7 +1197,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1204,7 +1210,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1236,7 +1242,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
