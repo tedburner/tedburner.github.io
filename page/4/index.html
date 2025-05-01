@@ -219,6 +219,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/docker-network/" class="post-title-link" itemprop="url">Docker —— Docker 网络通信</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-12-29 15:53:07" itemprop="dateCreated datePublished" datetime="2018-12-29T15:53:07+08:00">2018-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果有什么错误的地方，希望指出。本文是本人对 Docker 网络通信学习的笔记。</p>
+</blockquote>
+<p>Docker容器和服务如此强大的原因之一是您可以将它们连接在一起，或者将它们连接到非Docker工作负载。Docker容器和服务甚至不需要知道它们部署在Docker上，或者它们的对等体是否也是Docker工作负载。无论您的Docker主机是运行Linux，Windows还是两者兼而有之，您都可以使用Docker以与平台无关的方式管理它们。（PS：官网翻译）</p>
+<h1 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h1><ul>
+<li>bridge：默认网络驱动程序。如果未指定驱动程序，则这是您要创建的网络类型。当您的应用程序在需要通信的独立容器中运行时，通常会使用桥接网络。</li>
+<li>host：对于独立容器，删除容器和Docker主机之间的网络隔离，并直接使用主机的网络。host 仅适用于Docker 17.06及更高版本上的群集服务。</li>
+<li>none：对于此容器，禁用所有网络。通常与自定义网络驱动程序一起使用。none不适用于群组服务</li>
+<li>overlay：Macvlan网络允许您为容器分配MAC地址，使其显示为网络上的物理设备。Docker守护程序通过其MAC地址将流量路由到容器。macvlan 在处理期望直接连接到物理网络的传统应用程序时，使用驱动程序有时是最佳选择，而不是通过Docker主机的网络堆栈进行路由。</li>
+<li>Network plugins：您可以使用Docker安装和使用第三方网络插件。</li>
+</ul>
+<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><p>在网络方面，桥接网络是链路层设备，它在网络段之间转发流量。网桥可以是硬件设备或在主机内核中运行的软件设备。</p>
+<p>Docker 的桥接网络使用软件桥接器，改桥接器允许连接到同一网桥的容器进行通信，同时提供与未连接到该网桥的容器的隔离。</p>
+<p>桥接网络适用于在同一个 Docker守护程序主机上运行的容器。对于在不同Docker守护程序主机上运行的容器之间的通信，您可以在操作系统级别管理路由，也可以使用覆盖网络。</p>
+<p>启动Docker时，会自动创建默认桥接网络（也称为bridge），并且除非另行指定，否则新启动的容器将连接到该网络。您还可以创建用户定义的自定义网桥。用户定义的网桥优于默认bridge 网络。</p>
+<p>在Docker进行启动时，会在主机上创建一个名为 docker0 的虚拟网桥，在主机上启动的 Docker 容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器通过交换机连载了一个二层网络中。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/docker-network/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-cas/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1058,102 +1154,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-synchronized/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-synchronized/" class="post-title-link" itemprop="url">Java 并发编程之 Synchronized 详解</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-10-16 21:36:26" itemprop="dateCreated datePublished" datetime="2018-10-16T21:36:26+08:00">2018-10-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-18 22:46:56" itemprop="dateModified" datetime="2021-05-18T22:46:56+08:00">2021-05-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：如果本文有错误，希望指出。</p>
-</blockquote>
-<p>在之前的一篇博文中简单介绍了 Java 中的一些锁：<a href="https://jlj98.top/java-lock/">Java 中各种锁</a>。<br>最近在极客时间上买了杨晓峰的《Java核心技术36讲》，今天看到关于标题的东西，于是想记录下自己的学习。<br>Synchronized 和 ReentrantLock 这两个都是可重入锁，指的是同一线程在外层函数获取锁之后，内层函数仍然可以获取该锁，且不受影响。</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/tedburner/JavaExample/tree/master/src/main/java/com/example/common/concurrent/lock/reentrant">Synchronized 可重入测试源码</a></p>
-<h2 id="Synchronized-锁的原理"><a href="#Synchronized-锁的原理" class="headerlink" title="Synchronized 锁的原理"></a>Synchronized 锁的原理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;doSth&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;method&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用<code>javac SynchronizedTest.java</code> 和 <code>javap -c -s -v -l  SynchronizedTest</code> 命令查看编译后的Test.class的字节码，可以很容易看出在代码块上和方法上是有区别的。代码块上使用 <code>monitorenter/monitorexit</code> 指令来实现的；方法上是使用 <code>ACC_SYNCHRONIZED</code>。详情看下面的图片，是编译后的字节码：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181113202347.png"></p>
-<p>在 Java6 之前，Monitor 的实现完全是依靠操作系统内部的互斥锁，因为需要用户状态到内核状态的切换，所有同步操作是一个重量级操作。</p>
-<p>Synchronized 底层原理，Synchronized 有2个队列 waitSet 和 entrtyList。</p>
-<ul>
-<li>当多个线程进入同步代码块时，首先进入entryList</li>
-<li>有一个线程获取到monitor锁后，就赋值给当前线程，并且计数器+1</li>
-<li>如果线程调用wait方法，将释放锁，当前线程置为null，计数器-1，同时进入waitSet等待被唤醒，调用notify或者notifyAll之后又会进入entryList竞争锁</li>
-<li>如果线程执行完毕，同样释放锁，计数器-1，当前线程置为null</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-synchronized/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1225,20 +1225,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1270,7 +1270,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

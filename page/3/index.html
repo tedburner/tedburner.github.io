@@ -219,6 +219,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/ddd-thought/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ddd-thought/" class="post-title-link" itemprop="url">领域驱动设计之从零开始</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-08-22 23:23:01" itemprop="dateCreated datePublished" datetime="2019-08-22T23:23:01+08:00">2019-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">领域驱动设计</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近一段时间在了解领域模型，之前拜读了下《领域驱动设计——软件核心复杂性应对之道》，结果看的云里雾里，晦涩的语句，不明所以的专业术语，加上翻译导致的语句流畅性，可以说观看体验并不是很好。然后同事推荐我先看《实现领域驱动设计》这本书，但是对于这种软件设计的书，稍微之前那本好点了。以前都是“talk is cheap, show me the code”，加上自己在这方面没啥经验积累，看的过程中，没啥共鸣。</p>
+<p>接下来主要是自己在看的过程中的一些笔记和理解。</p>
+<h2 id="领域模型之贫血模型和充血模型"><a href="#领域模型之贫血模型和充血模型" class="headerlink" title="领域模型之贫血模型和充血模型"></a>领域模型之贫血模型和充血模型</h2><p>贫血模型：Model中，仅包含状态属性，不包含个行为，采用这种设计时，需要分离出DB曾，左门用语数据库操作。现在的web软件开发主要使用的就是贫血模式。<br>优点：系统层次结构清楚，各层之间单向依赖，缺点是不够面向对象</p>
+<p>充血模型：Model中即包含状态，也包含行为，是最符合面向对象的设计方式。<br>优点面向对象，缺点比较复杂，对技术要求更高。<br>Spring data 的 Repository 是对充血模型的最佳实践</p>
+<h2 id="领域、子域和限界上下文"><a href="#领域、子域和限界上下文" class="headerlink" title="领域、子域和限界上下文"></a>领域、子域和限界上下文</h2><p>在DDD领域中，一个领域被分为若干个子域，领域模型在界限上下文中进行开发。</p>
+<p>限界上下文是一个显示边界，灵越模型便存在边界之内。在边界内，通用语言中的所有术语和词组都有特定的含义，而模型需要准确的反映通用语言。</p>
+<h2 id="架构风格"><a href="#架构风格" class="headerlink" title="架构风格"></a>架构风格</h2><p>在选择使用框架时，需要明确其使用目的：建立一种可以表达领域模型的实现并且用它来解决重要问题。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ddd-thought/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/mysql-locks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1030,102 +1117,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-network/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/docker-network/" class="post-title-link" itemprop="url">Docker —— Docker 网络通信</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-12-29 15:53:07" itemprop="dateCreated datePublished" datetime="2018-12-29T15:53:07+08:00">2018-12-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>如果有什么错误的地方，希望指出。本文是本人对 Docker 网络通信学习的笔记。</p>
-</blockquote>
-<p>Docker容器和服务如此强大的原因之一是您可以将它们连接在一起，或者将它们连接到非Docker工作负载。Docker容器和服务甚至不需要知道它们部署在Docker上，或者它们的对等体是否也是Docker工作负载。无论您的Docker主机是运行Linux，Windows还是两者兼而有之，您都可以使用Docker以与平台无关的方式管理它们。（PS：官网翻译）</p>
-<h1 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h1><ul>
-<li>bridge：默认网络驱动程序。如果未指定驱动程序，则这是您要创建的网络类型。当您的应用程序在需要通信的独立容器中运行时，通常会使用桥接网络。</li>
-<li>host：对于独立容器，删除容器和Docker主机之间的网络隔离，并直接使用主机的网络。host 仅适用于Docker 17.06及更高版本上的群集服务。</li>
-<li>none：对于此容器，禁用所有网络。通常与自定义网络驱动程序一起使用。none不适用于群组服务</li>
-<li>overlay：Macvlan网络允许您为容器分配MAC地址，使其显示为网络上的物理设备。Docker守护程序通过其MAC地址将流量路由到容器。macvlan 在处理期望直接连接到物理网络的传统应用程序时，使用驱动程序有时是最佳选择，而不是通过Docker主机的网络堆栈进行路由。</li>
-<li>Network plugins：您可以使用Docker安装和使用第三方网络插件。</li>
-</ul>
-<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><p>在网络方面，桥接网络是链路层设备，它在网络段之间转发流量。网桥可以是硬件设备或在主机内核中运行的软件设备。</p>
-<p>Docker 的桥接网络使用软件桥接器，改桥接器允许连接到同一网桥的容器进行通信，同时提供与未连接到该网桥的容器的隔离。</p>
-<p>桥接网络适用于在同一个 Docker守护程序主机上运行的容器。对于在不同Docker守护程序主机上运行的容器之间的通信，您可以在操作系统级别管理路由，也可以使用覆盖网络。</p>
-<p>启动Docker时，会自动创建默认桥接网络（也称为bridge），并且除非另行指定，否则新启动的容器将连接到该网络。您还可以创建用户定义的自定义网桥。用户定义的网桥优于默认bridge 网络。</p>
-<p>在Docker进行启动时，会在主机上创建一个名为 docker0 的虚拟网桥，在主机上启动的 Docker 容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器通过交换机连载了一个二层网络中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/docker-network/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1197,20 +1188,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1242,7 +1233,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

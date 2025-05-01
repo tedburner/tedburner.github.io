@@ -219,6 +219,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-database/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/redis-database/" class="post-title-link" itemprop="url">Redis —— 数据库实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-01 14:05:25" itemprop="dateCreated datePublished" datetime="2018-08-01T14:05:25+08:00">2018-08-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-30 15:43:32" itemprop="dateModified" datetime="2021-05-30T15:43:32+08:00">2021-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Redis系列：</p>
+<ul>
+<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
+<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
+<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
+<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
+</ul>
+<p>Redis是一款NoSQL数据库，在大多数项目中作为缓存使用，也可以作为数据库，存储数据。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/antirez/redis">Redis源码</a></li>
+</ul>
+<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><p>Redis服务器将所有数据库都保存在服务器状态 <code>redis.h/redisServer</code> 结构的 <code>db</code> 数组中，<code>db</code> 数组的每个项都是一个 <code>redis.h/redisDb</code>结构，每个 <code>redis</code> 结构代表个数据库:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    redisDb *db;<span class="comment">//数组，保存服务器中的所有数据库</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">int</span> dbnum; <span class="comment">//服务器数据库数量，默认16个</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//数据库键空间</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">    dict *dict;                 <span class="comment">/* 数据库键空间，保存着数据库中所有键值对 */</span></span><br><span class="line">    dict *expires;              <span class="comment">/* 过期字典，保存所有过期时间*/</span></span><br><span class="line">    dict *blocking_keys;        <span class="comment">/* Keys with clients waiting for data (BLPOP)*/</span></span><br><span class="line">    dict *ready_keys;           <span class="comment">/* Blocked keys that received a PUSH */</span></span><br><span class="line">    dict *watched_keys;         <span class="comment">/* WATCHED keys for MULTI/EXEC CAS */</span></span><br><span class="line">    <span class="keyword">int</span> id;                     <span class="comment">/* Database ID */</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> avg_ttl;          <span class="comment">/* Average TTL, just for stats */</span></span><br><span class="line">    <span class="built_in">list</span> *defrag_later;         <span class="comment">/* List of key names to attempt to defrag one by one, gradually. */</span></span><br><span class="line">&#125; redisDb;</span><br></pre></td></tr></table></figure>
+<p>键空间和用户所见的数据库是直接对应的：</p>
+<ul>
+<li>键空间的键也就是数据库的键，每个键都是一个字符串对象。</li>
+<li>键空间的值也就是数据库的值，每个值可以是字符串对象、列表对象、哈希表对象、集合对象和有序集合对象中的任意一种 Redis 对象。</li>
+</ul>
+<h2 id="过期键删除策略"><a href="#过期键删除策略" class="headerlink" title="过期键删除策略"></a>过期键删除策略</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/redis-database/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-under-structure/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1055,118 +1154,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-transaction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/spring-transaction/" class="post-title-link" itemprop="url">Spring 事务管理</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-06 10:02:09" itemprop="dateCreated datePublished" datetime="2018-07-06T10:02:09+08:00">2018-07-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在项目中，事务可以有效的防止在程序出错时，对于数据的错误修改，回滚到修改之前。<br>spring事务和数据库事务一样，都有四个特性（ACID）:</p>
-<ul>
-<li><p>原子性（Atomicity）：事务是一个原子操作，由一系列动作组成。事务的原子性确保动作要么全部完成，要么完全不起作用；</p>
-</li>
-<li><p>一致性（Consistency）：一旦事务完成（不管成功还是失败），系统必须确保它所建模的业务处于一致的状态，而不会是部分完成部分失败。在现实中的数据不应该被破坏；</p>
-</li>
-<li><p>隔离性（Isolation）：可能有许多事务会同时处理相同的数据，因此每个事务都应该与其他事务隔离开来，防止数据损坏；</p>
-</li>
-<li><p>持久性（Durability）：一旦事务完成，无论发生什么系统错误，它的结果都不应该受到影响，这样就能从任何系统崩溃中恢复过来。通常情况下，事务的结果被写到持久化存储器中；</p>
-</li>
-</ul>
-<h1 id="事务的传播性"><a href="#事务的传播性" class="headerlink" title="事务的传播性"></a>事务的传播性</h1><p><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html">官方文档解释</a></p>
-<ul>
-<li>PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于<code>TransactionDefinition.PROPAGATION_REQUIRED</code>。（比如我们设计ServiceA.methodA的事务级别为PROPAGATION_REQUIRED，ServiceB.methodB的事务级别为PROPAGATION_NESTED，那么当执行到ServiceB.methodB的时候，ServiceA.methodA所在的事务就会挂起，ServiceB.methodB会起一个新的子事务并设置savepoint，等待ServiceB.methodB的事务完成以后，他才继续执行。）</li>
-<li>PROPAGATION_REQUIRED：支持当前事务，如果不存在则创建新事务。（方法B已经运行在方法A的事务内部，就不再起新的事务，直接加入方法A）。</li>
-<li>RROPAGATION_REQUIRES_NEW：创建一个新事务，并暂停当前事务（如果存在）。（方法A所在的事务就会挂起，方法B会起一个新的事务，方法B新起的事务不依赖方法A的事务，等待方法B的事务完成以后，方法A才继续执行，如果方法B执行没有异常，方法A抛出异常，方法B的操作不会被回滚，方法A中除了方法B外，会回滚数据）。</li>
-<li>PROPAGATION_SUPPORTS：如果当前存在事务中，即以事务的形式运行；如果不存在则以非事务方式执行。（方法B看到自己已经运行在方法A的事务内部，就不再起新的事务，直接加入方法A）</li>
-<li>PROPAGATION_NOT_SUPPORTED：支持当前事务，如果不存在则创建新事务。（方法A所在的事务就会挂起，而方法B以非事务的状态运行完，再继续方法A的事务）。</li>
-<li>PROPAGATION_MANDATORY：支持当前事务，如果有，使用当前事务；如果不存在则抛出异常。</li>
-<li>PROPAGATION_NEVER：如果事务存在，则以非事务方式执行，抛出异常。（假设ServiceA.methodA的事务级别是PROPAGATION_REQUIRED， 而ServiceB.methodB的事务级别是PROPAGATION_NEVER ，那么ServiceB.methodB就要抛出异常了。）</li>
-</ul>
-<p>下面给出一张图，对上面的事务传播性，做出总结：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200430092429.png"></p>
-<h1 id="事务的隔离性"><a href="#事务的隔离性" class="headerlink" title="事务的隔离性"></a>事务的隔离性</h1><p>事务并发可能引起的问题：</p>
-<ul>
-<li><p>脏读：脏读发生在一个事务读取了另一个事务改写但尚未提交的数据时。如果改写在稍后被回滚了，那么第一个事务获取的数据就是无效的；</p>
-</li>
-<li><p>不可重复读：不可重复读发生在一个事务执行相同的查询两次或两次以上，但是每次都得到不同的数据时。这通常是因为另一个并发事务在两次查询期间进行了更新；</p>
-</li>
-<li><p>幻读：幻读是由“可重复读”隔离级别导致的事务问题。事务T1查询某条数据，发现数据库没有数据，同时事务T2也查询这条数据，也同样没查询到。这时T1就将数据插入到了数据，由于可重复读的隔离级别，所以T2还是查询不到这条数据，然后T2插入了同样的数据，然后提示说数据以及存在，但是在事务T2中有查询不到这条数据，就像出现幻觉一样。</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/spring-transaction/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1238,20 +1225,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1283,7 +1270,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

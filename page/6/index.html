@@ -219,6 +219,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/docker-compose/" class="post-title-link" itemprop="url">Docker —— Docker 三剑客之 Compose 项目</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-12 09:56:57" itemprop="dateCreated datePublished" datetime="2018-09-12T09:56:57+08:00">2018-09-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果有什么错误的地方，希望指出。</p>
+</blockquote>
+<p>之前的文章中介绍了 Dockerfile，知道了 Dockerfile 模板文件可以定义一个单独的应用容器，如果需要定义多个容器就需要服务编排。服务编排有很多种技术方案，今天给大家介绍 Docker 官方产品 Docker Compose 。         </p>
+<p>Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速在集群中部署分布式应用。Compose 定位是 「定义和运行多个 Docker 容器的应用（Defining and running multicontainer Docker applications）」，其前身是开源项目 Fig。  </p>
+<p>Docker-Compose 是用来管理你的容器的，有点像一个容器的管家，想象一下当你的 Docker 中有成百上千的容器需要启动，如果一个一个的启动那得多费时间。有了 Docker-Compose 只需要编写一个文件，在这个文件里面声明好要启动的容器，配置一些参数，执行一下这个文件，Docker就会按照你声明的配置去把所有的容器启动起来，但是Docker-Compose只能管理当前主机上的Docker，也就是说不能去启动其他主机上的Docker容器。恰好满足了这样的需求。它允许用户通过一个单独的 docker-compose.yml 模板文件 （YAML 格式）来定义一组相关联的应用容器为一个项目（project）。   </p>
+<p>Compose 中有两个重要的概念： </p>
+<ul>
+<li>服务 ( service )：一个应用的容器，实际上可以包括若干运行相同镜像的容器实例。 </li>
+<li>项目 ( project )：由一组关联的应用容器组成的一个完整业务单元，在 dockercompose.yml 文件中定义。</li>
+</ul>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建-Python-服务"><a href="#创建-Python-服务" class="headerlink" title="创建 Python 服务"></a>创建 Python 服务</h2><p>1、创建项目文件夹：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir composetest</span><br><span class="line">$ <span class="built_in">cd</span> composetest</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/docker-compose/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/docker-dockerfile/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1046,105 +1139,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/redis-database/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/redis-database/" class="post-title-link" itemprop="url">Redis —— 数据库实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-08-01 14:05:25" itemprop="dateCreated datePublished" datetime="2018-08-01T14:05:25+08:00">2018-08-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-30 15:43:32" itemprop="dateModified" datetime="2021-05-30T15:43:32+08:00">2021-05-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Redis系列：</p>
-<ul>
-<li><a href="https://jlj98.top/redis-basic-knowledge/">Redis——初识Redis</a></li>
-<li><a href="https://jlj98.top/redis-under-structure/">Redis——底层结构</a></li>
-<li><a href="https://jlj98.top/redis-database/">Redis——数据库实现</a></li>
-<li><a href="https://jlj98.top/redis-server-mater-salve/">Redis 服务集群</a></li>
-</ul>
-<p>Redis是一款NoSQL数据库，在大多数项目中作为缓存使用，也可以作为数据库，存储数据。</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/antirez/redis">Redis源码</a></li>
-</ul>
-<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><p>Redis服务器将所有数据库都保存在服务器状态 <code>redis.h/redisServer</code> 结构的 <code>db</code> 数组中，<code>db</code> 数组的每个项都是一个 <code>redis.h/redisDb</code>结构，每个 <code>redis</code> 结构代表个数据库:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span> &#123;</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    redisDb *db;<span class="comment">//数组，保存服务器中的所有数据库</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">int</span> dbnum; <span class="comment">//服务器数据库数量，默认16个</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//数据库键空间</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisDb</span> &#123;</span></span><br><span class="line">    dict *dict;                 <span class="comment">/* 数据库键空间，保存着数据库中所有键值对 */</span></span><br><span class="line">    dict *expires;              <span class="comment">/* 过期字典，保存所有过期时间*/</span></span><br><span class="line">    dict *blocking_keys;        <span class="comment">/* Keys with clients waiting for data (BLPOP)*/</span></span><br><span class="line">    dict *ready_keys;           <span class="comment">/* Blocked keys that received a PUSH */</span></span><br><span class="line">    dict *watched_keys;         <span class="comment">/* WATCHED keys for MULTI/EXEC CAS */</span></span><br><span class="line">    <span class="keyword">int</span> id;                     <span class="comment">/* Database ID */</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> avg_ttl;          <span class="comment">/* Average TTL, just for stats */</span></span><br><span class="line">    <span class="built_in">list</span> *defrag_later;         <span class="comment">/* List of key names to attempt to defrag one by one, gradually. */</span></span><br><span class="line">&#125; redisDb;</span><br></pre></td></tr></table></figure>
-<p>键空间和用户所见的数据库是直接对应的：</p>
-<ul>
-<li>键空间的键也就是数据库的键，每个键都是一个字符串对象。</li>
-<li>键空间的值也就是数据库的值，每个值可以是字符串对象、列表对象、哈希表对象、集合对象和有序集合对象中的任意一种 Redis 对象。</li>
-</ul>
-<h2 id="过期键删除策略"><a href="#过期键删除策略" class="headerlink" title="过期键删除策略"></a>过期键删除策略</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/redis-database/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1216,20 +1210,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1261,7 +1255,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

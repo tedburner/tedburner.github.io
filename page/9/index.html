@@ -219,6 +219,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-thread-pool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/java-thread-pool/" class="post-title-link" itemprop="url">多线程编程 —— 线程池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-09 16:02:38" itemprop="dateCreated datePublished" datetime="2018-05-09T16:02:38+08:00">2018-05-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-07-24 16:48:07" itemprop="dateModified" datetime="2021-07-24T16:48:07+08:00">2021-07-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>如果本文有错误，希望指出。</p>
+</blockquote>
+<p>在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a7ad8beaaf5dfaefbd568fe4a9046a5c.jpg"></p>
+<p>使用线程池可以带来一系列好处：</p>
+<ul>
+<li>降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成的损耗。</li>
+<li>提高响应速度：任务到达时，无需等待线程创建即可立即执行。</li>
+<li>提高线程的可管理性：线程是稀缺资源，如果无限制创建，不仅会消耗系统资源，还会因为线程的不合理分布导致资源调度失衡，降低系统的稳定性。使用线程池可以进行统一的分配、调优和监控。</li>
+<li>提供更多更强大的功能：线程池具备可拓展性，允许开发人员向其中增加更多的功能。比如延时定时线程池ScheduledThreadPoolExecutor，就允许任务延期执行或定期执行。</li>
+</ul>
+<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个参数的含义。</p>
+<h2 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h2><h3 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h3><ul>
+<li>corePoolSize ：池中所保存的线程数，包括空闲线程，除非设置 allowCoreThreadTimeOut 参数，否则创建后会一直存活</li>
+<li>maximumPoolSize：池中允许的最大线程数</li>
+<li>keepAliveTime：<strong>非核心线程</strong>空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
+<li>unit：keepAliveTime 参数的时间单位</li>
+<li>workQueue ：执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务</li>
+<li>threadFactory：执行程序创建新线程时使用的工厂</li>
+<li>handler ：由于超出线程范围和队列容量而使执行</li>
+</ul>
+<h3 id="线程池运行流程"><a href="#线程池运行流程" class="headerlink" title="线程池运行流程"></a>线程池运行流程</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/java-thread-pool/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-vector/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1029,97 +1132,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-string-source/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-string-source/" class="post-title-link" itemprop="url">String，StringBuilder，StringBuffer 源码分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-04-11 11:53:40" itemprop="dateCreated datePublished" datetime="2018-04-11T11:53:40+08:00">2018-04-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>声明：本文使用JDK1.8</p>
-</blockquote>
-<p>在Java中，对于字符串的操作有这三种：String、StringBuilder、StringBuffer。这三者的效率是：StringBuilder &gt; StringBuffer &gt; String。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String a = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">a = a + <span class="string">&quot;d&quot;</span>;</span><br><span class="line">System.out.println(a);</span><br><span class="line">StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">buffer.append(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">System.out.println(buffer);</span><br><span class="line">StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">builder.append(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">System.out.println(builder);</span><br></pre></td></tr></table></figure>
-<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>先来看下String的源码，如图所示：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/c78a9b82baa1655ad8e9e04c3c1ad686.jpg"></p>
-<p>从图中我们可以看出，<code>String</code> 是由 <code>char</code> 数组构成的，而且有 <code>final</code> 关键字修饰，这说明 <code>String</code> 类型的对象是不可以改变的。那么，平时我们使用“+”来拼接字符串是什么实现的？   </p>
-<p>如上面的代码，首先创建一个 <code>String</code> 对象 <code>a</code>，再把“abc”赋值给它，后面Java虚拟机又创建了一个 <code>String</code> 对象 <code>a</code>，然后再把原来的 <code>a</code> 的值和 “d” 加起来再赋值给新的 <code>a</code>，而原来的<code>a</code> 就会被Java虚拟机的垃圾回收机制（GC）给回收掉了，所以，<code>a</code> 实际上并没有被更改，也就是前面说的 <code>String</code> 对象一旦创建之后就不可更改了。从这里可以看出，对于频繁操作的字符串，不建议使用 <code>String</code> 类型，这将会是一个不断创建新的对象并且将旧的对象回收的一个过程，所以执行速度很慢。</p>
-<p>对于 <code>String</code> 类型对象的“+”操作，通过在 <code>StringBuilder</code> 的 append 方法上面打断点，可以发现对于String的操作，其实是使用了 <code>StringBuilder</code> 的 <code>append</code> 操作，这个不是线程安全。详细可以看下面关于  <code>StringBuilder</code> 的源码。</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20181120163329.png"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-string-source/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1191,20 +1203,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1236,7 +1248,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

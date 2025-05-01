@@ -219,6 +219,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-transaction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
+      <meta itemprop="name" content="蒋先森">
+      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋先森のBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/spring-transaction/" class="post-title-link" itemprop="url">Spring 事务管理</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-06 10:02:09" itemprop="dateCreated datePublished" datetime="2018-07-06T10:02:09+08:00">2018-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-30 20:08:37" itemprop="dateModified" datetime="2021-03-30T20:08:37+08:00">2021-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在项目中，事务可以有效的防止在程序出错时，对于数据的错误修改，回滚到修改之前。<br>spring事务和数据库事务一样，都有四个特性（ACID）:</p>
+<ul>
+<li><p>原子性（Atomicity）：事务是一个原子操作，由一系列动作组成。事务的原子性确保动作要么全部完成，要么完全不起作用；</p>
+</li>
+<li><p>一致性（Consistency）：一旦事务完成（不管成功还是失败），系统必须确保它所建模的业务处于一致的状态，而不会是部分完成部分失败。在现实中的数据不应该被破坏；</p>
+</li>
+<li><p>隔离性（Isolation）：可能有许多事务会同时处理相同的数据，因此每个事务都应该与其他事务隔离开来，防止数据损坏；</p>
+</li>
+<li><p>持久性（Durability）：一旦事务完成，无论发生什么系统错误，它的结果都不应该受到影响，这样就能从任何系统崩溃中恢复过来。通常情况下，事务的结果被写到持久化存储器中；</p>
+</li>
+</ul>
+<h1 id="事务的传播性"><a href="#事务的传播性" class="headerlink" title="事务的传播性"></a>事务的传播性</h1><p><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Propagation.html">官方文档解释</a></p>
+<ul>
+<li>PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于<code>TransactionDefinition.PROPAGATION_REQUIRED</code>。（比如我们设计ServiceA.methodA的事务级别为PROPAGATION_REQUIRED，ServiceB.methodB的事务级别为PROPAGATION_NESTED，那么当执行到ServiceB.methodB的时候，ServiceA.methodA所在的事务就会挂起，ServiceB.methodB会起一个新的子事务并设置savepoint，等待ServiceB.methodB的事务完成以后，他才继续执行。）</li>
+<li>PROPAGATION_REQUIRED：支持当前事务，如果不存在则创建新事务。（方法B已经运行在方法A的事务内部，就不再起新的事务，直接加入方法A）。</li>
+<li>RROPAGATION_REQUIRES_NEW：创建一个新事务，并暂停当前事务（如果存在）。（方法A所在的事务就会挂起，方法B会起一个新的事务，方法B新起的事务不依赖方法A的事务，等待方法B的事务完成以后，方法A才继续执行，如果方法B执行没有异常，方法A抛出异常，方法B的操作不会被回滚，方法A中除了方法B外，会回滚数据）。</li>
+<li>PROPAGATION_SUPPORTS：如果当前存在事务中，即以事务的形式运行；如果不存在则以非事务方式执行。（方法B看到自己已经运行在方法A的事务内部，就不再起新的事务，直接加入方法A）</li>
+<li>PROPAGATION_NOT_SUPPORTED：支持当前事务，如果不存在则创建新事务。（方法A所在的事务就会挂起，而方法B以非事务的状态运行完，再继续方法A的事务）。</li>
+<li>PROPAGATION_MANDATORY：支持当前事务，如果有，使用当前事务；如果不存在则抛出异常。</li>
+<li>PROPAGATION_NEVER：如果事务存在，则以非事务方式执行，抛出异常。（假设ServiceA.methodA的事务级别是PROPAGATION_REQUIRED， 而ServiceB.methodB的事务级别是PROPAGATION_NEVER ，那么ServiceB.methodB就要抛出异常了。）</li>
+</ul>
+<p>下面给出一张图，对上面的事务传播性，做出总结：</p>
+<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/20200430092429.png"></p>
+<h1 id="事务的隔离性"><a href="#事务的隔离性" class="headerlink" title="事务的隔离性"></a>事务的隔离性</h1><p>事务并发可能引起的问题：</p>
+<ul>
+<li><p>脏读：脏读发生在一个事务读取了另一个事务改写但尚未提交的数据时。如果改写在稍后被回滚了，那么第一个事务获取的数据就是无效的；</p>
+</li>
+<li><p>不可重复读：不可重复读发生在一个事务执行相同的查询两次或两次以上，但是每次都得到不同的数据时。这通常是因为另一个并发事务在两次查询期间进行了更新；</p>
+</li>
+<li><p>幻读：幻读是由“可重复读”隔离级别导致的事务问题。事务T1查询某条数据，发现数据库没有数据，同时事务T2也查询这条数据，也同样没查询到。这时T1就将数据插入到了数据，由于可重复读的隔离级别，所以T2还是查询不到这条数据，然后T2插入了同样的数据，然后提示说数据以及存在，但是在事务T2中有查询不到这条数据，就像出现幻觉一样。</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/spring-transaction/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://jlj98.top/spring-aop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1031,109 +1143,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://jlj98.top/java-thread-pool/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/12295378.png">
-      <meta itemprop="name" content="蒋先森">
-      <meta itemprop="description" content="当你的才华还撑不起你的野心时，那你就应该静下心来学习">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋先森のBlog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/java-thread-pool/" class="post-title-link" itemprop="url">多线程编程 —— 线程池</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-09 16:02:38" itemprop="dateCreated datePublished" datetime="2018-05-09T16:02:38+08:00">2018-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-24 16:48:07" itemprop="dateModified" datetime="2021-07-24T16:48:07+08:00">2021-07-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>如果本文有错误，希望指出。</p>
-</blockquote>
-<p>在项目中，线程是一种稀缺资源，频繁的创建和销毁，对于系统的性能有着很大的消耗。线程池是线程资源复用的典范之作，通过维护一个一定数量的线程集合，在需要运行线程任务的时候直接从这个集合中取出一个线程去运行任务，而不是重新创建一个。这点在阿里Java手册上也提出了：</p>
-<p><img src="https://hexo-1252893039.cos.ap-shanghai.myqcloud.com/Qiniu/a7ad8beaaf5dfaefbd568fe4a9046a5c.jpg"></p>
-<p>使用线程池可以带来一系列好处：</p>
-<ul>
-<li>降低资源消耗：通过池化技术重复利用已创建的线程，降低线程创建和销毁造成的损耗。</li>
-<li>提高响应速度：任务到达时，无需等待线程创建即可立即执行。</li>
-<li>提高线程的可管理性：线程是稀缺资源，如果无限制创建，不仅会消耗系统资源，还会因为线程的不合理分布导致资源调度失衡，降低系统的稳定性。使用线程池可以进行统一的分配、调优和监控。</li>
-<li>提供更多更强大的功能：线程池具备可拓展性，允许开发人员向其中增加更多的功能。比如延时定时线程池ScheduledThreadPoolExecutor，就允许任务延期执行或定期执行。</li>
-</ul>
-<p>在Java中提供了几种线程池创建的方法，不过这几种方法都是最后通过 <code>ThreadPoolExecutor</code> 来创建线程的。在开始讲Java提供的几种之前，先讲下 <code>ThreadPoolExecutor</code> 中几个参数的含义。</p>
-<h2 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h2><h3 id="内部工作原理"><a href="#内部工作原理" class="headerlink" title="内部工作原理"></a>内部工作原理</h3><ul>
-<li>corePoolSize ：池中所保存的线程数，包括空闲线程，除非设置 allowCoreThreadTimeOut 参数，否则创建后会一直存活</li>
-<li>maximumPoolSize：池中允许的最大线程数</li>
-<li>keepAliveTime：<strong>非核心线程</strong>空闲线程等待新任务的最长时间，即线程数多余核心数的线程，会被销毁掉</li>
-<li>unit：keepAliveTime 参数的时间单位</li>
-<li>workQueue ：执行前用于保持任务的队列。此队列仅保持由 execute方法提交的 Runnable任务</li>
-<li>threadFactory：执行程序创建新线程时使用的工厂</li>
-<li>handler ：由于超出线程范围和队列容量而使执行</li>
-</ul>
-<h3 id="线程池运行流程"><a href="#线程池运行流程" class="headerlink" title="线程池运行流程"></a>线程池运行流程</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/java-thread-pool/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1205,20 +1214,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-count">119</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1250,7 +1259,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
